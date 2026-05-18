@@ -137,15 +137,15 @@
     </header>
 
     <nav>
-        <button class="nav-btn active" onclick="switchTab('cookbook')"><span>🍳</span> Книга Рецептов</button>
-        <button class="nav-btn" onclick="switchTab('database')"><span>🥑</span> База Продуктов</button>
-        <button class="nav-btn" onclick="switchTab('diary')"><span>📊</span> Дневник Питания</button>
-        <button class="nav-btn" onclick="switchTab('progress')"><span>📈</span> Прогресс</button>
+        <button id="nav-cookbook" class="nav-btn" onclick="switchTab('cookbook')"><span>🍳</span> Книга Рецептов</button>
+        <button id="nav-database" class="nav-btn" onclick="switchTab('database')"><span>🥑</span> База Продуктов</button>
+        <button id="nav-diary" class="nav-btn" onclick="switchTab('diary')"><span>📊</span> Дневник Питания</button>
+        <button id="nav-progress" class="nav-btn" onclick="switchTab('progress')"><span>📈</span> Прогресс</button>
     </nav>
 
     <div id="tab-cookbook" class="tab-content active container">
         <div id="recipe-list-view">
-            <h2>Интерактивная База Рецептов</h2>
+            <h2>Interactive Recipes</h2>
             <p style="margin-bottom: 20px;">Бюджетные продукты из Magnum/Small, адаптированные под ваши цели.</p>
             
             <div class="filters">
@@ -289,7 +289,6 @@
         { name: 'Грецкие орехи', k: 654, b: 15.2, j: 65.2, u: 7 }
     ];
 
-    // --- PRE-POPULATED 15 RECIPES ---
     const defaultRecipes = [
         { id: 'r1', title: 'Овсянка на молоке с яблоком', category: 'Завтраки', instructions: 'Сварить овсянку на смеси воды и молока. В конце добавить тертое яблоко.', modHim: 'Добавить 20г сливочного масла и 2 куска хлеба Аксай-нан.', modHer: 'Варить преимущественно на воде, без масла, больше яблока.', ingredients: [{name:'Овсянка Пищевик',weight:100,k:352,b:12.3,j:6.1,u:59.5},{name:'Молоко FoodMaster 2.5%',weight:150,k:53,b:2.8,j:2.5,u:4.7},{name:'Яблоко',weight:100,k:47,b:0.4,j:0.4,u:9.8}] },
         { id: 'r2', title: 'Сырники из творога Adal', category: 'Завтраки', instructions: 'Смешать творог, яйцо и немного муки. Сформировать сырники, обжарить на капле масла с двух сторон, допечь под крышкой.', modHim: 'Полить порцию медом (30г) и сметаной (30г).', modHer: 'Подавать без сметаны, подсластить сахзамом на этапе замеса.', ingredients: [{name:'Творог Adal 5%',weight:400,k:121,b:16,j:5,u:3},{name:'Яйцо Курочка Ряба',weight:50,k:157,b:12.7,j:10.9,u:0.7},{name:'Мука пшеничная',weight:40,k:334,b:10.8,j:1.3,u:69.9}] },
@@ -300,7 +299,7 @@
         { id: 'r7', title: 'Куриное филе тушеное с капустой', category: 'Птица', instructions: 'Обжарить кусочки куриного филе с луком. Добавить нашинкованную капусту, немного воды, томатную пасту. Тушить под крышкой 30 минут.', modHim: 'Дополнительно сварить 150г (в сухом виде) гречки на гарнир.', modHer: 'Гарнир не нужен, капуста даст отличный объем и сытость.', ingredients: [{name:'Куриное филе',weight:500,k:113,b:23.6,j:1.9,u:0.4},{name:'Капуста белокочанная',weight:600,k:28,b:1.8,j:0.2,u:4.7},{name:'Лук репчатый',weight:100,k:41,b:1.4,j:0.2,u:8.2},{name:'Масло подсолнечное Маслодел',weight:15,k:899,b:0,j:99.9,u:0}] },
         { id: 'r8', title: 'Ленивый плов из курицы', category: 'Птица', instructions: 'Обжарить морковь соломкой и лук. Положить кусочки филе. Сверху засыпать промытый рис, залить водой на 1 см выше риса. Варить на медленном огне до впитывания воды.', modHim: 'Полить готовый плов ложкой растительного масла для калорийности.', modHer: 'Смешать свою порцию со свежим огурцом (150г) для объема.', ingredients: [{name:'Куриное филе',weight:500,k:113,b:23.6,j:1.9,u:0.4},{name:'Рис белый Баракат',weight:300,k:344,b:6.7,j:0.7,u:78.9},{name:'Морковь',weight:200,k:35,b:1.3,j:0.1,u:6.9},{name:'Лук репчатый',weight:100,k:41,b:1.4,j:0.2,u:8.2}] },
         { id: 'r9', title: 'Котлеты куриные рубленые', category: 'Птица', instructions: 'Мелко порубить филе ножом. Смешать с яйцом, ложкой муки и тертым луком. Выкладывать ложкой на сковороду как оладьи.', modHim: 'Отварить макароны Султан (150г сухих) на гарнир.', modHer: 'Подавать с большой порцией салата Шакараб (помидоры+лук).', ingredients: [{name:'Куриное филе',weight:600,k:113,b:23.6,j:1.9,u:0.4},{name:'Яйцо Курочка Ряба',weight:50,k:157,b:12.7,j:10.9,u:0.7},{name:'Мука пшеничная',weight:30,k:334,b:10.8,j:1.3,u:69.9},{name:'Лук репчатый',weight:100,k:41,b:1.4,j:0.2,u:8.2}] },
-        { id: 'r10', title: 'Гуляш из говядины', category: 'Мясо', instructions: 'Обжарить говядину кубиками. Добавить лук, морковь, ложку томатной пасты. Залить водой и тушить на слабом огне 1.5 часа до мягкости.', modHim: 'На гарнир отварить гречку. Порция мяса с обильной подливой.', modHer: 'Минимум подливы (там жиры), мясо подавать с тушеной капустой.', ingredients: [{name:'Говядина мякоть (постная)',weight:600,k:158,b:22.2,j:7.1,u:0},{name:'Морковь',weight:150,k:35,b:1.3,j:0.1,u:6.9},{name:'Лук репчатый',weight:150,k:41,b:1.4,j:0.2,u:8.2},{name:'Масло подсолнечное Маслодел',weight:20,k:899,b:0,j:99.9,u:0}] },
+        { id: 'r10', title: 'Гуляш из говядины', category: 'Мясо', instructions: 'Обжарить говядину кубиками. Добавить лук, морковь, ложку томатной пасты. Залить водой и тушить на слабом огне 1.5 часа до мягкости.', modHim: 'На гарнир отварить гречку. Порция мяса с обильной подливой.', modHer: 'Минимум подливы (там жиры), мясо подавать с тушеной капустой.', ingredients: [{name:'Говядина мякоть (постная)',weight:600,k:158,b:22.2,j:7.1,u:0},{name:'Морковь',weight:150,k:35,b:1.3,j:0.1,u:6.9},{name:'Лук репчатый',weight:150,k:41,b:1.4,j:0.2,u:8.2},{name(--Масло подсолнечное Маслодел',weight:20,k:899,b:0,j:99.9,u:0}] },
         { id: 'r11', title: 'Макароны по-флотски', category: 'Мясо', instructions: 'Прокрутить говядину в фарш, обжарить с луком на сковороде. Отдельно отварить макароны. Смешать все вместе.', modHim: 'Добавить 30г сыра сверху и есть с хлебом.', modHer: 'Положить в тарелку 30% макарон по-флотски и 70% нарезки из свежих овощей.', ingredients: [{name:'Говядина мякоть (постная)',weight:400,k:158,b:22.2,j:7.1,u:0},{name:'Макароны Султан',weight:300,k:344,b:10.4,j:1.1,u:71.5},{name:'Лук репчатый',weight:150,k:41,b:1.4,j:0.2,u:8.2}] },
         { id: 'r12', title: 'Жаркое с картофелем', category: 'Мясо', instructions: 'Нарезать мясо и картофель крупными кубиками. Слегка обжарить мясо, закинуть картофель, залить бульоном/водой и тушить 40 минут.', modHim: 'Скушать всю порцию с картофелем и соком от жаркого.', modHer: 'Выбирать куски мяса, картофель ограничить до 100г готового веса.', ingredients: [{name:'Говядина мякоть (постная)',weight:500,k:158,b:22.2,j:7.1,u:0},{name:'Картофель',weight:600,k:77,b:2,j:0.4,u:16.3},{name:'Морковь',weight:100,k:35,b:1.3,j:0.1,u:6.9},{name:'Лук репчатый',weight:100,k:41,b:1.4,j:0.2,u:8.2}] },
         { id: 'r13', title: 'Минтай под овощным маринадом', category: 'Рыба', instructions: 'Филе минтая нарезать. Натереть морковь, нарезать лук. Потушить овощи с томатной пастой. Выложить овощи на рыбу и запечь/потушить 20 минут.', modHim: 'Обязательно отварить рис (150г сухих) на гарнир.', modHer: 'Отличный легкий ужин, кушать просто так.', ingredients: [{name:'Минтай филе',weight:600,k:72,b:15.9,j:0.9,u:0},{name:'Морковь',weight:300,k:35,b:1.3,j:0.1,u:6.9},{name:'Лук репчатый',weight:200,k:41,b:1.4,j:0.2,u:8.2},{name:'Масло подсолнечное Маслодел',weight:15,k:899,b:0,j:99.9,u:0}] },
@@ -309,46 +308,92 @@
     ];
 
     // --- STATE MANAGEMENT ---
-    let state = { recipes: [], ingredients: [], diary: {}, weights: { him: [], her: [] } };
+    let state = { 
+        recipes: [], 
+        ingredients: [], 
+        diary: {}, 
+        weights: { him: [], her: [] },
+        activeTab: 'cookbook',           // Remember active tab
+        currentRecipeId: null,          // Remember open recipe workspace
+        calcCookedWeight: '',           // Remember current cooked weight input
+        calcSplitRange: 65,             // Remember current slider split %
+        activeToppings: { him: [], her: [] } // Remember added temporary toppings
+    };
+    
     let currentDate = new Date().toISOString().split('T')[0];
-    let currentRecipeId = null;
 
     // Local temporary store for dynamically added personal toppings in current workspace view
     let activeToppings = { him: [], her: [] };
 
     function init() {
-        const saved = localStorage.getItem('FamilyNutritionApp');
+        const saved = localStorage.getItem('FamilyNutritionApp_v3');
         if (saved) {
             state = JSON.parse(saved);
             if(!state.ingredients || state.ingredients.length === 0) state.ingredients = [...defaultIngredients];
+            if(!state.activeTab) state.activeTab = 'cookbook';
+            if(!state.activeToppings) state.activeToppings = { him: [], her: [] };
         } else {
             state.recipes = JSON.parse(JSON.stringify(defaultRecipes));
             state.ingredients = JSON.parse(JSON.stringify(defaultIngredients));
+            state.activeTab = 'cookbook';
+            state.currentRecipeId = null;
+            state.calcCookedWeight = '';
+            state.calcSplitRange = 65;
+            state.activeToppings = { him: [], her: [] };
             saveState();
         }
         
         document.getElementById('weight-date-him').value = currentDate;
         document.getElementById('weight-date-her').value = currentDate;
         
+        // Restore active tab layout
+        document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+        document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
+        
+        document.getElementById(`tab-${state.activeTab}`).classList.add('active');
+        document.getElementById(`nav-${state.activeTab}`).classList.add('active');
+
         renderRecipes();
         renderDatabase();
         renderDiary();
         renderProgress();
+
+        // Restore active workspace recipe if it was open
+        if (state.activeTab === 'cookbook' && state.currentRecipeId) {
+            document.getElementById('recipe-list-view').style.display = 'none';
+            document.getElementById('recipe-detail-view').style.display = 'block';
+            renderRecipeEditor(true); // true to indicate restoration of saved weights/toppings
+        } else {
+            closeRecipe();
+        }
     }
 
-    function saveState() { localStorage.setItem('FamilyNutritionApp', JSON.stringify(state)); }
+    function saveState() { 
+        localStorage.setItem('FamilyNutritionApp_v3', JSON.stringify(state)); 
+    }
 
     function switchTab(tabId) {
         document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
         document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
         
         document.getElementById(`tab-${tabId}`).classList.add('active');
-        event.currentTarget.classList.add('active');
+        document.getElementById(`nav-${tabId}`).classList.add('active');
 
-        if(tabId === 'cookbook') { closeRecipe(); renderRecipes(); }
-        else if (tabId === 'database') { renderDatabase(); }
+        state.activeTab = tabId;
+        saveState();
+
+        if (tabId === 'database') { renderDatabase(); }
         else if (tabId === 'diary') { renderDiary(); }
         else if (tabId === 'progress') { renderProgress(); }
+        else if (tabId === 'cookbook') {
+            if (state.currentRecipeId) {
+                document.getElementById('recipe-list-view').style.display = 'none';
+                document.getElementById('recipe-detail-view').style.display = 'block';
+                renderRecipeEditor(true);
+            } else {
+                closeRecipe();
+            }
+        }
     }
 
     // --- TAB 1: COOKBOOK LOGIC ---
@@ -388,6 +433,10 @@
     function createNewRecipe() {
         const nr = { id: generateId(), title: 'Новый рецепт', category: 'Завтраки', instructions: '', modHim: '', modHer: '', ingredients: [] };
         state.recipes.push(nr);
+        state.currentRecipeId = nr.id;
+        state.calcCookedWeight = '';
+        state.calcSplitRange = 65;
+        state.activeToppings = { him: [], her: [] };
         saveState();
         openRecipe(nr.id);
     }
@@ -397,18 +446,23 @@
         activeToppings = { him: [], her: [] }; // reset
         document.getElementById('recipe-list-view').style.display = 'none';
         document.getElementById('recipe-detail-view').style.display = 'block';
+        saveState();
         renderRecipeEditor();
     }
 
     function closeRecipe() {
-        currentRecipeId = null;
+        state.currentRecipeId = null;
+        state.calcCookedWeight = '';
+        state.calcSplitRange = 65;
+        state.activeToppings = { him: [], her: [] };
+        saveState();
         document.getElementById('recipe-detail-view').style.display = 'none';
         document.getElementById('recipe-list-view').style.display = 'block';
         renderRecipes();
     }
 
-    function renderRecipeEditor() {
-        const r = state.recipes.find(x => x.id === currentRecipeId);
+    function renderRecipeEditor(isRestoring = false) {
+        const r = state.recipes.find(x => x.id === state.currentRecipeId);
         if(!r) return;
 
         let totalWeight = 0, totalK = 0, totalB = 0, totalJ = 0, totalU = 0;
@@ -424,10 +478,10 @@
                         <div class="autocomplete-dropdown"></div>
                     </div>
                     <div><span class="hide-mobile" style="font-size:0.75rem; color:var(--text-muted);">Вес(г)</span><input type="number" value="${ing.weight}" onchange="updateRIng(${idx}, 'weight', this.value)"></div>
-                    <div><span class="hide-mobile" style="font-size:0.75rem; color:var(--text-muted);">Ккал(100г)</span><input type="number" value="${ing.k}" onchange="updateRIng(${idx}, 'k', this.value)"></div>
-                    <div><span class="hide-mobile" style="font-size:0.75rem; color:var(--text-muted);">Б(100г)</span><input type="number" value="${ing.b}" onchange="updateRIng(${idx}, 'b', this.value)"></div>
-                    <div><span class="hide-mobile" style="font-size:0.75rem; color:var(--text-muted);">Ж(100г)</span><input type="number" value="${ing.j}" onchange="updateRIng(${idx}, 'j', this.value)"></div>
-                    <div><span class="hide-mobile" style="font-size:0.75rem; color:var(--text-muted);">У(100г)</span><input type="number" value="${ing.u}" onchange="updateRIng(${idx}, 'u', this.value)"></div>
+                    <div><span class="hide-mobile" style="font-size:0.75rem; color:var(--text-muted);">Ккал</span><input type="number" value="${ing.k}" onchange="updateRIng(${idx}, 'k', this.value)"></div>
+                    <div><span class="hide-mobile" style="font-size:0.75rem; color:var(--text-muted);">Б</span><input type="number" value="${ing.b}" onchange="updateRIng(${idx}, 'b', this.value)"></div>
+                    <div><span class="hide-mobile" style="font-size:0.75rem; color:var(--text-muted);">Ж</span><input type="number" value="${ing.j}" onchange="updateRIng(${idx}, 'j', this.value)"></div>
+                    <div><span class="hide-mobile" style="font-size:0.75rem; color:var(--text-muted);">У</span><input type="number" value="${ing.u}" onchange="updateRIng(${idx}, 'u', this.value)"></div>
                     <button class="danger" style="margin-top:auto; height:38px;" onclick="delRIng(${idx})">✕</button>
                 </div>
             `;
@@ -454,16 +508,16 @@
             </div>
 
             <h4>Пошаговое приготовление</h4>
-            <textarea rows="4" onchange="updateR('instructions', this.value)">${r.instructions}</textarea>
+            <textarea rows="4" onchange="updateR('instructions', this.value)">${r.instructions || ''}</textarea>
 
             <div class="mod-box">
                 <div class="mod-him">
                     <h4 style="color:var(--him-main);">Модификация для Него</h4>
-                    <textarea rows="3" onchange="updateR('modHim', this.value)" style="background:white; margin-top:10px;">${r.modHim}</textarea>
+                    <textarea rows="3" onchange="updateR('modHim', this.value)" style="background:white; margin-top:10px;">${r.modHim || ''}</textarea>
                 </div>
                 <div class="mod-her">
                     <h4 style="color:var(--her-main);">Модификация для Неё</h4>
-                    <textarea rows="3" onchange="updateR('modHer', this.value)" style="background:white; margin-top:10px;">${r.modHer}</textarea>
+                    <textarea rows="3" onchange="updateR('modHer', this.value)" style="background:white; margin-top:10px;">${r.modHer || ''}</textarea>
                 </div>
             </div>
 
@@ -473,8 +527,8 @@
                 <div style="display:flex; justify-content:center; align-items:center; gap:15px; flex-wrap:wrap;">
                     <input type="number" id="calc-cooked-weight" placeholder="Общий вес готового блюда (г)" style="max-width:250px; margin:0;" oninput="calcSplit()">
                     <div style="text-align:left; font-size:0.85rem; font-weight:bold; width:200px;">
-                        ОН: <span id="label-him-pct">65</span>% | ОНА: <span id="label-her-pct">35</span>%
-                        <input type="range" id="calc-split-range" min="10" max="90" value="65" style="margin:5px 0 0 0;" oninput="calcSplit()">
+                        ОН: <span id="label-him-pct">${state.calcSplitRange}</span>% | ОНА: <span id="label-her-pct">${100 - state.calcSplitRange}</span>%
+                        <input type="range" id="calc-split-range" min="10" max="90" value="${state.calcSplitRange}" style="margin:5px 0 0 0;" oninput="saveCalcParams(); calcSplit();">
                     </div>
                 </div>
                 <div id="split-results" class="split-results"></div>
@@ -484,30 +538,36 @@
         calcSplit();
     }
 
+    function saveCalcParams() {
+        state.calcCookedWeight = document.getElementById('calc-cooked-weight').value;
+        state.calcSplitRange = parseInt(document.getElementById('calc-split-range').value) || 65;
+        saveState();
+    }
+
     function updateR(field, val) {
-        const r = state.recipes.find(x => x.id === currentRecipeId);
+        const r = state.recipes.find(x => x.id === state.currentRecipeId);
         r[field] = val; saveState();
     }
     function updateRIng(idx, field, val) {
-        const r = state.recipes.find(x => x.id === currentRecipeId);
+        const r = state.recipes.find(x => x.id === state.currentRecipeId);
         if(field === 'name') r.ingredients[idx][field] = val;
         else r.ingredients[idx][field] = parseFloat(val) || 0;
         saveState(); renderRecipeEditor();
     }
     function addRIng() {
-        const r = state.recipes.find(x => x.id === currentRecipeId);
+        const r = state.recipes.find(x => x.id === state.currentRecipeId);
         r.ingredients.push({name:'', weight:100, k:0, b:0, j:0, u:0});
         saveState(); renderRecipeEditor();
     }
     function delRIng(idx) {
-        const r = state.recipes.find(x => x.id === currentRecipeId);
+        const r = state.recipes.find(x => x.id === state.currentRecipeId);
         r.ingredients.splice(idx, 1);
         saveState(); renderRecipeEditor();
     }
     function deleteRecipe() {
         if(!confirm('Удалить рецепт навсегда?')) return;
-        state.recipes = state.recipes.filter(x => x.id !== currentRecipeId);
-        saveState(); closeRecipe();
+        state.recipes = state.recipes.filter(x => x.id !== state.currentRecipeId);
+        closeRecipe();
     }
 
     // --- AUTOCOMPLETE ENGINE (RECIPES & TOPPINGS) ---
@@ -710,15 +770,11 @@
     function renderDiary() {
         const today = new Date().toISOString().split('T')[0];
         document.getElementById('diary-date-display').innerText = (currentDate === today) ? 'Сегодня' : currentDate;
-
         const dayData = state.diary[currentDate] || { him: [], her: [] };
 
         const renderUserProgress = (user, data, target, barsId, listId, color) => {
-            let tk=0, tb=0, tj=0, tu=0;
-            data.forEach(x => { tk+=x.k; tb+=x.b; tj+=x.j; tu+=x.u; });
-            
-            const pk = Math.min(100, (tk/target.kcal)*100);
-            const pb = Math.min(100, (tb/target.p)*100);
+            let tk=0, tb=0, tj=0, tu=0; data.forEach(x => { tk+=x.k; tb+=x.b; tj+=x.j; tu+=x.u; });
+            const pk = Math.min(100, (tk/target.kcal)*100), pb = Math.min(100, (tb/target.p)*100);
             
             document.getElementById(barsId).innerHTML = `
                 <div class="progress-container">
@@ -733,7 +789,6 @@
                     <span>Жиры: ${tj}/${target.f}г</span><span>Углеводы: ${tu}/${target.c}г</span>
                 </div>
             `;
-
             document.getElementById(listId).innerHTML = data.length === 0 ? '<p style="font-size:0.85rem; color:var(--text-muted);">Пока пусто.</p>' : data.map(x => `
                 <div class="log-entry">
                     <div>
@@ -744,7 +799,6 @@
                 </div>
             `).join('');
         };
-
         renderUserProgress('him', dayData.him, TARGETS.him, 'diary-him-bars', 'diary-him-list', 'var(--him-main)');
         renderUserProgress('her', dayData.her, TARGETS.her, 'diary-her-bars', 'diary-her-list', 'var(--her-main)');
     }
@@ -754,11 +808,9 @@
         const d = document.getElementById(`weight-date-${user}`).value;
         const v = parseFloat(document.getElementById(`weight-val-${user}`).value);
         if(!d || !v) return;
-        
         const existing = state.weights[user].find(x => x.date === d);
         if(existing) existing.val = v; else state.weights[user].push({date: d, val: v});
-        
-        state.weights[user].sort((a,b) => new Date(b.date) - new Date(a.date)); // Desc
+        state.weights[user].sort((a,b) => new Date(b.date) - new Date(a.date));
         saveState(); renderProgress();
     }
     function renderProgress() {
@@ -766,31 +818,25 @@
             const data = state.weights[user];
             const tbody = document.getElementById(`weight-table-${user}`);
             if(data.length === 0) { tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;">Нет записей</td></tr>'; return; }
-
             const firstVal = data[data.length-1].val;
-            
             tbody.innerHTML = data.map((entry, i) => {
                 let weekDiff = "-";
                 let pastWeek = data.find(w => { const days = (new Date(entry.date) - new Date(w.date))/(1000*3600*24); return days >= 5 && days <= 9; });
                 if(!pastWeek && i < data.length-1) pastWeek = data[i+1];
-                
                 if(pastWeek && pastWeek.date !== entry.date) {
                     const diff = (entry.val - pastWeek.val).toFixed(1);
                     const isGood = user === 'him' ? diff > 0 : diff < 0;
                     weekDiff = `<span class="${isGood?'trend-good':'trend-bad'}">${diff > 0 ? '+'+diff : diff}</span>`;
                 }
-                
                 const totalDiff = (entry.val - firstVal).toFixed(1);
                 const isTGood = user === 'him' ? totalDiff > 0 : totalDiff < 0;
-                const totalStr = totalDiff == 0 ? "0" : `<span class="${isTGood?'trend-good':'trend-bad'}">${totalDiff > 0 ? '+'+totalDiff : totalDiff}</span>`;
-
-                return `<tr><td>${entry.date}</td><td style="font-weight:700;">${entry.val}</td><td>${weekDiff}</td><td>${totalStr}</td></tr>`;
+                tbody.innerHTML = '';
+                return `<tr><td>${entry.date}</td><td style="font-weight:700;">${entry.val}</td><td>${weekDiff}</td><td>${totalDiff == 0 ? "0" : `<span class="${isTGood?'trend-good':'trend-bad'}">${totalDiff > 0 ? '+'+totalDiff : totalDiff}</span>`}</td></tr>`;
             }).join('');
         };
         buildTable('him'); buildTable('her');
     }
 
-    // BOOT
     init();
 </script>
 </body>

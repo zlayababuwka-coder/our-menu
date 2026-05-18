@@ -3,1748 +3,1299 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NutriSplit — Премиум Нутри-Хаб</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>Family Nutrition Hub | Almaty Edition</title>
     <style>
         :root {
-            --bg-gradient: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%);
-            --glass-bg: rgba(255, 255, 255, 0.55);
-            --glass-bg-hover: rgba(255, 255, 255, 0.7);
-            --glass-border: rgba(255, 255, 255, 0.3);
-            --text-main: #1e293b;
-            --text-muted: #64748b;
+            /* Theme Colors */
+            --bg-body: #f4f6f8;
+            --bg-surface: #ffffff;
+            --text-main: #1f2937;
+            --text-muted: #6b7280;
+            --border: #e5e7eb;
             
-            /* Цветовые схемы профилей */
-            --p1-color: #3b82f6;
-            --p1-bg: rgba(59, 130, 246, 0.1);
-            --p2-color: #10b981;
-            --p2-bg: rgba(16, 185, 129, 0.1);
+            /* Profile Colors */
+            --him-main: #1e40af; /* Deep Blue */
+            --him-light: #dbeafe;
+            --him-gradient: linear-gradient(135deg, #1e40af, #3b82f6);
             
-            --danger: #ef4444;
-            --danger-bg: rgba(239, 68, 68, 0.1);
+            --her-main: #047857; /* Mint/Green */
+            --her-light: #d1fae5;
+            --her-gradient: linear-gradient(135deg, #047857, #10b981);
+            
+            /* UI Elements */
             --accent: #f59e0b;
-            --radius: 16px;
-            --shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.06);
+            --radius-lg: 20px;
+            --radius-md: 12px;
+            --shadow-soft: 0 10px 25px rgba(0,0,0,0.05);
+            --shadow-hover: 0 15px 35px rgba(0,0,0,0.1);
+            --transition: all 0.3s ease;
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: system-ui, -apple-system, sans-serif; }
+        body { background-color: var(--bg-body); color: var(--text-main); -webkit-font-smoothing: antialiased; padding-bottom: 90px; }
 
-        body {
-            background: var(--bg-gradient);
-            background-attachment: fixed;
-            min-height: 100vh;
-            color: var(--text-main);
-            display: flex;
-            padding: 20px;
-        }
+        /* Typography */
+        h1, h2, h3, h4 { color: var(--text-main); font-weight: 700; margin-bottom: 0.5rem; }
+        p { color: var(--text-muted); line-height: 1.5; }
 
-        /* Основной контейнер приложения */
-        .app-container {
-            display: flex;
-            width: 100%;
-            max-width: 1400px;
-            margin: 0 auto;
-            gap: 20px;
-        }
-
-        /* Боковое меню навигации */
-        nav {
-            width: 260px;
-            background: var(--glass-bg);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid var(--glass-border);
-            border-radius: var(--radius);
-            padding: 24px 16px;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            box-shadow: var(--shadow);
-            height: fit-content;
-            position: sticky;
-            top: 20px;
-        }
-
-        .brand {
-            font-size: 22px;
-            font-weight: 800;
-            text-align: center;
-            margin-bottom: 24px;
-            background: linear-gradient(45deg, #4f46e5, #06b6d4);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            letter-spacing: -0.5px;
-        }
-
-        .nav-btn {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 12px 16px;
-            border: none;
-            background: transparent;
-            color: var(--text-main);
-            font-size: 15px;
-            font-weight: 600;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            text-align: left;
-        }
-
-        .nav-btn:hover {
-            background: rgba(255, 255, 255, 0.4);
-        }
-
-        .nav-btn.active {
-            background: #ffffff;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-            color: #4f46e5;
-        }
-
-        /* Главная область контента */
-        main {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            min-width: 0;
-        }
-
-        .tab-content {
-            display: none;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        .tab-content.active {
-            display: flex;
-        }
-
-        /* Стили стеклянных карточек */
-        .glass-card {
-            background: var(--glass-bg);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid var(--glass-border);
-            border-radius: var(--radius);
-            padding: 24px;
-            box-shadow: var(--shadow);
-        }
-
-        /* Заголовки страниц */
-        .page-header {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-            margin-bottom: 10px;
-        }
-
-        .header-title-area {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .header-title-area svg {
-            width: 28px;
-            height: 28px;
-            color: #4f46e5;
-            flex-shrink: 0;
-        }
-
-        .page-header h1 {
-            font-size: 24px;
-            font-weight: 700;
-            color: var(--text-main);
-        }
-
-        .page-header p {
-            font-size: 14px;
-            color: var(--text-muted);
-            line-height: 1.5;
-        }
-
-        /* Сетки и элементы форм */
-        .grid-2 {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-        }
-
-        @media (max-width: 900px) {
-            .app-container { flex-direction: column; }
-            nav { width: 100%; position: static; }
-            .grid-2 { grid-template-columns: 1fr; }
-        }
-
-        .profile-card-header {
-            font-size: 18px;
-            font-weight: 700;
-            margin-bottom: 16px;
-            padding-bottom: 8px;
-            border-bottom: 2px solid rgba(0,0,0,0.05);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .form-group {
-            margin-bottom: 14px;
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-        }
-
-        label {
-            font-size: 13px;
-            font-weight: 600;
-            color: var(--text-muted);
-        }
-
-        input, select, textarea {
-            width: 100%;
-            padding: 10px 14px;
-            border: 1px solid rgba(0,0,0,0.1);
-            border-radius: 10px;
-            background: rgba(255,255,255,0.5);
-            font-size: 14px;
-            color: var(--text-main);
-            outline: none;
-            transition: all 0.2s;
-        }
-
-        input:focus, select:focus, textarea:focus {
-            border-color: #4f46e5;
-            background: #ffffff;
-        }
-
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            padding: 10px 20px;
-            border-radius: 10px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            border: none;
-        }
-
-        .btn-primary { background: #4f46e5; color: white; }
-        .btn-primary:hover { background: #4338ca; }
-        .btn-secondary { background: rgba(0,0,0,0.05); color: var(--text-main); }
-        .btn-secondary:hover { background: rgba(0,0,0,0.1); }
-        .btn-danger { background: var(--danger); color: white; }
-        .btn-danger:hover { background: #dc2626; }
-
-        /* Внутренние компоненты вкладок */
-        .calculated-targets {
-            margin-top: 14px;
-            padding: 12px;
-            border-radius: 10px;
-            background: rgba(255,255,255,0.4);
-            font-size: 13px;
-            line-height: 1.6;
-        }
-
-        /* Книга рецептов */
-        .recipe-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 16px;
-            margin-top: 16px;
-        }
-
-        .recipe-card {
-            background: rgba(255,255,255,0.45);
-            border: 1px solid var(--glass-border);
-            border-radius: 12px;
-            padding: 16px;
-            cursor: pointer;
-            transition: transform 0.2s, background-color 0.2s;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            position: relative;
-        }
-
-        .recipe-card:hover {
-            transform: translateY(-2px);
-            background: var(--glass-bg-hover);
-        }
-
-        .recipe-card-checkbox {
-            position: absolute;
-            top: 16px;
-            right: 16px;
-            width: 18px;
-            height: 18px;
-            cursor: pointer;
-            z-index: 2;
-        }
-
-        /* Модальные окна */
-        .modal-overlay {
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0,0,0,0.3);
-            backdrop-filter: blur(4px);
-            -webkit-backdrop-filter: blur(4px);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-            padding: 16px;
-        }
-
-        .modal-box {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(16px);
-            border: 1px solid var(--glass-border);
-            width: 100%;
-            max-width: 600px;
-            border-radius: var(--radius);
-            padding: 24px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.15);
-            max-height: 90vh;
-            overflow-y: auto;
-            position: relative;
-        }
-
-        .close-modal {
-            position: absolute;
-            top: 16px; right: 16px;
-            background: transparent;
-            border: none;
-            font-size: 20px;
-            cursor: pointer;
-            color: var(--text-muted);
-        }
-
-        /* Прогресс-бары дневника питания */
-        .diary-profile-block {
-            background: rgba(255,255,255,0.4);
-            border-radius: 12px;
-            padding: 16px;
-            margin-bottom: 16px;
-        }
-
-        .macro-progress-container {
-            margin-top: 12px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .macro-row {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-        }
-
-        .macro-labels {
-            display: flex;
-            justify-content: space-between;
-            font-size: 12px;
-            font-weight: 600;
-        }
-
-        .progress-bar-wrap {
-            height: 10px;
-            background: rgba(0,0,0,0.06);
-            border-radius: 5px;
-            overflow: hidden;
-            position: relative;
-        }
-
-        .progress-bar-fill {
-            height: 100%;
-            border-radius: 5px;
-            width: 0%;
-            transition: width 0.3s ease, background-color 0.3s;
-        }
-
-        .overflow-text {
-            color: var(--danger);
-            font-weight: 700;
-        }
-
-        /* Таблицы записей */
-        .data-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 12px;
-            font-size: 14px;
-        }
-
-        .data-table th, .data-table td {
-            padding: 10px 12px;
-            text-align: left;
-            border-bottom: 1px solid rgba(0,0,0,0.05);
-        }
-
-        .data-table th {
-            font-weight: 600;
-            color: var(--text-muted);
-            background: rgba(0,0,0,0.02);
-        }
-
-        .action-icon {
-            cursor: pointer;
-            color: var(--text-muted);
-            transition: color 0.2s;
-        }
-
-        .action-icon:hover { color: var(--danger); }
-
-        .shopping-list-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 8px 0;
-            border-bottom: 1px dashed rgba(0,0,0,0.08);
-        }
+        /* Header & Nav */
+        header { background: var(--bg-surface); padding: 20px; text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,0.03); position: sticky; top: 0; z-index: 50; }
+        .header-title { font-size: 1.5rem; font-weight: 800; background: linear-gradient(90deg, var(--him-main), var(--her-main)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         
-        .shopping-list-item input:checked + span {
-            text-decoration: line-through;
-            color: var(--text-muted);
+        nav { position: fixed; bottom: 0; width: 100%; background: var(--bg-surface); display: flex; justify-content: space-around; padding: 15px 10px; box-shadow: 0 -5px 20px rgba(0,0,0,0.05); border-top: 1px solid var(--border); z-index: 100; }
+        .nav-btn { background: none; border: none; font-size: 0.85rem; font-weight: 600; color: var(--text-muted); display: flex; flex-direction: column; align-items: center; gap: 6px; cursor: pointer; transition: var(--transition); padding: 8px 12px; border-radius: var(--radius-md); }
+        .nav-btn i { font-size: 1.4rem; font-style: normal; }
+        .nav-btn.active { color: var(--him-main); background: var(--him-light); }
+
+        /* Layout */
+        .container { max-width: 1000px; margin: 0 auto; padding: 25px 20px; }
+        .tab-content { display: none; animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
+        .tab-content.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Cards & Inputs */
+        .card { background: var(--bg-surface); border-radius: var(--radius-lg); padding: 25px; margin-bottom: 25px; box-shadow: var(--shadow-soft); transition: var(--transition); }
+        .card:hover { box-shadow: var(--shadow-hover); }
+        
+        input, select, textarea { width: 100%; padding: 12px 15px; border: 1px solid var(--border); border-radius: var(--radius-md); font-size: 0.95rem; margin-bottom: 15px; background: var(--bg-body); transition: var(--transition); outline: none; }
+        input:focus, select:focus, textarea:focus { border-color: var(--him-main); background: var(--bg-surface); box-shadow: 0 0 0 3px var(--him-light); }
+        
+        button.primary { background: var(--him-main); color: white; border: none; padding: 12px 20px; border-radius: var(--radius-md); font-weight: 600; cursor: pointer; transition: var(--transition); width: 100%; }
+        button.primary:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(30, 64, 175, 0.3); }
+        button.secondary { background: var(--bg-body); color: var(--text-main); border: 1px solid var(--border); padding: 10px 15px; border-radius: var(--radius-md); font-weight: 600; cursor: pointer; transition: var(--transition); }
+        button.secondary:hover { background: var(--border); }
+        button.danger { background: #fee2e2; color: #dc2626; border: none; padding: 8px 12px; border-radius: var(--radius-md); cursor: pointer; font-weight: bold;}
+
+        /* Tab 1: Cookbook */
+        .filters { display: flex; gap: 15px; margin-bottom: 20px; }
+        .recipe-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+        .recipe-card { background: var(--bg-surface); border-radius: var(--radius-lg); padding: 20px; border: 1px solid var(--border); cursor: pointer; transition: var(--transition); display: flex; flex-direction: column; height: 100%;}
+        .recipe-card:hover { border-color: var(--him-main); transform: translateY(-5px); box-shadow: var(--shadow-hover); }
+        .badge { display: inline-block; padding: 5px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; background: var(--bg-body); color: var(--text-muted); margin-bottom: 10px; }
+        .recipe-macros { margin-top: auto; padding-top: 15px; border-top: 1px solid var(--border); font-size: 0.85rem; color: var(--text-muted); display: flex; justify-content: space-between; }
+
+        /* Recipe Detail Workspace */
+        .workspace-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .ingredient-row { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr 40px; gap: 10px; margin-bottom: 10px; align-items: center; background: var(--bg-body); padding: 10px; border-radius: var(--radius-md); position: relative; }
+        .ingredient-row input { margin-bottom: 0; padding: 8px; font-size: 0.85rem;}
+        
+        .mod-box { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px; }
+        .mod-him { background: var(--him-light); padding: 15px; border-radius: var(--radius-md); border-left: 4px solid var(--him-main); }
+        .mod-her { background: var(--her-light); padding: 15px; border-radius: var(--radius-md); border-left: 4px solid var(--her-main); }
+
+        /* Split Calculator */
+        .split-zone { background: #f8fafc; border: 2px dashed #cbd5e1; padding: 25px; border-radius: var(--radius-lg); text-align: center; margin-top: 30px; }
+        .split-results { display: flex; gap: 20px; margin-top: 20px; flex-wrap: wrap;}
+        .portion-card { flex: 1; min-width: 250px; padding: 20px; border-radius: var(--radius-md); color: white; text-align: left; display: flex; flex-direction: column;}
+        .portion-card.him { background: var(--him-gradient); }
+        .portion-card.her { background: var(--her-gradient); }
+        .portion-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; font-size: 0.9rem; font-weight: 500; background: rgba(255,255,255,0.15); padding: 10px; border-radius: 8px;}
+        
+        /* Custom Additions / Toppings Zone inside Portion Card */
+        .toppings-zone { margin-top: 15px; background: rgba(255,255,255,0.1); padding: 12px; border-radius: 8px; border: 1px dashed rgba(255,255,255,0.3); color: white; text-align: left;}
+        .topping-row { display: grid; grid-template-columns: 2fr 1fr 30px; gap: 5px; margin-bottom: 8px; align-items: center; position: relative;}
+        .topping-row input { margin: 0; padding: 6px; font-size: 0.8rem; background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.2); color: white; }
+        .topping-row input::placeholder { color: rgba(255,255,255,0.6); }
+        .topping-row input:focus { background: white; color: var(--text-main); }
+        .topping-row .btn-del-top { background: none; border: none; color: #fecaca; cursor: pointer; font-size: 1.1rem; font-weight: bold; text-align: center;}
+
+        /* Autocomplete Database */
+        .autocomplete-dropdown { position: absolute; top: 100%; left: 0; width: 100%; background: var(--bg-surface); border: 1px solid var(--border); border-radius: var(--radius-md); max-height: 200px; overflow-y: auto; z-index: 1000; box-shadow: var(--shadow-hover); display: none; color: var(--text-main); }
+        .autocomplete-item { padding: 10px 15px; cursor: pointer; font-size: 0.85rem; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between;}
+        .autocomplete-item:hover { background: var(--him-light); color: var(--him-main); }
+
+        /* Progress Bars */
+        .progress-container { margin-bottom: 15px; }
+        .progress-header { display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: 600; margin-bottom: 5px; }
+        .progress-track { height: 12px; background: var(--border); border-radius: 10px; overflow: hidden; }
+        .progress-fill { height: 100%; border-radius: 10px; transition: width 0.8s ease; }
+        
+        .log-entry { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--border); }
+        .log-entry:last-child { border-bottom: none; }
+
+        /* Tables */
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; background: var(--bg-surface); border-radius: var(--radius-md); overflow: hidden;}
+        th, td { padding: 15px; text-align: left; border-bottom: 1px solid var(--border); font-size: 0.9rem;}
+        th { background: var(--bg-body); font-weight: 700; color: var(--text-muted); }
+        .trend-good { color: var(--her-main); font-weight: 700; }
+        .trend-bad { color: #dc2626; font-weight: 700; }
+
+        @media (max-width: 768px) {
+            .ingredient-row { grid-template-columns: 1fr; gap: 5px; background: white; border: 1px solid var(--border); padding: 15px; }
+            .ingredient-row input { margin-bottom: 5px; }
+            .hide-mobile { display: none; }
+            .filters { flex-direction: column; gap: 10px; }
+            .mod-box { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
 
-<div class="app-container">
+    <header>
+        <div class="header-title">Nutrition Hub Almaty</div>
+        <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 5px;">Загрузка профилей...</div>
+    </header>
+
     <nav>
-        <div class="brand">NutriSplit</div>
-        <button class="nav-btn active" onclick="switchTab('settings')">⚙️ Настройки</button>
-        <button class="nav-btn" onclick="switchTab('recipes')">🥗 Рецепты</button>
-        <button class="nav-btn" onclick="switchTab('database')">🛒 База КБЖУ</button>
-        <button class="nav-btn" onclick="switchTab('diary')">📊 Дневник</button>
-        <button class="nav-btn" onclick="switchTab('progress')">📈 Вес и Прогресс</button>
+        <button class="nav-btn active" onclick="switchTab('cookbook')"><span>🍳</span> Книга Рецептов</button>
+        <button class="nav-btn" onclick="switchTab('database')"><span>🥑</span> База Продуктов</button>
+        <button class="nav-btn" onclick="switchTab('diary')"><span>📊</span> Дневник</button>
+        <button class="nav-btn" onclick="switchTab('progress')"><span>📈</span> Вес</button>
+        <button class="nav-btn" onclick="switchTab('settings')"><span>⚙️</span> Настройки</button>
     </nav>
 
-    <main>
-        
-        <div id="tab-settings" class="tab-content active">
-            <div class="glass-card">
-                <div class="page-header">
-                    <div class="header-title-area">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
-                        <h1>🧮 Персональный расчет КБЖУ</h1>
-                    </div>
-                    <p>Настройте профили пользователей. Наш калькулятор автоматически рассчитает идеальную норму калорий и макронутриентов под ваши цели по формуле Миффлина-Сан Жеора.</p>
-                </div>
-
-                <div class="grid-2">
-                    <div style="background: rgba(255,255,255,0.25); padding: 16px; border-radius: 12px;">
-                        <div class="profile-card-header" style="color: var(--p1-color)">
-                            <span>👤 Профиль 1</span>
-                        </div>
-                        <div class="form-group">
-                            <label>ИМЯ / МЕТКА</label>
-                            <input type="text" id="p1-name" oninput="liveUpdateNames()" placeholder="Например, Артем">
-                        </div>
-                        <div class="form-group">
-                            <label>ПОЛ</label>
-                            <select id="p1-gender">
-                                <option value="male">Мужской</option>
-                                <option value="female">Женский</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>ВЕС (кг)</label>
-                            <input type="number" id="p1-weight" placeholder="78">
-                        </div>
-                        <div class="form-group">
-                            <label>РОСТ (см)</label>
-                            <input type="number" id="p1-height" placeholder="175">
-                        </div>
-                        <div class="form-group">
-                            <label>ВОЗРАСТ</label>
-                            <input type="number" id="p1-age" placeholder="26">
-                        </div>
-                        <div class="form-group">
-                            <label>АКТИВНОСТЬ</label>
-                            <select id="p1-activity">
-                                <option value="1.2">Минимальная (сидячий быт)</option>
-                                <option value="1.375">Легкая (1-3 тренировки/нед)</option>
-                                <option value="1.55">Средняя (3-5 тренировок/нед)</option>
-                                <option value="1.725">Высокая (6-7 тренировок/нед)</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>ЦЕЛЬ</label>
-                            <select id="p1-goal">
-                                <option value="lose">Похудение (-15%)</option>
-                                <option value="maintain">Поддержание формы</option>
-                                <option value="gain">Набор массы (+15%)</option>
-                            </select>
-                        </div>
-                        <div id="p1-targets-display" class="calculated-targets">Нормы не рассчитаны</div>
-                    </div>
-
-                    <div style="background: rgba(255,255,255,0.25); padding: 16px; border-radius: 12px;">
-                        <div class="profile-card-header" style="color: var(--p2-color)">
-                            <span><span>👤 Профиль 2</span></span>
-                        </div>
-                        <div class="form-group">
-                            <label>ИМЯ / МЕТКА</label>
-                            <input type="text" id="p2-name" oninput="liveUpdateNames()" placeholder="Например, Алина">
-                        </div>
-                        <div class="form-group">
-                            <label>ПОЛ</label>
-                            <select id="p2-gender">
-                                <option value="female">Женский</option>
-                                <option value="male">Мужской</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>ВЕС (кг)</label>
-                            <input type="number" id="p2-weight" placeholder="55">
-                        </div>
-                        <div class="form-group">
-                            <label>РОСТ (см)</label>
-                            <input type="number" id="p2-height" placeholder="165">
-                        </div>
-                        <div class="form-group">
-                            <label>ВОЗРАСТ</label>
-                            <input type="number" id="p2-age" placeholder="25">
-                        </div>
-                        <div class="form-group">
-                            <label>АКТИВНОСТЬ</label>
-                            <select id="p2-activity">
-                                <option value="1.2">Минимальная (сидячий быт)</option>
-                                <option value="1.375">Легкая (1-3 тренировки/нед)</option>
-                                <option value="1.55">Средняя (3-5 тренировок/нед)</option>
-                                <option value="1.725">Высокая (6-7 тренировок/нед)</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>ЦЕЛЬ</label>
-                            <select id="p2-goal">
-                                <option value="lose">Похудение (-15%)</option>
-                                <option value="maintain">Поддержание формы</option>
-                                <option value="gain">Набор массы (+15%)</option>
-                            </select>
-                        </div>
-                        <div id="p2-targets-display" class="calculated-targets">Нормы не рассчитаны</div>
-                    </div>
-                </div>
-
-                <div style="margin-top: 20px; text-align: center;">
-                    <button class="btn btn-primary" onclick="calculateAndSaveProfiles()">Рассчитать и сохранить параметры</button>
-                </div>
-            </div>
-
-            <div class="glass-card">
-                <h3 style="font-size:16px; font-weight:700; margin-bottom:6px;">📦 Резервная копия (JSON)</h3>
-                <p style="font-size:13px; color:var(--text-muted); margin-bottom:14px;">Ваши данные хранятся только в этом браузере. Скачайте файл бэкапа для переноса данных на другое устройство.</p>
-                <div style="display:flex; gap:10px; flex-wrap:wrap;">
-                    <button class="btn btn-secondary" onclick="exportData()">Экспорт данных</button>
-                    <button class="btn btn-secondary" onclick="document.getElementById('import-file').click()">Импорт данных</button>
-                    <input type="file" id="import-file" style="display:none" onchange="importData(event)">
-                    <button class="btn btn-danger" style="margin-left:auto;" onclick="clearAllData()">Очистить все данные</button>
-                </div>
-            </div>
-        </div>
-
-        <div id="tab-recipes" class="tab-content">
-            <div class="glass-card">
-                <div class="page-header">
-                    <div class="header-title-area">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M6.34 17.66l2.83-2.83M14.12 9.88l2.83-2.83"></path><circle cx="12" cy="12" r="6"></circle></svg>
-                        <h1>🥗 Книга рецептов и расчет порций</h1>
-                    </div>
-                    <p>Готовьте общее блюдо на двоих, а калькулятор сам подскажет нужный вес порции для каждого профиля, исходя из его личной нормы КБЖУ.</p>
-                </div>
-
-                <div style="display:flex; gap:10px; margin-bottom:16px;">
-                    <button class="btn btn-primary" onclick="openNewRecipeModal()">+ Новый Рецепт</button>
-                    <button class="btn btn-secondary" onclick="generateShoppingList()">Сгенерировать список покупок</button>
-                </div>
-
-                <div id="recipes-container" class="recipe-grid"></div>
-            </div>
-
-            <div id="shopping-list-card" class="glass-card" style="display:none;">
-                <h3 style="font-size:18px; font-weight:700; margin-bottom:10px; display:flex; justify-content:space-between; align-items:center;">
-                    <span>🛒 Объединенный список покупок</span>
-                    <button class="btn btn-secondary" style="padding:4px 10px; font-size:12px;" onclick="document.getElementById('shopping-list-card').style.display='none'">Закрыть</button>
-                </h3>
-                <div id="shopping-list-results"></div>
-            </div>
-        </div>
-
-        <div id="tab-database" class="tab-content">
-            <div class="glass-card">
-                <div class="page-header">
-                    <div class="header-title-area">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
-                        <h1>🛒 База продуктов</h1>
-                    </div>
-                    <p>Используйте готовые продукты или добавляйте свои. Они будут автоматически доступны при создании рецептов и добавлении быстрых перекусов.</p>
-                </div>
-
-                <div style="background:rgba(255,255,255,0.25); padding:16px; border-radius:12px; margin-bottom:16px;">
-                    <h4 style="font-size:14px; margin-bottom:10px; font-weight:700;">➕ Добавить продукт в базу (на 100г)</h4>
-                    <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)) 100px; gap:10px; align-items:end;">
-                        <div class="form-group" style="margin:0;">
-                            <label>Название</label>
-                            <input type="text" id="db-name" placeholder="Гречка отварная">
-                        </div>
-                        <div class="form-group" style="margin:0;">
-                            <label>Калории</label>
-                            <input type="number" id="db-k" placeholder="110">
-                        </div>
-                        <div class="form-group" style="margin:0;">
-                            <label>Белки</label>
-                            <input type="number" step="0.1" id="db-b" placeholder="3.5">
-                        </div>
-                        <div class="form-group" style="margin:0;">
-                            <label>Жиры</label>
-                            <input type="number" step="0.1" id="db-j" placeholder="0.8">
-                        </div>
-                        <div class="form-group" style="margin:0;">
-                            <label>Углеводы</label>
-                            <input type="number" step="0.1" id="db-u" placeholder="21">
-                        </div>
-                        <button class="btn btn-primary" style="height:40px;" onclick="addProductToDatabase()">+</button>
-                    </div>
-                </div>
-
-                <div style="max-height:400px; overflow-y:auto;">
-                    <table class="data-table">
-                        <thead>
-                            <tr>
-                                <th>Продукт</th>
-                                <th>Ккал</th>
-                                <th>Б (г)</th>
-                                <th>Ж (г)</th>
-                                <th>У (г)</th>
-                                <th style="width:50px;">Удал.</th>
-                            </tr>
-                        </thead>
-                        <tbody id="food-base-table-body"></tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-
-        <div id="tab-diary" class="tab-content">
-            <div class="glass-card">
-                <div class="page-header">
-                    <div class="header-title-area">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-                        <h1>📊 Дневник питания и выполнение норм</h1>
-                    </div>
-                    <p>Вносите съеденные продукты и контролируйте остаток суточного КБЖУ.</p>
-                </div>
-
-                <div style="display:flex; justify-content:space-between; align-items:center; gap:10px; margin-bottom:16px;">
-                    <div style="display:flex; align-items:center; gap:8px;">
-                        <label style="white-space:nowrap;">Дата:</label>
-                        <input type="date" id="diary-current-date" style="width:160px;" onchange="renderDiaryTab()">
-                    </div>
-                    <div style="display:flex; gap:6px;">
-                        <button class="btn btn-secondary" onclick="setDiaryPeriod('day')">День</button>
-                        <button class="btn btn-secondary" onclick="toggleArchiveView('week')">Сводка за неделю</button>
-                    </div>
-                    <button class="btn btn-primary" onclick="openAddDiaryModal()">➕ Внести данные</button>
-                </div>
-
-                <div class="grid-2" id="diary-profiles-bars-grid"></div>
-
-                <div style="margin-top:10px;">
-                    <h3 style="font-size:16px; font-weight:700; margin-bottom:10px;" id="diary-table-title">История питания за день</h3>
-                    <div style="max-height:300px; overflow-y:auto;">
-                        <table class="data-table">
-                            <thead>
-                                <tr>
-                                    <th>Пользователь</th>
-                                    <th>Продукт / Блюдо</th>
-                                    <th>Вес (г)</th>
-                                    <th>Ккал</th>
-                                    <th>Б / Ж / У</th>
-                                    <th style="width:90px; text-align:center;">Действия</th>
-                                </tr>
-                            </thead>
-                            <tbody id="diary-logs-table-body"></tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div id="tab-progress" class="tab-content">
-            <div class="glass-card">
-                <div class="page-header">
-                    <div class="header-title-area">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
-                        <h1>📈 Динамика веса и аналитика</h1>
-                    </div>
-                    <p>Отслеживайте изменения веса и анализируйте прогресс. Фильтры периодов помогут увидеть точные тренды на пути к вашим целям.</p>
-                </div>
-
-                <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:20px; background:rgba(255,255,255,0.2); padding:12px; border-radius:10px;">
-                    <div style="display:flex; gap:6px;">
-                        <button class="btn btn-secondary" onclick="setWeightFilter(7)">7 дней</button>
-                        <button class="btn btn-secondary" onclick="setWeightFilter(30)">1 месяц</button>
-                        <button class="btn btn-secondary" onclick="setWeightFilter(365)">1 год</button>
-                        <button class="btn btn-secondary" onclick="setWeightFilter(0)">Все время</button>
-                    </div>
-                    <div style="display:flex; gap:8px; align-items:center;">
-                        <select id="weight-log-profile" style="width:130px;"></select>
-                        <input type="number" step="0.1" id="weight-log-val" placeholder="Вес" style="width:80px;">
-                        <input type="date" id="weight-log-date" style="width:140px;">
-                        <button class="btn btn-primary" onclick="addWeightEntry()">Записать</button>
-                    </div>
-                </div>
-
-                <div class="grid-2">
-                    <div class="glass-card" style="background:rgba(255,255,255,0.4);">
-                        <h3 id="chart-title-p1" style="font-size:16px; font-weight:700; margin-bottom:10px; color:var(--p1-color)"></h3>
-                        <div style="height:250px; position:relative;">
-                            <canvas id="chart-weight-p1"></canvas>
-                        </div>
-                    </div>
-                    <div class="glass-card" style="background:rgba(255,255,255,0.4);">
-                        <h3 id="chart-title-p2" style="font-size:16px; font-weight:700; margin-bottom:10px; color:var(--p2-color)"></h3>
-                        <div style="height:250px; position:relative;">
-                            <canvas id="chart-weight-p2"></canvas>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="glass-card" style="margin-top:20px; background:rgba(255,255,255,0.3);">
-                    <h3 style="font-size:16px; font-weight:700; margin-bottom:10px;">История взвешиваний</h3>
-                    <div style="max-height:250px; overflow-y:auto;">
-                        <table class="data-table">
-                            <thead>
-                                <tr>
-                                    <th>Дата</th>
-                                    <th>Пользователь</th>
-                                    <th>Вес (кг)</th>
-                                    <th style="width:50px;">Удалить</th>
-                                </tr>
-                            </thead>
-                            <tbody id="weight-history-table-body"></tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-    </main>
-</div>
-
-<div id="modal-recipe-view" class="modal-overlay">
-    <div class="modal-box">
-        <button class="close-modal" onclick="closeModal('modal-recipe-view')">✕</button>
-        <h2 id="m-recipe-title" style="font-size:22px; font-weight:700; margin-bottom:8px;"></h2>
-        <p id="m-recipe-desc" style="color:var(--text-muted); font-size:14px; margin-bottom:16px;"></p>
-        
-        <h4 style="font-weight:700; font-size:14px; margin-bottom:6px;">Ингредиенты (сырой вес на всё блюдо):</h4>
-        <ul id="m-recipe-ingredients" style="margin-left:20px; font-size:14px; margin-bottom:16px; line-height:1.6;"></ul>
-
-        <h4 style="font-weight:700; font-size:14px; margin-bottom:6px;">Инструкции по приготовлению:</h4>
-        <p id="m-recipe-instructions" style="font-size:14px; margin-bottom:20px; white-space:pre-wrap; line-height:1.5; color:#334155;"></p>
-
-        <div style="background:rgba(79,70,229,0.06); padding:16px; border-radius:12px; border:1px solid rgba(79,70,229,0.15);">
-            <h4 style="font-weight:700; font-size:15px; color:#4f46e5; margin-bottom:10px;">⚖️ Умный калькулятор пропорций порций</h4>
-            <div id="split-fallback-notice" style="color:var(--danger); font-size:13px; font-weight:600; display:none; margin-bottom:10px;"></div>
+    <div id="tab-cookbook" class="tab-content active container">
+        <div id="recipe-list-view">
+            <h2>
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right: 6px;"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                Интерактивная База Рецептов
+            </h2>
+            <p style="margin-bottom: 20px;">Бюджетные продукты из Magnum/Small, адаптированные под ваши цели.</p>
             
-            <div id="split-calculator-controls">
-                <div class="form-group">
-                    <label>Фактический общий вес готового блюда (грамм)</label>
-                    <input type="number" id="split-total-weight" placeholder="Например, 750" oninput="calculatePortionSplit()">
+            <div class="filters">
+                <input type="text" id="search-recipe" placeholder="Поиск рецепта..." oninput="renderRecipes()" style="flex: 2; margin:0;">
+                <select id="filter-category" onchange="renderRecipes()" style="flex: 1; margin:0;">
+                    <option value="Все">Все категории</option>
+                    <option value="Завтраки">Завтраки</option>
+                    <option value="Супы">Супы</option>
+                    <option value="Птица">Птица</option>
+                    <option value="Мясо">Мясо</option>
+                    <option value="Рыба">Рыба</option>
+                    <option value="Салаты">Салаты</option>
+                </select>
+                <button class="secondary" onclick="createNewRecipe()" style="flex: 1; margin:0;">+ Новый Рецепт</button>
+            </div>
+            
+            <div id="recipes-container" class="recipe-grid" style="margin-bottom: 25px;"></div>
+
+            <div class="card" style="border-top: 4px solid var(--accent);">
+                <h3 style="display: flex; align-items: center; gap: 8px; font-size: 1.1rem; margin-bottom: 10px;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+                    Интерактивный Список Покупок
+                </h3>
+                <div id="shopping-list-container" style="font-size: 0.95rem;"></div>
+                <button class="secondary" style="margin-top: 12px; font-size: 0.8rem; padding: 6px 12px;" onclick="clearShoppingList()">Очистить список</button>
+            </div>
+        </div>
+
+        <div id="recipe-detail-view" style="display: none;">
+            <div class="workspace-header">
+                <button class="secondary" onclick="closeRecipe()">← Назад в меню</button>
+                <button class="danger" onclick="deleteRecipe()">Удалить рецепт</button>
+            </div>
+            
+            <div class="card" id="recipe-editor"></div>
+        </div>
+    </div>
+
+    <div id="tab-database" class="tab-content container">
+        <h2>
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right: 6px;"><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/><circle cx="12" cy="14" r="3"/></svg>
+            База Продуктов (Алматы)
+        </h2>
+        <p style="margin-bottom: 20px;">Управляйте ингредиентами. Они будут доступны для автозаполнения в рецептах и добавках.</p>
+        
+        <div class="card" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; align-items: end;">
+            <div><label style="font-size:12px;">Название</label><input type="text" id="db-name" placeholder="Творог Adal 5%" style="margin:0;"></div>
+            <div><label style="font-size:12px;">Ккал (на 100г)</label><input type="number" id="db-k" placeholder="121" style="margin:0;"></div>
+            <div><label style="font-size:12px;">Белки</label><input type="number" id="db-b" placeholder="16" style="margin:0;"></div>
+            <div><label style="font-size:12px;">Жиры</label><input type="number" id="db-j" placeholder="5" style="margin:0;"></div>
+            <div><label style="font-size:12px;">Углеводы</label><input type="number" id="db-u" placeholder="3" style="margin:0;"></div>
+            <button class="primary" onclick="addDbProduct()" style="margin:0;">Добавить</button>
+        </div>
+
+        <div class="card" style="padding: 0;">
+            <table>
+                <thead><tr><th>Продукт</th><th>Ккал</th><th>Б</th><th>Ж</th><th>У</th><th></th></tr></thead>
+                <tbody id="db-table-body"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <div id="tab-diary" class="tab-content container">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h2>
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right: 6px;"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="9" y1="9" x2="15" y2="9"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="13" y2="17"/></svg>
+                Дневник Питания
+            </h2>
+            <div style="display: flex; gap: 10px; align-items: center;">
+                <button class="secondary" onclick="changeDate(-1)">←</button>
+                <span id="diary-date-display" style="font-weight: bold;">Сегодня</span>
+                <button class="secondary" onclick="changeDate(1)">→</button>
+            </div>
+        </div>
+
+        <div class="card" style="border-top: 5px solid var(--him-main);">
+            <h3 class="name-label-him-header">HIM</h3>
+            <div id="diary-him-bars" style="margin-top: 15px;"></div>
+            
+            <div style="margin-top: 20px; border-top: 1px solid var(--border); padding-top: 15px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                    <h4 style="font-size: 0.9rem; margin: 0;">Съедено за день:</h4>
+                    <button class="secondary" style="font-size: 0.8rem; padding: 5px 10px;" onclick="toggleQuickLog('him')">＋ Внести данные</button>
                 </div>
-                <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:14px;">
-                    <div style="background:white; padding:10px; border-radius:8px; border-left:4px solid var(--p1-color);">
-                        <div id="split-p1-label" style="font-size:12px; font-weight:700; color:var(--p1-color)"></div>
-                        <div id="split-p1-result" style="font-size:18px; font-weight:800; margin:4px 0;">0 г</div>
-                        <div id="split-p1-macros" style="font-size:11px; color:var(--text-muted)"></div>
-                        <button class="btn btn-secondary" style="font-size:11px; padding:3px 8px; margin-top:6px; width:100%;" id="btn-log-p1-recipe" onclick="logRecipeToDiary(0)">В дневник</button>
+                
+                <div id="quick-log-him" style="display:none; background:var(--bg-body); padding:15px; border-radius:var(--radius-md); margin-bottom:15px; border:1px solid var(--border);">
+                    <div style="position:relative; margin-bottom:10px;">
+                        <input type="text" id="quick-input-him" placeholder="Начните вводить название продукта..." oninput="handleQuickAutocomplete(this, 'him')" onblur="hideAutocomplete(this)" style="margin:0;">
+                        <div class="autocomplete-dropdown" id="quick-dropdown-him"></div>
                     </div>
-                    <div style="background:white; padding:10px; border-radius:8px; border-left:4px solid var(--p2-color);">
-                        <div id="split-p2-label" style="font-size:12px; font-weight:700; color:var(--p2-color)"></div>
-                        <div id="split-p2-result" style="font-size:18px; font-weight:800; margin:4px 0;">0 г</div>
-                        <div id="split-p2-macros" style="font-size:11px; color:var(--text-muted)"></div>
-                        <button class="btn btn-secondary" style="font-size:11px; padding:3px 8px; margin-top:6px; width:100%;" id="btn-log-p2-recipe" onclick="logRecipeToDiary(1)">В дневник</button>
+                    <div style="display:flex; gap:10px;">
+                        <input type="number" id="quick-weight-him" placeholder="Вес (г)" style="margin:0; flex:1;">
+                        <button class="primary" style="width:auto; margin:0; padding: 0 15px;" onclick="submitQuickLog('him')">ОК</button>
                     </div>
+                    <input type="hidden" id="quick-hidden-him">
                 </div>
+
+                <div id="diary-him-list"></div>
+            </div>
+        </div>
+
+        <div class="card" style="border-top: 5px solid var(--her-main);">
+            <h3 class="name-label-her-header">HER</h3>
+            <div id="diary-her-bars" style="margin-top: 15px;"></div>
+            
+            <div style="margin-top: 20px; border-top: 1px solid var(--border); padding-top: 15px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                    <h4 style="font-size: 0.9rem; margin: 0;">Съедено за день:</h4>
+                    <button class="secondary" style="font-size: 0.8rem; padding: 5px 10px;" onclick="toggleQuickLog('her')">＋ Внести данные</button>
+                </div>
+                
+                <div id="quick-log-her" style="display:none; background:var(--bg-body); padding:15px; border-radius:var(--radius-md); margin-bottom:15px; border:1px solid var(--border);">
+                    <div style="position:relative; margin-bottom:10px;">
+                        <input type="text" id="quick-input-her" placeholder="Начните вводить название продукта..." oninput="handleQuickAutocomplete(this, 'her')" onblur="hideAutocomplete(this)" style="margin:0;">
+                        <div class="autocomplete-dropdown" id="quick-dropdown-her"></div>
+                    </div>
+                    <div style="display:flex; gap:10px;">
+                        <input type="number" id="quick-weight-her" placeholder="Вес (г)" style="margin:0; flex:1;">
+                        <button class="primary" style="width:auto; margin:0; padding: 0 15px;" onclick="submitQuickLog('her')">ОК</button>
+                    </div>
+                    <input type="hidden" id="quick-hidden-her">
+                </div>
+
+                <div id="diary-her-list"></div>
             </div>
         </div>
     </div>
-</div>
 
-<div id="modal-recipe-form" class="modal-overlay">
-    <div class="modal-box" style="max-width:650px;">
-        <button class="close-modal" onclick="closeModal('modal-recipe-form')">✕</button>
-        <h2 style="font-size:20px; font-weight:700; margin-bottom:14px;">🥗 Создание нового рецепта</h2>
-        
-        <div class="form-group">
-            <label>Название рецепта</label>
-            <input type="text" id="f-recipe-title" placeholder="Куриное филе в соусе">
+    <div id="tab-progress" class="tab-content container">
+        <h2>
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right: 6px;"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+            Динамика Веса
+        </h2>
+        <p style="margin-bottom: 20px;">Отслеживайте изменения массы и анализируйте тренды отдельно.</p>
+
+        <div class="card" style="border-left: 4px solid var(--him-main);">
+            <h3 class="name-label-him-progress" style="color: var(--him-main);">ОН</h3>
+            
+            <div style="display:flex; gap:5px; margin: 12px 0; flex-wrap:wrap;">
+                <button class="secondary" style="padding:4px 8px; font-size:0.75rem;" onclick="setWeightFilter('him', '7')">7 дней</button>
+                <button class="secondary" style="padding:4px 8px; font-size:0.75rem;" onclick="setWeightFilter('him', '30')">1 месяц</button>
+                <button class="secondary" style="padding:4px 8px; font-size:0.75rem;" onclick="setWeightFilter('him', '365')">1 год</button>
+                <button class="secondary" style="padding:4px 8px; font-size:0.75rem;" onclick="setWeightFilter('him', 'all')">Все время</button>
+            </div>
+
+            <div id="chart-container-him" style="background:var(--bg-body); border-radius:var(--radius-md); padding:10px; margin-bottom:15px; height:130px; display:flex; align-items:center; justify-content:center;"></div>
+
+            <div style="display: flex; gap: 10px; margin-top: 15px;">
+                <input type="date" id="weight-date-him" style="margin:0;">
+                <input type="number" step="0.1" id="weight-val-him" placeholder="Вес (кг)" style="margin:0;">
+                <button class="primary" style="width: auto; margin:0;" onclick="addWeight('him')">Записать</button>
+            </div>
+            <table>
+                <thead><tr><th>Дата</th><th>Вес (кг)</th><th>За неделю</th><th>Всего</th><th></th></tr></thead>
+                <tbody id="weight-table-him"></tbody>
+            </table>
         </div>
-        <div class="form-group">
-            <label>Краткое описание</label>
-            <input type="text" id="f-recipe-desc" placeholder="Нежное филе сбалансированное по макросам">
-        </div>
 
-        <h4 style="font-size:14px; font-weight:700; margin:14px 0 6px 0;">Компоненты (выберите из базы продуктов):</h4>
-        <div id="f-recipe-ingredients-list" style="display:flex; flex-direction:column; gap:8px; margin-bottom:12px;"></div>
-        <button class="btn btn-secondary" style="font-size:12px; padding:6px 12px; margin-bottom:16px;" onclick="addIngredientRowToForm()">+ Добавить продукт</button>
+        <div class="card" style="border-left: 4px solid var(--her-main);">
+            <h3 class="name-label-her-progress" style="color: var(--her-main);">ОНА</h3>
+            
+            <div style="display:flex; gap:5px; margin: 12px 0; flex-wrap:wrap;">
+                <button class="secondary" style="padding:4px 8px; font-size:0.75rem;" onclick="setWeightFilter('her', '7')">7 дней</button>
+                <button class="secondary" style="padding:4px 8px; font-size:0.75rem;" onclick="setWeightFilter('her', '30')">1 месяц</button>
+                <button class="secondary" style="padding:4px 8px; font-size:0.75rem;" onclick="setWeightFilter('her', '365')">1 год</button>
+                <button class="secondary" style="padding:4px 8px; font-size:0.75rem;" onclick="setWeightFilter('her', 'all')">Все время</button>
+            </div>
 
-        <div class="form-group">
-            <label>Инструкции по приготовлению</label>
-            <textarea id="f-recipe-instructions" rows="4" placeholder="Шаг 1. Нарезать филе... Шаг 2. Обжарить..."></textarea>
-        </div>
+            <div id="chart-container-her" style="background:var(--bg-body); border-radius:var(--radius-md); padding:10px; margin-bottom:15px; height:130px; display:flex; align-items:center; justify-content:center;"></div>
 
-        <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:16px;">
-            <button class="btn btn-secondary" onclick="closeModal('modal-recipe-form')">Отмена</button>
-            <button class="btn btn-primary" onclick="saveCustomRecipe()">Сохранить рецепт в книгу</button>
+            <div style="display: flex; gap: 10px; margin-top: 15px;">
+                <input type="date" id="weight-date-her" style="margin:0;">
+                <input type="number" step="0.1" id="weight-val-her" placeholder="Вес (кг)" style="margin:0;">
+                <button class="primary" style="width: auto; margin:0;" onclick="addWeight('her')">Записать</button>
+            </div>
+            <table>
+                <thead><tr><th>Дата</th><th>Вес (кг)</th><th>За неделю</th><th>Всего</th><th></th></tr></thead>
+                <tbody id="weight-table-her"></tbody>
+            </table>
         </div>
     </div>
-</div>
 
-<div id="modal-diary-add" class="modal-overlay">
-    <div class="modal-box" style="max-width:450px;">
-        <button class="close-modal" onclick="closeModal('modal-diary-add')">✕</button>
-        <h2 style="font-size:18px; font-weight:700; margin-bottom:14px;">📊 Внести прием пищи</h2>
+    <div id="tab-settings" class="tab-content container">
+        <h2>
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right: 6px;"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            Настройки Профилей
+        </h2>
         
-        <div class="form-group">
-            <label>Целевой профиль</label>
-            <select id="fd-profile"></select>
-        </div>
-        <div class="form-group">
-            <label>Выбрать продукт из базы</label>
-            <select id="fd-product" onchange="handleDiaryProductSelectChange()"></select>
-        </div>
-        <div style="text-align:center; font-weight:600; font-size:13px; color:var(--text-muted); margin:4px 0 10px 0;">ИЛИ внести вручную ниже:</div>
-        
-        <div class="form-group">
-            <label>Название продукта/блюда вручную</label>
-            <input type="text" id="fd-custom-name" placeholder="Яблоко зеленое">
-        </div>
-        <div class="form-group">
-            <label>Вес порции (грамм)</label>
-            <input type="number" id="fd-weight" placeholder="150" value="100">
-        </div>
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
-            <div class="form-group"><label>Калории на 100г</label><input type="number" id="fd-k"></div>
-            <div class="form-group"><label>Белки на 100г</label><input type="number" step="0.1" id="fd-b"></div>
-            <div class="form-group"><label>Жиры на 100г</label><input type="number" step="0.1" id="fd-j"></div>
-            <div class="form-group"><label>Углеводы на 100г</label><input type="number" step="0.1" id="fd-u"></div>
+        <div class="card" style="background: #fafafa; border: 1px solid var(--border);">
+            <p style="font-size: 0.95rem; color: var(--text-main); font-weight: 500;">
+                🧮 Персональный расчет КБЖУ. Настройте профили пользователей. Наш калькулятор автоматически рассчитает идеальную норму калорий и макронутриентов под ваши цели по формуле Миффлина-Сан Жеора.
+            </p>
         </div>
 
-        <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:16px;">
-            <button class="btn btn-secondary" onclick="closeModal('modal-diary-add')">Отмена</button>
-            <button class="btn btn-primary" onclick="saveDiaryEntry()">Внести в журнал</button>
+        <div class="mod-box" style="margin-top: 0; margin-bottom: 25px;">
+            <div class="card" style="border-top: 4px solid var(--him-main); margin-bottom: 0;">
+                <h3 style="color: var(--him-main); margin-bottom: 15px;">Профиль 1</h3>
+                <label style="font-size: 11px; font-weight: 700; color: var(--text-muted);">ИМЯ / МЕТКА</label>
+                <input type="text" id="cfg-name-him" placeholder="Артём" oninput="updateProfileConfig('him', 'name', this.value)">
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                    <div><label style="font-size:11px;">Вес (кг)</label><input type="number" id="cfg-w-him" oninput="updateProfileConfig('him', 'weight', this.value)"></div>
+                    <div><label style="font-size:11px;">Рост (см)</label><input type="number" id="cfg-h-him" oninput="updateProfileConfig('him', 'height', this.value)"></div>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                    <div><label style="font-size:11px;">Возраст</label><input type="number" id="cfg-age-him" oninput="updateProfileConfig('him', 'age', this.value)"></div>
+                    <div>
+                        <label style="font-size:11px;">Цель</label>
+                        <select id="cfg-goal-him" onchange="updateProfileConfig('him', 'goal', this.value)">
+                            <option value="gain">Набор массы</option>
+                            <option value="maintain">Поддержание</option>
+                            <option value="lose">Снижение веса</option>
+                        </select>
+                    </div>
+                </div>
+                <label style="font-size:11px;">Уровень активности</label>
+                <select id="cfg-act-him" onchange="updateProfileConfig('him', 'activity', this.value)">
+                    <option value="1.2">Минимум нагрузок (1.2)</option>
+                    <option value="1.375">Легкая активность (1.375)</option>
+                    <option value="1.55">Средняя активность (1.55)</option>
+                    <option value="1.725">Высокая нагрузка (1.725)</option>
+                </select>
+            </div>
+
+            <div class="card" style="border-top: 4px solid var(--her-main); margin-bottom: 0;">
+                <h3 style="color: var(--her-main); margin-bottom: 15px;">Профиль 2</h3>
+                <label style="font-size: 11px; font-weight: 700; color: var(--text-muted);">ИМЯ / МЕТКА</label>
+                <input type="text" id="cfg-name-her" placeholder="Она" oninput="updateProfileConfig('her', 'name', this.value)">
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                    <div><label style="font-size:11px;">Вес (кг)</label><input type="number" id="cfg-w-her" oninput="updateProfileConfig('her', 'weight', this.value)"></div>
+                    <div><label style="font-size:11px;">Рост (см)</label><input type="number" id="cfg-h-her" oninput="updateProfileConfig('her', 'height', this.value)"></div>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                    <div><label style="font-size:11px;">Возраст</label><input type="number" id="cfg-age-her" oninput="updateProfileConfig('her', 'age', this.value)"></div>
+                    <div>
+                        <label style="font-size:11px;">Цель</label>
+                        <select id="cfg-goal-her" onchange="updateProfileConfig('her', 'goal', this.value)">
+                            <option value="gain">Набор массы</option>
+                            <option value="maintain">Поддержание</option>
+                            <option value="lose">Снижение веса</option>
+                        </select>
+                    </div>
+                </div>
+                <label style="font-size:11px;">Уровень активности</label>
+                <select id="cfg-act-her" onchange="updateProfileConfig('her', 'activity', this.value)">
+                    <option value="1.2">Минимум нагрузок (1.2)</option>
+                    <option value="1.375">Легкая активность (1.375)</option>
+                    <option value="1.55">Средняя активность (1.55)</option>
+                    <option value="1.725">Высокая нагрузка (1.725)</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>💾 Резервная Копия Данных</h3>
+            <p style="margin-bottom: 15px; font-size: 0.9rem;">
+                📦 Резервная копия (JSON). Ваши данные хранятся только в этом браузере. Скачайте файл бэкапа для переноса данных на другое устройство.
+            </p>
+            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                <button class="secondary" style="flex: 1; min-width: 180px;" onclick="exportDataBackup()">Выгрузить JSON в файл</button>
+                <button class="secondary" style="flex: 1; min-width: 180px;" onclick="document.getElementById('import-file-selector').click()">Загрузить файл бэкапа</button>
+                <input type="file" id="import-file-selector" style="display: none;" onchange="importDataBackup(this)">
+            </div>
         </div>
     </div>
-</div>
 
 <script>
-// --- ПЕРВОНАЧАЛЬНАЯ ИНИЦИАЛИЗАЦИЯ И ДЕМО-ДАННЫЕ ---
-const DEMO_PRODUCTS = [
-    {id: "p_1", name: "Куриное филе (сырое)", k: 110, b: 23, j: 1.2, u: 0},
-    {id: "p_2", name: "Овсяная каша (сухая)", k: 352, b: 12, j: 6, u: 62},
-    {id: "p_3", name: "Рис Басмати (крупа)", k: 340, b: 7.5, j: 0.5, u: 78},
-    {id: "p_4", name: "Оливковое масло", k: 898, b: 0, j: 99.8, u: 0}
-];
+    // --- TARGETS GLOBAL CONFIG ---
+    let TARGETS = {
+        him: { kcal: 2900, p: 125, f: 85, c: 410 },
+        her: { kcal: 1600, p: 115, f: 60, c: 150 }
+    };
 
-const DEMO_RECIPES = [
-    {
-        id: "r_1",
-        title: "Нежное куриное филе",
-        description: "Классическое диетическое блюдо с высоким содержанием чистого белка.",
-        instructions: "1. Нарежьте куриное филе на равные кусочки.\n2. Сбрызните оливковым маслом, добавьте специи по вкусу.\n3. Обжаривайте на разогретой сковороде 10-12 минут.",
-        ingredients: [{productId: "p_1", weight: 500}, {productId: "p_4", weight: 10}]
-    },
-    {
-        id: "r_2",
-        title: "Утренняя овсяная каша",
-        description: "Прекрасный сложный углевод для долгого насыщения.",
-        instructions: "1. Засыпьте овсяные хлопья в сотейник.\n2. Залейте водой или молоком.\n3. Варите на медленном огне 5-7 минут до загустения.",
-        ingredients: [{productId: "p_2", weight: 150}]
-    }
-];
+    // --- PRE-POPULATED ALMATY DATABASE ---
+    const defaultIngredients = [
+        { name: 'Творог Adal 5%', k: 121, b: 16, j: 5, u: 3 },
+        { name: 'Говядина мякоть (постная)', k: 158, b: 22.2, j: 7.1, u: 0 },
+        { name: 'Куриное филе', k: 113, b: 23.6, j: 1.9, u: 0.4 },
+        { name: 'Минтай филе', k: 72, b: 15.9, j: 0.9, u: 0 },
+        { name: 'Жая (конина ветчина)', k: 130, b: 18, j: 6, u: 0 },
+        { name: 'Яйцо Курочка Ряба', k: 157, b: 12.7, j: 10.9, u: 0.7 },
+        { name: 'Гречка', k: 313, b: 12.6, j: 3.3, u: 62.1 },
+        { name: 'Рис белый Баракат', k: 344, b: 6.7, j: 0.7, u: 78.9 },
+        { name: 'Макароны Султан', k: 344, b: 10.4, j: 1.1, u: 71.5 },
+        { name: 'Чечевица красная', k: 314, b: 21.6, j: 1.1, u: 48 },
+        { name: 'Овсянка Пищевик', k: 352, b: 12.3, j: 6.1, u: 59.5 },
+        { name: 'Картофель', k: 77, b: 2, j: 0.4, u: 16.3 },
+        { name: 'Капуста белокочанная', k: 28, b: 1.8, j: 0.2, u: 4.7 },
+        { name: 'Морковь', k: 35, b: 1.3, j: 0.1, u: 6.9 },
+        { name: 'Лук репчатый', k: 41, b: 1.4, j: 0.2, u: 8.2 },
+        { name: 'Помидоры', k: 20, b: 0.6, j: 0.2, u: 4.2 },
+        { name: 'Огурцы', k: 15, b: 0.8, j: 0.1, u: 2.8 },
+        { name: 'Масло подсолнечное Маслодел', k: 899, b: 0, j: 99.9, u: 0 },
+        { name: 'Хлеб Аксай-нан отрубной', k: 227, b: 7.5, j: 1.4, u: 45.2 },
+        { name: 'Молоко FoodMaster 2.5%', k: 53, b: 2.8, j: 2.5, u: 4.7 },
+        { name: 'Грецкие орехи', k: 654, b: 15.2, j: 65.2, u: 7 }
+    ];
 
-let state = {
-    profiles: [
-        {name: "Профиль 1", gender: "male", weight: "", height: "", age: "", activity: "1.2", goal: "maintain", targets: null},
-        {name: "Профиль 2", gender: "female", weight: "", height: "", age: "", activity: "1.2", goal: "maintain", targets: null}
-    ],
-    recipes: [],
-    foodBase: [],
-    diary: [],
-    weightLogs: []
-};
+    // --- PRE-POPULATED 15 RECIPES ---
+    const defaultRecipes = [
+        { id: 'r1', title: 'Овсянка на молоке с яблоком', category: 'Завтраки', instructions: 'Сварить овсянку на смеси воды и молока. В конце добавить тертое яблоко.', modHim: 'Добавить 20г сливочного масла и 2 куска хлеба Аксай-нан.', modHer: 'Варить преимущественно на воде, без масла, больше яблока.', ingredients: [{name:'Овсянка Пищевик',weight:100,k:352,b:12.3,j:6.1,u:59.5},{name:'Молоко FoodMaster 2.5%',weight:150,k:53,b:2.8,j:2.5,u:4.7},{name:'Яблоко',weight:100,k:47,b:0.4,j:0.4,u:9.8}] },
+        { id: 'r2', title: 'Сырники из творога Adal', category: 'Завтраки', instructions: 'Смешать творог, яйцо и немного муки. Сформировать сырники, обжарить на капле масла с двух сторон, допечь под крышкой.', modHim: 'Полить порцию медом (30г) и сметаной (30г).', modHer: 'Подавать без сметаны, подсластить сахзамом на этапе замеса.', ingredients: [{name:'Творог Adal 5%',weight:400,k:121,b:16,j:5,u:3},{name:'Яйцо Курочка Ряба',weight:50,k:157,b:12.7,j:10.9,u:0.7},{name:'Мука пшеничная',weight:40,k:334,b:10.8,j:1.3,u:69.9}] },
+        { id: 'r3', title: 'Яичница с томатами и жая', category: 'Завтраки', instructions: 'Слегка обжарить помидоры и лук. Вбить яйца, добавить нарезанную жая. Готовить под крышкой 5 минут.', modHim: 'Увеличить порцию яиц, добавить 2 куска хлеба со сливочным маслом.', modHer: 'Больше помидоров для объема, без хлеба.', ingredients: [{name:'Яйцо Курочка Ряба',weight:200,k:157,b:12.7,j:10.9,u:0.7},{name:'Жая (конина ветчина)',weight:100,k:130,b:18,j:6,u:0},{name:'Помидоры',weight:200,k:20,b:0.6,j:0.2,u:4.2}] },
+        { id: 'r4', title: 'Чечевичный суп (бюджетный)', category: 'Супы', instructions: 'Отварить чечевицу с тертой морковью и луком до состояния пюре. Посолить, добавить паприку и каплю масла в зажарку.', modHim: 'В тарелку накрошить отрубной хлеб (50г) и добавить 100г отварной курицы.', modHer: 'Чистый суп, добавить ложку лимонного сока.', ingredients: [{name:'Чечевица красная',weight:250,k:314,b:21.6,j:1.1,u:48},{name:'Морковь',weight:100,k:35,b:1.3,j:0.1,u:6.9},{name:'Лук репчатый',weight:100,k:41,b:1.4,j:0.2,u:8.2},{name:'Масло подсолнечное Маслодел',weight:10,k:899,b:0,j:99.9,u:0}] },
+        { id: 'r5', title: 'Постный борщ с говядиной', category: 'Супы', instructions: 'Сварить бульон из говядины. Добавить нашинкованную капусту, картофель. Отдельно пассеровать свеклу, морковь, лук и томатную пасту. Соединить, варить 15 мин.', modHim: 'Большая порция картофеля и гущи. Подавать с хлебом и сметаной.', modHer: 'Больше жидкого бульона и капусты, минимум картофеля.', ingredients: [{name:'Говядина мякоть (постная)',weight:400,k:158,b:22.2,j:7.1,u:0},{name:'Капуста белокочанная',weight:300,k:28,b:1.8,j:0.2,u:4.7},{name:'Свекла',weight:200,k:43,b:1.5,j:0.1,u:8.8},{name:'Картофель',weight:200,k:77,b:2,j:0.4,u:16.3}] },
+        { id: 'r6', title: 'Куриный суп с лапшой', category: 'Супы', instructions: 'Отварить филе. Бульон процедить, добавить мелко нарезанный картофель и морковь. В конце кинуть макароны/лапшу и зелень.', modHim: 'Наложить больше лапши и картофеля.', modHer: 'Налить больше бульона и положить крупный кусок куриного филе для белка.', ingredients: [{name:'Куриное филе',weight:300,k:113,b:23.6,j:1.9,u:0.4},{name:'Макароны Султан',weight:100,k:344,b:10.4,j:1.1,u:71.5},{name:'Картофель',weight:150,k:77,b:2,j:0.4,u:16.3},{name:'Морковь',weight:100,k:35,b:1.3,j:0.1,u:6.9}] },
+        { id: 'r7', title: 'Куриное филе тушеное с капустой', category: 'Птица', instructions: 'Обжарить кусочки куриного филе с луком. Добавить нашинкованную капусту, немного воды, томатную пасту. Тушить под крышкой 30 минут.', modHim: 'Дополнительно сварить 150г (в сухом виде) гречки на гарнир.', modHer: 'Гарнир не нужен, капуста даст отличный объем и сытость.', ingredients: [{name:'Куриное филе',weight:500,k:113,b:23.6,j:1.9,u:0.4},{name:'Капуста белокочанная',weight:600,k:28,b:1.8,j:0.2,u:4.7},{name:'Лук репчатый',weight:100,k:41,b:1.4,j:0.2,u:8.2},{name:'Масло подсолнечное Маслодел',weight:15,k:899,b:0,j:99.9,u:0}] },
+        { id: 'r8', title: 'Ленивый плов из курицы', category: 'Птица', instructions: 'Обжарить морковь соломкой и лук. Положить кусочки филе. Сверху засыпать промытый рис, залить водой на 1 см выше риса. Варить на медленном огне до впитывания воды.', modHim: 'Полить готовый плов ложкой растительного масла для калорийности.', modHer: 'Смешать свою порцию со свежим огурцом (150г) для объема.', ingredients: [{name:'Куриное филе',weight:500,k:113,b:23.6,j:1.9,u:0.4},{name:'Рис белый Баракат',weight:300,k:344,b:6.7,j:0.7,u:78.9},{name:'Морковь',weight:200,k:35,b:1.3,j:0.1,u:6.9},{name:'Лук репчатый',weight:100,k:41,b:1.4,j:0.2,u:8.2}] },
+        { id: 'r9', title: 'Котлеты куриные рубленые', category: 'Птица', instructions: 'Мелко порубить филе ножом. Смешать с яйцом, ложкой муки и тертым луком. Выкладывать ложкой на сковороду как оладьи.', modHim: 'Отварить макароны Султан (150г сухих) на гарнир.', modHer: 'Подавать с большой порцией салата Шакараб (помидоры+лук).', ingredients: [{name:'Куриное филе',weight:600,k:113,b:23.6,j:1.9,u:0.4},{name:'Яйцо Курочка Ряба',weight:50,k:157,b:12.7,j:10.9,u:0.7},{name:'Мука пшеничная',weight:30,k:334,b:10.8,j:1.3,u:69.9},{name:'Лук репчатый',weight:100,k:41,b:1.4,j:0.2,u:8.2}] },
+        { id: 'r10', title: 'Гуляш из говядины', category: 'Мясо', instructions: 'Обжарить говядину кубиками. Добавить лук, морковь, ложку томатной пасты. Залить водой и тушить на слабом огне 1.5 часа до мягкости.', modHim: 'На гарнир отварить гречку. Порция мяса с обильной подливой.', modHer: 'Минимум подливы (там жиры), мясо подавать с тушеной капустой.', ingredients: [{name:'Говядина мякоть (постная)',weight:600,k:158,b:22.2,j:7.1,u:0},{name:'Морковь',weight:150,k:35,b:1.3,j:0.1,u:6.9},{name:'Лук репчатый',weight:150,k:41,b:1.4,j:0.2,u:8.2},{name:'Масло подсолнечное Маслодел',weight:20,k:899,b:0,j:99.9,u:0}] },
+        { id: 'r11', title: 'Макароны по-флотски', category: 'Мясо', instructions: 'Прокрутить говядину в фарш, обжарить с луком на сковороде. Отдельно отварить макароны. Смешать все вместе.', modHim: 'Добавить 30г сыра сверху и есть с хлебом.', modHer: 'Положить в тарелку 30% макарон по-флотски и 70% нарезки из свежих овощей.', ingredients: [{name:'Говядина мякоть (постная)',weight:400,k:158,b:22.2,j:7.1,u:0},{name:'Макароны Султан',weight:300,k:344,b:10.4,j:1.1,u:71.5},{name:'Лук репчатый',weight:150,k:41,b:1.4,j:0.2,u:8.2}] },
+        { id: 'r12', title: 'Жаркое с картофелем', category: 'Мясо', instructions: 'Нарезать мясо и картофель крупными кубиками. Слегка обжарить мясо, закинуть картофель, залить бульоном/водой и тушить 40 минут.', modHim: 'Скушать всю порцию с картофелем и соком от жаркого.', modHer: 'Выбирать куски мяса, картофель ограничить до 100г готового веса.', ingredients: [{name:'Говядина мякоть (постная)',weight:500,k:158,b:22.2,j:7.1,u:0},{name:'Картофель',weight:600,k:77,b:2,j:0.4,u:16.3},{name:'Морковь',weight:100,k:35,b:1.3,j:0.1,u:6.9},{name:'Лук репчатый',weight:100,k:41,b:1.4,j:0.2,u:8.2}] },
+        { id: 'r13', title: 'Минтай под овощным маринадом', category: 'Рыба', instructions: 'Филе минтая нарезать. Натереть морковь, нарезать лук. Потушить овощи с томатной пастой. Выложить овощи на рыбу и запечь/потушить 20 минут.', modHim: 'Обязательно отварить рис (150г сухих) на гарнир.', modHer: 'Отличный легкий ужин, кушать просто так.', ingredients: [{name:'Минтай филе',weight:600,k:72,b:15.9,j:0.9,u:0},{name:'Морковь',weight:300,k:35,b:1.3,j:0.1,u:6.9},{name:'Лук репчатый',weight:200,k:41,b:1.4,j:0.2,u:8.2},{name:'Масло подсолнечное Маслодел',weight:15,k:899,b:0,j:99.9,u:0}] },
+        { id: 'r14', title: 'Салат Шакараб белковый', category: 'Салаты', instructions: 'Нарезать помидоры крупно, лук тонкими полукольцами. Вместо майонеза добавить зерненый творог. Посолить, поперчить.', modHim: 'Дополнить этим салатом основное блюдо (например, гуляш).', modHer: 'Можно использовать как самостоятельный легкий перекус.', ingredients: [{name:'Помидоры',weight:400,k:20,b:0.6,j:0.2,u:4.2},{name:'Лук репчатый',weight:100,k:41,b:1.4,j:0.2,u:8.2},{name:'Творог Adal 5%',weight:150,k:121,b:16,j:5,u:3}] },
+        { id: 'r15', title: 'Салат Витаминный', category: 'Салаты', instructions: 'Нашинковать свежую капусту, натереть морковь. Помять руками с солью. Заправить каплей подсолнечного масла и уксусом.', modHim: 'Добавить горсть семечек или орехов.', modHer: 'Заправить лимонным соком вместо масла.', ingredients: [{name:'Капуста белокочанная',weight:400,k:28,b:1.8,j:0.2,u:4.7},{name:'Морковь',weight:150,k:35,b:1.3,j:0.1,u:6.9},{name:'Масло подсолнечное Маслодел',weight:10,k:899,b:0,j:99.9,u:0}] }
+    ];
 
-// Проверка Cold-Start / Чистого запуска
-function coldStartCheck() {
-    const localData = localStorage.getItem('nutrisplit_data');
-    if (!localData) {
-        // Чистый запуск: база пуста, загружаем демо-продукты и демо-рецепты
-        state.foodBase = [...DEMO_PRODUCTS];
-        state.recipes = [...DEMO_RECIPES];
-        saveStateToLocalStorage();
-        switchTab('settings'); // Перенаправляем на Настройки
-    } else {
-        try {
-            const parsed = JSON.parse(localData);
-            // Плавная миграция данных старых версий
-            if (parsed.profiles) state.profiles = parsed.profiles;
-            if (parsed.recipes) state.recipes = parsed.recipes;
-            if (parsed.foodBase) state.foodBase = parsed.foodBase;
-            if (parsed.diary) state.diary = parsed.diary;
-            if (parsed.weightLogs) state.weightLogs = parsed.weightLogs;
-        } catch (e) {
-            console.error("Ошибка миграции данных:", e);
-        }
-    }
-}
-
-function saveStateToLocalStorage() {
-    localStorage.setItem('nutrisplit_data', JSON.stringify(state));
-}
-
-// Переключение вкладок с сохранением состояния
-function switchTab(tabName) {
-    document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-    document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
-    
-    const targetTab = document.getElementById(`tab-${tabName}`);
-    if (targetTab) targetTab.classList.add('active');
-    
-    // Подсветка кнопки навигации
-    const btn = Array.from(document.querySelectorAll('.nav-btn')).find(b => b.getAttribute('onclick').includes(tabName));
-    if (btn) btn.classList.add('active');
-    
-    localStorage.setItem('nutrisplit_active_tab', tabName);
-
-    // Вызовы рендеринга для конкретных вкладок
-    if (tabName === 'recipes') renderRecipesTab();
-    if (tabName === 'database') renderFoodBaseTab();
-    if (tabName === 'diary') renderDiaryTab();
-    if (tabName === 'progress') renderWeightTab();
-}
-
-// Синхронизация названий по всему интерфейсу во время ввода
-function liveUpdateNames() {
-    const n1 = document.getElementById('p1-name').value.trim() || "Профиль 1";
-    const n2 = document.getElementById('p2-name').value.trim() || "Профиль 2";
-    
-    // Обновляем метки в Дневнике, Графиках и Модальных окнах
-    document.getElementById('chart-title-p1').innerText = `Динамика веса: ${n1}`;
-    document.getElementById('chart-title-p2').innerText = `Динамика веса: ${n2}`;
-}
-
-// --- ТАБ 1: МИФФЛИН-САН ЖЕОР И НАСТРОЙКИ ---
-function calculateAndSaveProfiles() {
-    for (let i = 0; i < 2; i++) {
-        const idx = i + 1;
-        const name = document.getElementById(`p${idx}-name`).value.trim() || `Профиль ${idx}`;
-        const gender = document.getElementById(`p${idx}-gender`).value;
-        const weight = parseFloat(document.getElementById(`p${idx}-weight`).value);
-        const height = parseFloat(document.getElementById(`p${idx}-height`).value);
-        const age = parseFloat(document.getElementById(`p${idx}-age`).value);
-        const activity = parseFloat(document.getElementById(`p${idx}-activity`).value);
-        const goal = document.getElementById(`p${idx}-goal`).value;
-
-        state.profiles[i].name = name;
-        state.profiles[i].gender = gender;
-        state.profiles[i].weight = weight || "";
-        state.profiles[i].height = height || "";
-        state.profiles[i].age = age || "";
-        state.profiles[i].activity = activity;
-        state.profiles[i].goal = goal;
-
-        if (weight && height && age) {
-            // Формула Миффлина-Сан Жеора
-            let bmr = (10 * weight) + (6.25 * height) - (5 * age);
-            if (gender === 'male') bmr += 5;
-            else bmr -= 161;
-
-            let calories = bmr * activity;
-            if (goal === 'lose') calories *= 0.85;
-            if (goal === 'gain') calories *= 1.15;
-
-            calories = Math.round(calories);
-            // Распределение БЖУ: Белки (30%), Жиры (30%), Углеводы (40%)
-            const b = Math.round((calories * 0.30) / 4);
-            const j = Math.round((calories * 0.30) / 9);
-            const u = Math.round((calories * 0.40) / 4);
-
-            state.profiles[i].targets = { k: calories, b: b, j: j, u: u };
-            
-            // Запись в историю веса, если её ещё нет на сегодняшний день
-            logWeightAutomatically(i, weight);
-        } else {
-            state.profiles[i].targets = null;
-        }
-    }
-    saveStateToLocalStorage();
-    renderSettingsTab();
-    alert("Параметры профилей успешно сохранены и пересчитаны!");
-}
-
-function logWeightAutomatically(profileIndex, weight) {
-    const today = new Date().toISOString().split('T')[0];
-    const exists = state.weightLogs.some(l => l.date === today && l.profileIndex === profileIndex);
-    if (!exists && weight) {
-        state.weightLogs.push({ id: "w_" + Date.now() + "_" + Math.random(), date: today, profileIndex, weight });
-    }
-}
-
-function renderSettingsTab() {
-    liveUpdateNames();
-    for (let i = 0; i < 2; i++) {
-        const idx = i + 1;
-        const p = state.profiles[i];
-        document.getElementById(`p${idx}-name`).value = p.name;
-        document.getElementById(`p${idx}-gender`).value = p.gender;
-        document.getElementById(`p${idx}-weight`).value = p.weight;
-        document.getElementById(`p${idx}-height`).value = p.height;
-        document.getElementById(`p${idx}-age`).value = p.age;
-        document.getElementById(`p${idx}-activity`).value = p.activity;
-        document.getElementById(`p${idx}-goal`).value = p.goal;
-
-        const display = document.getElementById(`p${idx}-targets-display`);
-        if (p.targets) {
-            display.innerHTML = `🎯 <strong>Суточная норма КБЖУ:</strong><br>
-            🔥 Калории: ${p.targets.k} ккал<br>
-            🧬 Белки: ${p.targets.b} г | 🥑 Жиры: ${p.targets.j} г | 🌾 Углеводы: ${p.targets.u} г`;
-        } else {
-            display.innerHTML = `⚠️ Введите вес, рост и возраст для расчета нормы.`;
-        }
-    }
-}
-
-// --- БЭКАПЫ И СБРОС ---
-function exportData() {
-    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(state));
-    const downloadAnchor = document.createElement('a');
-    downloadAnchor.setAttribute("href", dataStr);
-    downloadAnchor.setAttribute("download", `nutrisplit_backup_${new Date().toISOString().split('T')[0]}.json`);
-    document.body.appendChild(downloadAnchor);
-    downloadAnchor.click();
-    downloadAnchor.remove();
-}
-
-function importData(event) {
-    const file = event.target.files[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = function(e) {
-        try {
-            const importedState = JSON.parse(e.target.result);
-            if (importedState.profiles || importedState.recipes || importedState.foodBase) {
-                state = { ...state, ...importedState };
-                saveStateToLocalStorage();
-                renderSettingsTab();
-                alert("Данные успешно импортированы!");
-            } else {
-                alert("Неверный формат файла бэкапа.");
-            }
-        } catch (err) {
-            alert("Ошибка при чтении файла бэкапа.");
+    // --- GLOBAL APPLICATIONS STATE ---
+    let state = { 
+        recipes: [], 
+        ingredients: [], 
+        diary: {}, 
+        weights: { him: [], her: [] },
+        shoppingList: [],
+        profiles: {
+            him: { name: 'Артём', weight: 78, height: 180, age: 27, activity: '1.375', goal: 'gain' },
+            her: { name: 'Она', weight: 78, height: 158, age: 26, activity: '1.2', goal: 'lose' }
         }
     };
-    reader.readAsText(file);
-}
-
-function clearAllData() {
-    if (confirm("Вы действительно хотите БЕЗВОЗВРАТНО удалить все данные приложения?")) {
-        localStorage.removeItem('nutrisplit_data');
-        location.reload();
-    }
-}
-
-// --- ТАБ 2: КНИГА РЕЦЕПТОВ И УМНЫЙ СПЛИТ ---
-let currentActiveRecipe = null;
-
-function renderRecipesTab() {
-    const container = document.getElementById('recipes-container');
-    container.innerHTML = '';
     
-    state.recipes.forEach(recipe => {
-        // Подсчет сухих макросов на 100г смеси сырых ингредиентов
-        let totalWeight = 0, tk = 0, tb = 0, tj = 0, tu = 0;
-        recipe.ingredients.forEach(ing => {
-            const prod = state.foodBase.find(p => p.id === ing.productId);
-            if (prod) {
-                totalWeight += ing.weight;
-                tk += (prod.k * ing.weight) / 100;
-                tb += (prod.b * ing.weight) / 100;
-                tj += (prod.j * ing.weight) / 100;
-                tu += (prod.u * ing.weight) / 100;
+    let currentDate = new Date().toISOString().split('T')[0];
+    let currentRecipeId = null;
+    let activeToppings = { him: [], her: [] };
+    let weightFilters = { him: 'all', her: 'all' };
+
+    function init() {
+        const saved = localStorage.getItem('FamilyNutritionApp');
+        if (saved) {
+            try {
+                const parsed = JSON.parse(saved);
+                if (parsed.recipes) state.recipes = parsed.recipes;
+                if (parsed.ingredients) state.ingredients = parsed.ingredients;
+                if (parsed.diary) state.diary = parsed.diary;
+                if (parsed.weights) state.weights = parsed.weights;
+                if (parsed.shoppingList) state.shoppingList = parsed.shoppingList;
+                if (parsed.profiles) state.profiles = parsed.profiles;
+            } catch (e) {
+                console.error("Error shifting data localstorage state", e);
             }
+        }
+        
+        if (!state.recipes || state.recipes.length === 0) state.recipes = JSON.parse(JSON.stringify(defaultRecipes));
+        if (!state.ingredients || state.ingredients.length === 0) state.ingredients = JSON.parse(JSON.stringify(defaultIngredients));
+        if (!state.shoppingList) state.shoppingList = [];
+        if (!state.weights.him) state.weights.him = [];
+        if (!state.weights.her) state.weights.her = [];
+        
+        document.getElementById('weight-date-him').value = currentDate;
+        document.getElementById('weight-date-her').value = currentDate;
+        
+        recalculateMifflinTargets();
+        renderRecipes();
+        renderDatabase();
+        renderShoppingList();
+        
+        const persistentTab = localStorage.getItem('NutriSplit_activeTab') || 'cookbook';
+        // Mocking structure to support event.currentTarget inside switchTab securely
+        const targetBtn = Array.from(document.querySelectorAll('.nav-btn')).find(b => b.getAttribute('onclick').includes(persistentTab));
+        if (targetBtn) {
+            switchTab(persistentTab, targetBtn);
+        } else {
+            switchTab(persistentTab, document.querySelector('.nav-btn'));
+        }
+    }
+
+    function saveState() { 
+        localStorage.setItem('FamilyNutritionApp', JSON.stringify(state)); 
+    }
+
+    function switchTab(tabId, customBtnElement = null) {
+        document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+        document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
+        
+        document.getElementById(`tab-${tabId}`).classList.add('active');
+        
+        let activeNavBtn = customBtnElement || event?.currentTarget;
+        if (activeNavBtn) activeNavBtn.classList.add('active');
+
+        localStorage.setItem('NutriSplit_activeTab', tabId);
+
+        if(tabId === 'cookbook') { closeRecipe(); renderRecipes(); renderShoppingList(); }
+        else if (tabId === 'database') { renderDatabase(); }
+        else if (tabId === 'diary') { renderDiary(); }
+        else if (tabId === 'progress') { renderProgress(); }
+        else if (tabId === 'settings') { hydrateSettingsForm(); }
+    }
+
+    // --- RECALCULATE Norma (Mifflin-St Jeor) ---
+    function recalculateMifflinTargets() {
+        const h = state.profiles.him;
+        const w = state.profiles.her;
+
+        // Profile 1 (Him) Formula
+        let bmrHim = 10 * (parseFloat(h.weight) || 78) + 6.25 * (parseFloat(h.height) || 180) - 5 * (parseFloat(h.age) || 27) + 5;
+        let tdeeHim = bmrHim * (parseFloat(h.activity) || 1.375);
+        if (h.goal === 'gain') tdeeHim += 400;
+        else if (h.goal === 'lose') tdeeHim -= 400;
+        TARGETS.him.kcal = Math.round(tdeeHim);
+        TARGETS.him.p = Math.round((parseFloat(h.weight) || 78) * 1.8);
+        TARGETS.him.f = Math.round((parseFloat(h.weight) || 78) * 1.0);
+        TARGETS.him.c = Math.round((TARGETS.him.kcal - (TARGETS.him.p * 4) - (TARGETS.him.f * 9)) / 4);
+
+        // Profile 2 (Her) Formula
+        let bmrHer = 10 * (parseFloat(w.weight) || 78) + 6.25 * (parseFloat(w.height) || 158) - 5 * (parseFloat(w.age) || 26) - 161;
+        let tdeeHer = bmrHer * (parseFloat(w.activity) || 1.2);
+        if (w.goal === 'gain') tdeeHer += 300;
+        else if (w.goal === 'lose') tdeeHer -= 350;
+        TARGETS.her.kcal = Math.round(tdeeHer);
+        TARGETS.her.p = Math.round((parseFloat(w.weight) || 78) * 1.6);
+        TARGETS.her.f = Math.round((parseFloat(w.weight) || 78) * 0.9);
+        TARGETS.her.c = Math.round((TARGETS.her.kcal - (TARGETS.her.p * 4) - (TARGETS.her.f * 9)) / 4);
+
+        updateGlobalProfileNamesText();
+    }
+
+    function updateGlobalProfileNamesText() {
+        const nameHim = state.profiles.him.name || 'Артём';
+        const nameHer = state.profiles.her.name || 'Она';
+
+        // Header metadata
+        const headerSub = document.querySelector('header div[style*="font-size: 0.8rem"]');
+        if (headerSub) {
+            headerSub.innerText = `${nameHim} (${TARGETS.him.kcal} ккал) & ${nameHer} (${TARGETS.her.kcal} ккал)`;
+        }
+
+        // Live text bindings injections
+        document.querySelectorAll('.name-label-him-header').forEach(el => {
+            el.innerText = `${nameHim.toUpperCase()} (Норма: ${TARGETS.him.kcal} ккал)`;
+        });
+        document.querySelectorAll('.name-label-her-header').forEach(el => {
+            el.innerText = `${nameHer.toUpperCase()} (Норма: ${TARGETS.her.kcal} ккал)`;
+        });
+        document.querySelectorAll('.name-label-him-progress').forEach(el => {
+            el.innerText = `${nameHim.toUpperCase()} — Динамика`;
+        });
+        document.querySelectorAll('.name-label-her-progress').forEach(el => {
+            el.innerText = `${nameHer.toUpperCase()} — Динамика`;
+        });
+    }
+
+    function updateProfileConfig(user, field, val) {
+        state.profiles[user][field] = val;
+        saveState();
+        recalculateMifflinTargets();
+    }
+
+    function hydrateSettingsForm() {
+        const h = state.profiles.him;
+        const w = state.profiles.her;
+
+        document.getElementById('cfg-name-him').value = h.name || '';
+        document.getElementById('cfg-w-him').value = h.weight || '';
+        document.getElementById('cfg-h-him').value = h.height || '';
+        document.getElementById('cfg-age-him').value = h.age || '';
+        document.getElementById('cfg-goal-him').value = h.goal || 'gain';
+        document.getElementById('cfg-act-him').value = h.activity || '1.375';
+
+        document.getElementById('cfg-name-her').value = w.name || '';
+        document.getElementById('cfg-w-her').value = w.weight || '';
+        document.getElementById('cfg-h-her').value = w.height || '';
+        document.getElementById('cfg-age-her').value = w.age || '';
+        document.getElementById('cfg-goal-her').value = w.goal || 'lose';
+        document.getElementById('cfg-act-her').value = w.activity || '1.2';
+    }
+
+    // --- TAB 1: COOKBOOK LOGIC ---
+    function renderRecipes() {
+        const query = document.getElementById('search-recipe').value.toLowerCase();
+        const category = document.getElementById('filter-category').value;
+        const container = document.getElementById('recipes-container');
+        container.innerHTML = '';
+        
+        const filtered = state.recipes.filter(r => {
+            const mQ = r.title.toLowerCase().includes(query) || r.ingredients.some(i => i.name.toLowerCase().includes(query));
+            const mC = category === 'Все' || r.category === category;
+            return mQ && mC;
         });
 
-        const k100 = totalWeight ? Math.round((tk / totalWeight) * 100) : 0;
-
-        const card = document.createElement('div');
-        card.className = 'recipe-card';
-        card.onclick = (e) => {
-            if (e.target.className === 'recipe-card-checkbox') return;
-            openRecipeViewModal(recipe);
-        };
-
-        card.innerHTML = `
-            <input type="checkbox" class="recipe-card-checkbox" data-id="${recipe.id}">
-            <h3 style="font-size:16px; font-weight:700; padding-right:24px;">${recipe.title}</h3>
-            <p style="font-size:13px; color:var(--text-muted); flex:1;">${recipe.description || 'Без описания'}</p>
-            <div style="font-size:12px; background:rgba(0,0,0,0.04); padding:6px; border-radius:6px; font-weight:600;">
-                ~ ${k100} ккал / 100г (сырой вес)
-            </div>
-        `;
-        container.appendChild(card);
-    });
-}
-
-function openRecipeViewModal(recipe) {
-    currentActiveRecipe = recipe;
-    document.getElementById('m-recipe-title').innerText = recipe.title;
-    document.getElementById('m-recipe-desc').innerText = recipe.description || '';
-    document.getElementById('m-recipe-instructions').innerText = recipe.instructions || 'Инструкции отсутствуют.';
-
-    const ingList = document.getElementById('m-recipe-ingredients');
-    ingList.innerHTML = '';
-    
-    recipe.ingredients.forEach(ing => {
-        const prod = state.foodBase.find(p => p.id === ing.productId);
-        const name = prod ? prod.name : 'Неизвестный продукт';
-        ingList.innerHTML += `<li>${name} — <strong>${ing.weight}г</strong></li>`;
-    });
-
-    // Настройка сплиттера
-    const p1 = state.profiles[0];
-    const p2 = state.profiles[1];
-    document.getElementById('split-p1-label').innerText = p1.name;
-    document.getElementById('split-p2-label').innerText = p2.name;
-    document.getElementById('split-total-weight').value = '';
-    document.getElementById('split-p1-result').innerText = '0 г';
-    document.getElementById('split-p2-result').innerText = '0 г';
-    document.getElementById('split-p1-macros').innerText = '';
-    document.getElementById('split-p2-macros').innerText = '';
-
-    if (!p1.targets || !p2.targets) {
-        document.getElementById('split-fallback-notice').style.display = 'block';
-        document.getElementById('split-fallback-notice').innerText = 'Пожалуйста, сначала рассчитайте нормы КБЖУ в Настройках';
-        document.getElementById('split-calculator-controls').style.opacity = '0.4';
-        document.getElementById('btn-log-p1-recipe').disabled = true;
-        document.getElementById('btn-log-p2-recipe').disabled = true;
-    } else {
-        document.getElementById('split-fallback-notice').style.display = 'none';
-        document.getElementById('split-calculator-controls').style.opacity = '1';
-        document.getElementById('btn-log-p1-recipe').disabled = false;
-        document.getElementById('btn-log-p2-recipe').disabled = false;
-    }
-
-    openModal('modal-recipe-view');
-}
-
-function calculatePortionSplit() {
-    if (!currentActiveRecipe || !state.profiles[0].targets || !state.profiles[1].targets) return;
-
-    const totalCookedWeight = parseFloat(document.getElementById('split-total-weight').value);
-    if (!totalCookedWeight || totalCookedWeight <= 0) return;
-
-    // Рассчитываем пропорцию на основе целевых калорий пользователей
-    const cal1 = state.profiles[0].targets.k;
-    const cal2 = state.profiles[1].targets.k;
-    const ratio1 = cal1 / (cal1 + cal2);
-    const ratio2 = cal2 / (cal1 + cal2);
-
-    const w1 = Math.round(totalCookedWeight * ratio1);
-    const w2 = Math.round(totalCookedWeight * ratio2);
-
-    document.getElementById('split-p1-result').innerText = `${w1} г`;
-    document.getElementById('split-p2-result').innerText = `${w2} г`;
-
-    // Вычисляем КБЖУ порции на основе суммарных макросов сырых продуктов
-    let tk = 0, tb = 0, tj = 0, tu = 0;
-    currentActiveRecipe.ingredients.forEach(ing => {
-        const prod = state.foodBase.find(p => p.id === ing.productId);
-        if (prod) {
-            tk += (prod.k * ing.weight) / 100;
-            tb += (prod.b * ing.weight) / 100;
-            tj += (prod.j * ing.weight) / 100;
-            tu += (prod.u * ing.weight) / 100;
-        }
-    });
-
-    const portionKBJU = (weight, totalWeight) => {
-        const factor = weight / totalWeight;
-        return {
-            k: Math.round(tk * factor),
-            b: Math.round(tb * factor),
-            j: Math.round(tj * factor),
-            u: Math.round(tu * factor)
-        };
-    };
-
-    const m1 = portionKBJU(w1, totalCookedWeight);
-    const m2 = portionKBJU(w2, totalCookedWeight);
-
-    document.getElementById('split-p1-macros').innerHTML = `🔥 ${m1.k} ккал | Б: ${m1.b}г | Ж: ${m1.j}г | У: ${m1.u}г`;
-    document.getElementById('split-p2-macros').innerHTML = `🔥 ${m2.k} ккал | Б: ${m2.b}г | Ж: ${m2.j}г | У: ${m2.u}г`;
-
-    // Временное сохранение для логирования
-    currentActiveRecipe._calculatedSplits = [
-        { name: currentActiveRecipe.title, weight: w1, ...m1 },
-        { name: currentActiveRecipe.title, weight: w2, ...m2 }
-    ];
-}
-
-function logRecipeToDiary(profileIndex) {
-    if (!currentActiveRecipe || !currentActiveRecipe._calculatedSplits) return;
-    const data = currentActiveRecipe._calculatedSplits[profileIndex];
-    const today = document.getElementById('diary-current-date').value || new Date().toISOString().split('T')[0];
-
-    state.diary.push({
-        id: "d_" + Date.now() + "_" + Math.random(),
-        date: today,
-        profileIndex: profileIndex,
-        foodName: data.name + " (Готовая порция)",
-        weight: data.weight,
-        k: Math.round((data.k / data.weight) * 100), // пересчет в плотность на 100г для совместимости логики
-        b: Number(((data.b / data.weight) * 100).toFixed(1)),
-        j: Number(((data.j / data.weight) * 100).toFixed(1)),
-        u: Number(((data.u / data.weight) * 100).toFixed(1))
-    });
-
-    saveStateToLocalStorage();
-    alert(`Блюдо успешно добавлено в дневник для ${state.profiles[profileIndex].name}!`);
-    closeModal('modal-recipe-view');
-}
-
-// ИНТЕГРИРОВАННЫЙ СПИСОК ПОКУПОК
-function generateShoppingList() {
-    const checkedCheckboxes = document.querySelectorAll('.recipe-card-checkbox:checked');
-    if (checkedCheckboxes.length === 0) {
-        alert("Пожалуйста, отметьте галочками рецепты, для которых нужно собрать ингредиенты.");
-        return;
-    }
-
-    const totals = {}; // productId -> суммарный вес
-
-    checkedCheckboxes.forEach(cb => {
-        const id = cb.getAttribute('data-id');
-        const recipe = state.recipes.find(r => r.id === id);
-        if (recipe) {
-            recipe.ingredients.forEach(ing => {
-                totals[ing.productId] = (totals[ing.productId] || 0) + ing.weight;
-            });
-        }
-    });
-
-    const resultsContainer = document.getElementById('shopping-list-results');
-    resultsContainer.innerHTML = '';
-
-    let hasItems = false;
-    for (let pId in totals) {
-        const prod = state.foodBase.find(p => p.id === pId);
-        if (prod) {
-            hasItems = true;
-            resultsContainer.innerHTML += `
-                <div class="shopping-list-item">
-                    <input type="checkbox">
-                    <span><strong>${prod.name}</strong> — ${totals[pId]} грамм</span>
+        filtered.forEach(r => {
+            let tk=0; r.ingredients.forEach(i => tk += (i.weight * i.k)/100);
+            
+            const div = document.createElement('div');
+            div.className = 'recipe-card';
+            div.onclick = () => openRecipe(r.id);
+            div.innerHTML = `
+                <div class="badge">${r.category}</div>
+                <h3 style="font-size:1.1rem; margin-bottom:10px;">${r.title}</h3>
+                <p style="font-size:0.85rem;">Ингредиентов: ${r.ingredients.length}</p>
+                <div class="recipe-macros">
+                    <span>Базовые Ккал:</span>
+                    <span style="font-weight:700; color:var(--text-main);">${Math.round(tk)}</span>
                 </div>
             `;
-        }
-    }
-
-    if (hasItems) {
-        document.getElementById('shopping-list-card').style.display = 'block';
-        document.getElementById('shopping-list-card').scrollIntoView({ behavior: 'smooth' });
-    }
-}
-
-// Форма добавления рецептов
-function openNewRecipeModal() {
-    document.getElementById('f-recipe-title').value = '';
-    document.getElementById('f-recipe-desc').value = '';
-    document.getElementById('f-recipe-instructions').value = '';
-    document.getElementById('f-recipe-ingredients-list').innerHTML = '';
-    addIngredientRowToForm();
-    openModal('modal-recipe-form');
-}
-
-function addIngredientRowToForm() {
-    const container = document.getElementById('f-recipe-ingredients-list');
-    const row = document.createElement('div');
-    row.style.display = 'grid';
-    row.style.gridTemplateColumns = '1fr 120px 40px';
-    row.style.gap = '8px';
-    row.className = 'form-ingredient-row';
-
-    let options = state.foodBase.map(p => `<option value="${p.id}">${p.name} (калорийность: ${p.k})</option>`).join('');
-    
-    row.innerHTML = `
-        <select class="ing-select">${options}</select>
-        <input type="number" class="ing-weight" placeholder="Вес, г" value="100">
-        <button class="btn btn-danger" onclick="this.parentElement.remove()">✕</button>
-    `;
-    container.appendChild(row);
-}
-
-function saveCustomRecipe() {
-    const title = document.getElementById('f-recipe-title').value.trim();
-    const desc = document.getElementById('f-recipe-desc').value.trim();
-    const inst = document.getElementById('f-recipe-instructions').value.trim();
-
-    if (!title) { alert("Укажите название рецепта"); return; }
-
-    const ingredients = [];
-    const rows = document.querySelectorAll('.form-ingredient-row');
-    rows.forEach(row => {
-        const productId = row.querySelector('.ing-select').value;
-        const weight = parseFloat(row.querySelector('.ing-weight').value);
-        if (productId && weight > 0) {
-            ingredients.push({ productId, weight });
-        }
-    });
-
-    if (ingredients.length === 0) { alert("Добавьте хотя бы один ингредиент"); return; }
-
-    state.recipes.push({
-        id: "r_" + Date.now(),
-        title, description: desc, instructions: inst, ingredients
-    });
-
-    saveStateToLocalStorage();
-    closeModal('modal-recipe-form');
-    renderRecipesTab();
-}
-
-// --- ТАБ 3: БАЗА ПРОДУКТОВ ---
-function renderFoodBaseTab() {
-    const tbody = document.getElementById('food-base-table-body');
-    tbody.innerHTML = '';
-    state.foodBase.forEach(prod => {
-        tbody.innerHTML += `
-            <tr>
-                <td style="font-weight:600;">${prod.name}</td>
-                <td>${prod.k}</td>
-                <td>${prod.b}</td>
-                <td>${prod.j}</td>
-                <td>${prod.u}</td>
-                <td><span class="action-icon" onclick="deleteProductFromBase('${prod.id}')">🗑️</span></td>
-            </tr>
-        `;
-    });
-}
-
-function addProductToDatabase() {
-    const name = document.getElementById('db-name').value.trim();
-    const k = Math.round(parseFloat(document.getElementById('db-k').value));
-    const b = parseFloat(document.getElementById('db-b').value) || 0;
-    const j = parseFloat(document.getElementById('db-j').value) || 0;
-    const u = parseFloat(document.getElementById('db-u').value) || 0;
-
-    if (!name || isNaN(k)) { alert("Введите название и калорийность продукта"); return; }
-
-    state.foodBase.push({ id: "p_" + Date.now(), name, k, b, j, u });
-    saveStateToLocalStorage();
-    
-    // Сброс полей
-    document.getElementById('db-name').value = '';
-    document.getElementById('db-k').value = '';
-    document.getElementById('db-b').value = '';
-    document.getElementById('db-j').value = '';
-    document.getElementById('db-u').value = '';
-
-    renderFoodBaseTab();
-}
-
-function deleteProductFromBase(id) {
-    state.foodBase = state.foodBase.filter(p => p.id !== id);
-    saveStateToLocalStorage();
-    renderFoodBaseTab();
-}
-
-// --- ТАБ 4: ДНЕВНИК ПИТАНИЯ ---
-let currentDiaryPeriod = 'day'; // 'day' или 'week'/'month' для архивов
-
-function setDefaultDiaryDate() {
-    const today = new Date().toISOString().split('T')[0];
-    const dateInput = document.getElementById('diary-current-date');
-    if (dateInput && !dateInput.value) {
-        dateInput.value = today;
-    }
-}
-
-function setDiaryPeriod(p) {
-    currentDiaryPeriod = p;
-    document.getElementById('diary-table-title').innerText = "История питания за день";
-    renderDiaryTab();
-}
-
-function renderDiaryTab() {
-    setDefaultDiaryDate();
-    const selectedDate = document.getElementById('diary-current-date').value;
-    const grid = document.getElementById('diary-profiles-bars-grid');
-    grid.innerHTML = '';
-
-    // Рассчитываем потребление за выбранный период (день или архив)
-    for (let i = 0; i < 2; i++) {
-        const p = state.profiles[i];
-        let logs = [];
-        
-        if (currentDiaryPeriod === 'day') {
-            logs = state.diary.filter(l => l.date === selectedDate && l.profileIndex === i);
-        } else if (currentDiaryPeriod === 'week') {
-            logs = state.diary.filter(l => isDateInPastDays(l.date, 7) && l.profileIndex === i);
-        } else if (currentDiaryPeriod === 'month') {
-            logs = state.diary.filter(l => isDateInPastDays(l.date, 30) && l.profileIndex === i);
-        }
-
-        let consumed = { k: 0, b: 0, j: 0, u: 0 };
-        logs.forEach(l => {
-            consumed.k += (l.k * l.weight) / 100;
-            consumed.b += (l.b * l.weight) / 100;
-            consumed.j += (l.j * l.weight) / 100;
-            consumed.u += (l.u * l.weight) / 100;
+            container.appendChild(div);
         });
-
-        // Округляем итоги
-        for (let key in consumed) consumed[key] = Math.round(consumed[key]);
-
-        const targets = p.targets || { k: 0, b: 0, j: 0, u: 0 };
-        
-        const remK = targets.k - consumed.k;
-        const remB = targets.b - consumed.b;
-        const remJ = targets.j - consumed.j;
-        const remU = targets.u - consumed.u;
-
-        const pBox = document.createElement('div');
-        pBox.className = 'diary-profile-block';
-        pBox.style.borderLeft = `4px solid ${i === 0 ? 'var(--p1-color)' : 'var(--p2-color)'}`;
-        
-        const pct = (c, t) => t > 0 ? Math.min((c / t) * 100, 100) : 0;
-        const fmtRem = (val) => val < 0 ? `<span class="overflow-text">${val}г</span>` : `${val}г`;
-        const fmtRemK = (val) => val < 0 ? `<span class="overflow-text">${val} ккал</span>` : `${val} ккал`;
-
-        pBox.innerHTML = `
-            <h3 style="font-size:16px; font-weight:700; color: ${i === 0 ? 'var(--p1-color)' : 'var(--p2-color)'}">${p.name}</h3>
-            <div style="font-size:13px; margin-top:6px; font-weight:600;">
-                Осталось: ${fmtRemK(remK)} | Б: ${fmtRem(remB)} | Ж: ${fmtRem(remJ)} | У: ${fmtRem(remU)}
-            </div>
-            <div class="macro-progress-container">
-                ${renderProgressBar('Калории', consumed.k, targets.k, pct(consumed.k, targets.k), '#6366f1')}
-                ${renderProgressBar('Белки', consumed.b, targets.b, pct(consumed.b, targets.b), '#ef4444')}
-                ${renderProgressBar('Жиры', consumed.j, targets.j, pct(consumed.j, targets.j), '#f59e0b')}
-                ${renderProgressBar('Углеводы', consumed.u, targets.u, pct(consumed.u, targets.u), '#10b981')}
-            </div>
-        `;
-        grid.appendChild(pBox);
     }
 
-    // Рендерим таблицу записей (всегда за выбранный день для детального контроля)
-    const tbody = document.getElementById('diary-logs-table-body');
-    tbody.innerHTML = '';
-    const dayLogs = state.diary.filter(l => l.date === selectedDate);
-    
-    if (dayLogs.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; color:var(--text-muted);">В этот день записей нет</td></tr>`;
-    } else {
-        dayLogs.forEach(l => {
-            const profName = state.profiles[l.profileIndex]?.name || `Профиль ${l.profileIndex + 1}`;
-            const tk = Math.round((l.k * l.weight) / 100);
-            const tb = Math.round((l.b * l.weight) / 100);
-            const tj = Math.round((l.j * l.weight) / 100);
-            const tu = Math.round((l.u * l.weight) / 100);
+    function generateId() { return 'r_' + Math.random().toString(36).substr(2, 9); }
 
-            tbody.innerHTML += `
-                <tr>
-                    <td><strong>${profName}</strong></td>
-                    <td>${l.foodName}</td>
-                    <td>${l.weight}г</td>
-                    <td><strong>${tk}</strong></td>
-                    <td style="font-size:12px; color:var(--text-muted);">${tb} / ${tj} / ${tu}</td>
-                    <td style="text-align:center;">
-                        <button class="btn btn-secondary" style="padding:2px 6px; font-size:11px;" onclick="cloneDiaryEntry('${l.id}')">Повторить</button>
-                        <span class="action-icon" style="margin-left:8px;" onclick="deleteDiaryEntry('${l.id}')">🗑️</span>
-                    </td>
-                </tr>
+    function createNewRecipe() {
+        const nr = { id: generateId(), title: 'Новый рецепт', category: 'Завтраки', instructions: '', modHim: '', modHer: '', ingredients: [] };
+        state.recipes.push(nr);
+        saveState();
+        openRecipe(nr.id);
+    }
+
+    function openRecipe(id) {
+        currentRecipeId = id;
+        activeToppings = { him: [], her: [] }; 
+        document.getElementById('recipe-list-view').style.display = 'none';
+        document.getElementById('recipe-detail-view').style.display = 'block';
+        renderRecipeEditor();
+
+        // Automated proportions calculation set via Mifflin target rules
+        const proportionalPct = Math.round((TARGETS.him.kcal / (TARGETS.him.kcal + TARGETS.her.kcal)) * 100);
+        const splitRangeSlider = document.getElementById('calc-split-range');
+        if (splitRangeSlider) {
+            splitRangeSlider.value = proportionalPct;
+            calcSplit();
+        }
+    }
+
+    function closeRecipe() {
+        currentRecipeId = null;
+        document.getElementById('recipe-detail-view').style.display = 'none';
+        document.getElementById('recipe-list-view').style.display = 'block';
+        renderRecipes();
+        renderShoppingList();
+    }
+
+    function renderRecipeEditor() {
+        const r = state.recipes.find(x => x.id === currentRecipeId);
+        if(!r) return;
+
+        const nameHim = state.profiles.him.name || 'Артём';
+        const nameHer = state.profiles.her.name || 'Она';
+
+        let totalWeight = 0, totalK = 0, totalB = 0, totalJ = 0, totalU = 0;
+        const ingRows = r.ingredients.map((ing, idx) => {
+            let ratio = ing.weight / 100;
+            totalWeight += ing.weight; totalK += ing.k * ratio; totalB += ing.b * ratio; totalJ += ing.j * ratio; totalU += ing.u * ratio;
+            
+            return `
+                <div class="ingredient-row">
+                    <div style="position:relative;">
+                        <span class="hide-mobile" style="font-size:0.75rem; color:var(--text-muted);">Название</span>
+                        <input type="text" value="${ing.name}" oninput="handleAutocomplete(this, ${idx}, 'recipe')" onblur="hideAutocomplete(this)" placeholder="Продукт">
+                        <div class="autocomplete-dropdown"></div>
+                    </div>
+                    <div><span class="hide-mobile" style="font-size:0.75rem; color:var(--text-muted);">Вес(г)</span><input type="number" value="${ing.weight}" onchange="updateRIng(${idx}, 'weight', this.value)"></div>
+                    <div><span class="hide-mobile" style="font-size:0.75rem; color:var(--text-muted);">Ккал(100г)</span><input type="number" value="${ing.k}" onchange="updateRIng(${idx}, 'k', this.value)"></div>
+                    <div><span class="hide-mobile" style="font-size:0.75rem; color:var(--text-muted);">Б(100г)</span><input type="number" value="${ing.b}" onchange="updateRIng(${idx}, 'b', this.value)"></div>
+                    <div><span class="hide-mobile" style="font-size:0.75rem; color:var(--text-muted);">Ж(100г)</span><input type="number" value="${ing.j}" onchange="updateRIng(${idx}, 'j', this.value)"></div>
+                    <div><span class="hide-mobile" style="font-size:0.75rem; color:var(--text-muted);">У(100г)</span><input type="number" value="${ing.u}" onchange="updateRIng(${idx}, 'u', this.value)"></div>
+                    <button class="danger" style="margin-top:auto; height:38px;" onclick="delRIng(${idx})">✕</button>
+                </div>
             `;
-        });
-    }
-}
+        }).join('');
 
-function renderProgressBar(title, current, target, percent, color) {
-    return `
-        <div class="macro-row">
-            <div class="macro-labels">
-                <span>${title}</span>
-                <span>${current} / ${target}</span>
+        r._computed = { w: totalWeight, k: totalK, b: totalB, j: totalJ, u: totalU };
+
+        const html = `
+            <div style="display:flex; gap:15px; margin-bottom:20px; flex-wrap:wrap;">
+                <input type="text" value="${r.title}" onchange="updateR('title', this.value)" style="flex:2; font-size:1.2rem; font-weight:bold; margin:0;">
+                <select onchange="updateR('category', this.value)" style="flex:1; margin:0;">
+                    ${['Завтраки','Супы','Птица','Мясо','Рыба','Гарниры','Салаты'].map(c => `<option value="${c}" ${r.category===c?'selected':''}>${c}</option>`).join('')}
+                </select>
             </div>
-            <div class="progress-bar-wrap">
-                <div class="progress-bar-fill" style="width: ${percent}%; background-color: ${color};"></div>
+
+            <button class="primary" style="background: var(--accent); margin-bottom: 20px;" onclick="pushToShoppingList('${r.id}')">🛒 Добавить все ингредиенты в список покупок</button>
+
+            <h4 style="margin-bottom:15px;">Сырые Ингредиенты</h4>
+            ${ingRows}
+            <button class="secondary" onclick="addRIng()" style="width:100%; margin:10px 0 20px 0;">+ Добавить ингредиент</button>
+
+            <div style="background:var(--bg-body); padding:15px; border-radius:var(--radius-md); display:flex; justify-content:space-between; font-weight:bold; margin-bottom:20px;">
+                <span>Сырой вес: ${Math.round(totalWeight)}г</span>
+                <span>🔥 ${Math.round(totalK)}</span><span>🥩 Б:${Math.round(totalB)}</span>
+                <span>🥑 Ж:${Math.round(totalJ)}</span><span>🍚 У:${Math.round(totalU)}</span>
             </div>
-        </div>
-    `;
-}
 
-function toggleArchiveView(period) {
-    currentDiaryPeriod = period;
-    document.getElementById('diary-table-title').innerText = `Сводные данные за период: ${period === 'week' ? '7 дней' : '30 дней'}`;
-    renderDiaryTab();
-}
+            <h4>Пошаговое приготовление</h4>
+            <textarea rows="4" onchange="updateR('instructions', this.value)">${r.instructions}</textarea>
 
-function openAddDiaryModal() {
-    const profSelect = document.getElementById('fd-profile');
-    profSelect.innerHTML = state.profiles.map((p, idx) => `<option value="${idx}">${p.name}</option>`).join('');
+            <div class="mod-box">
+                <div class="mod-him">
+                    <h4 style="color:var(--him-main);">Модификация для: ${nameHim}</h4>
+                    <textarea rows="3" onchange="updateR('modHim', this.value)" style="background:white; margin-top:10px;">${r.modHim}</textarea>
+                </div>
+                <div class="mod-her">
+                    <h4 style="color:var(--her-main);">Модификация для: ${nameHer}</h4>
+                    <textarea rows="3" onchange="updateR('modHer', this.value)" style="background:white; margin-top:10px;">${r.modHer}</textarea>
+                </div>
+            </div>
 
-    const prodSelect = document.getElementById('fd-product');
-    prodSelect.innerHTML = `<option value="custom">-- Ввести вручную --</option>` + 
-        state.foodBase.map(p => `<option value="${p.id}">${p.name}</option>`).join('');
-
-    // Сброс полей
-    document.getElementById('fd-custom-name').value = '';
-    document.getElementById('fd-weight').value = 100;
-    document.getElementById('fd-k').value = '';
-    document.getElementById('fd-b').value = '';
-    document.getElementById('fd-j').value = '';
-    document.getElementById('fd-u').value = '';
-
-    openModal('modal-diary-add');
-}
-
-function handleDiaryProductSelectChange() {
-    const val = document.getElementById('fd-product').value;
-    if (val !== 'custom') {
-        const prod = state.foodBase.find(p => p.id === val);
-        if (prod) {
-            document.getElementById('fd-custom-name').value = prod.name;
-            document.getElementById('fd-k').value = prod.k;
-            document.getElementById('fd-b').value = prod.b;
-            document.getElementById('fd-j').value = prod.j;
-            document.getElementById('fd-u').value = prod.u;
-        }
-    }
-}
-
-function saveDiaryEntry() {
-    const profileIndex = parseInt(document.getElementById('fd-profile').value);
-    const customName = document.getElementById('fd-custom-name').value.trim();
-    const weight = parseFloat(document.getElementById('fd-weight').value);
-    const k = parseFloat(document.getElementById('fd-k').value);
-    const b = parseFloat(document.getElementById('fd-b').value) || 0;
-    const j = parseFloat(document.getElementById('fd-j').value) || 0;
-    const u = parseFloat(document.getElementById('fd-u').value) || 0;
-
-    if (!customName || !weight || isNaN(k)) { alert("Заполните название, вес и калорийность продукта"); return; }
-
-    const today = document.getElementById('diary-current-date').value || new Date().toISOString().split('T')[0];
-
-    state.diary.push({
-        id: "d_" + Date.now(),
-        date: today,
-        profileIndex,
-        foodName: customName,
-        weight, k, b, j, u
-    });
-
-    saveStateToLocalStorage();
-    closeModal('modal-diary-add');
-    renderDiaryTab();
-}
-
-function cloneDiaryEntry(id) {
-    const entry = state.diary.find(l => l.id === id);
-    if (entry) {
-        const cloned = { ...entry, id: "d_" + Date.now() + "_" + Math.random() };
-        state.diary.push(cloned);
-        saveStateToLocalStorage();
-        renderDiaryTab();
-    }
-}
-
-function deleteDiaryEntry(id) {
-    state.diary = state.diary.filter(l => l.id !== id);
-    saveStateToLocalStorage();
-    renderDiaryTab();
-}
-
-function isDateInPastDays(dateStr, days) {
-    const d = new Date(dateStr);
-    const today = new Date();
-    const diffTime = Math.abs(today - d);
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    return diffDays <= days;
-}
-
-// --- ТАБ 5: ПРОГРЕСС ВЕСА И РАЗДЕЛЬНЫЕ ГРАФИКИ ---
-let weightFilterDays = 30; // По умолчанию 1 месяц
-let chartP1 = null;
-let chartP2 = null;
-
-function renderWeightTab() {
-    // Селектор профилей для внесения веса
-    const sel = document.getElementById('weight-log-profile');
-    sel.innerHTML = state.profiles.map((p, idx) => `<option value="${idx}">${p.name}</option>`).join('');
-    
-    document.getElementById('weight-log-date').value = new Date().toISOString().split('T')[0];
-    document.getElementById('weight-log-val').value = '';
-
-    renderWeightHistoryTable();
-    buildSeparateCharts();
-}
-
-function addWeightEntry() {
-    const profileIndex = parseInt(document.getElementById('weight-log-profile').value);
-    const weight = parseFloat(document.getElementById('weight-log-val').value);
-    const date = document.getElementById('weight-log-date').value;
-
-    if (!weight || !date) { alert("Укажите вес и дату"); return; }
-
-    // Проверяем дубли на эту дату для конкретного профиля
-    state.weightLogs = state.weightLogs.filter(l => !(l.date === date && l.profileIndex === profileIndex));
-
-    state.weightLogs.push({
-        id: "w_" + Date.now(),
-        date, profileIndex, weight
-    });
-
-    // Обновляем текущий вес в профиле, если дата сегодняшняя или самая свежая
-    state.profiles[profileIndex].weight = weight;
-
-    saveStateToLocalStorage();
-    renderWeightTab();
-}
-
-function deleteWeightEntry(id) {
-    state.weightLogs = state.weightLogs.filter(l => l.id !== id);
-    saveStateToLocalStorage();
-    renderWeightTab();
-}
-
-function renderWeightHistoryTable() {
-    const tbody = document.getElementById('weight-history-table-body');
-    tbody.innerHTML = '';
-    
-    // Сортировка по дате (свежие вверху)
-    const sorted = [...state.weightLogs].sort((a,b) => new Date(b.date) - new Date(a.date));
-    
-    if(sorted.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; color:var(--text-muted);">История пуста</td></tr>`;
-        return;
-    }
-
-    sorted.forEach(l => {
-        const pName = state.profiles[l.profileIndex]?.name || `Профиль ${l.profileIndex+1}`;
-        tbody.innerHTML += `
-            <tr>
-                <td>${l.date}</td>
-                <td>${pName}</td>
-                <td><strong>${l.weight} кг</strong></td>
-                <td><span class="action-icon" onclick="deleteWeightEntry('${l.id}')">🗑️</span></td>
-            </tr>
+            <div class="split-zone">
+                <h3 style="margin-bottom:10px;">⚖️ Калькулятор Готовых Порций + Добавки</h3>
+                <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:15px;">Взвесьте готовое блюдо, укажите индивидуальные топпинги — система пересчет КБЖУ автоматически.</p>
+                <div style="display:flex; justify-content:center; align-items:center; gap:15px; flex-wrap:wrap;">
+                    <input type="number" id="calc-cooked-weight" placeholder="Общий вес готового блюда (г)" style="max-width:250px; margin:0;" oninput="calcSplit()">
+                    <div style="text-align:left; font-size:0.85rem; font-weight:bold; width:200px;">
+                        ${nameHim}: <span id="label-him-pct">65</span>% | ${nameHer}: <span id="label-her-pct">35</span>%
+                        <input type="range" id="calc-split-range" min="10" max="90" value="65" style="margin:5px 0 0 0;" oninput="calcSplit()">
+                    </div>
+                </div>
+                <div id="split-results" class="split-results"></div>
+            </div>
         `;
-    });
-}
-
-function setWeightFilter(days) {
-    weightFilterDays = days;
-    buildSeparateCharts();
-}
-
-function buildSeparateCharts() {
-    const dataP1 = getFilteredWeightData(0);
-    const dataP2 = getFilteredWeightData(1);
-
-    // Уничтожаем старые графики во избежание наложений Canvas
-    if (chartP1) chartP1.destroy();
-    if (chartP2) chartP2.destroy();
-
-    chartP1 = createLineChart('chart-weight-p1', dataP1, state.profiles[0].name, 'rgba(59, 130, 246, 1)', 'rgba(59, 130, 246, 0.1)');
-    chartP2 = createLineChart('chart-weight-p2', dataP2, state.profiles[1].name, 'rgba(16, 185, 129, 1)', 'rgba(16, 185, 129, 0.1)');
-}
-
-function getFilteredWeightData(profileIndex) {
-    let logs = state.weightLogs.filter(l => l.profileIndex === profileIndex);
-    
-    if (weightFilterDays > 0) {
-        logs = logs.filter(l => isDateInPastDays(l.date, weightFilterDays));
-    }
-    
-    // Сортируем по хронологии
-    logs.sort((a,b) => new Date(a.date) - new Date(b.date));
-
-    // Агрегация данных при длинных интервалах (> 100 точек) для исключения перегрузки интерфейса
-    if (logs.length > 60) {
-        logs = logs.filter((l, index) => index % Math.ceil(logs.length / 30) === 0);
+        document.getElementById('recipe-editor').innerHTML = html;
+        calcSplit();
     }
 
-    return {
-        labels: logs.map(l => l.date),
-        values: logs.map(l => l.weight)
-    };
-}
+    function updateR(field, val) {
+        const r = state.recipes.find(x => x.id === currentRecipeId);
+        r[field] = val; saveState();
+    }
+    function updateRIng(idx, field, val) {
+        const r = state.recipes.find(x => x.id === currentRecipeId);
+        if(field === 'name') r.ingredients[idx][field] = val;
+        else r.ingredients[idx][field] = parseFloat(val) || 0;
+        saveState(); renderRecipeEditor();
+    }
+    function addRIng() {
+        const r = state.recipes.find(x => x.id === currentRecipeId);
+        r.ingredients.push({name:'', weight:100, k:0, b:0, j:0, u:0});
+        saveState(); renderRecipeEditor();
+    }
+    function delRIng(idx) {
+        const r = state.recipes.find(x => x.id === currentRecipeId);
+        r.ingredients.splice(idx, 1);
+        saveState(); renderRecipeEditor();
+    }
+    function deleteRecipe() {
+        if(!confirm('Удалить рецепт навсегда?')) return;
+        state.recipes = state.recipes.filter(x => x.id !== currentRecipeId);
+        saveState(); closeRecipe();
+    }
 
-function createLineChart(canvasId, dataObj, label, color, bgColor) {
-    const ctx = document.getElementById(canvasId).getContext('2d');
-    return new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: dataObj.labels,
-            datasets: [{
-                label: label,
-                data: dataObj.values,
-                borderColor: color,
-                backgroundColor: bgColor,
-                fill: true,
-                tension: 0.4, // Плавные кривые Безье
-                borderWidth: 3,
-                pointRadius: 4,
-                pointBackgroundColor: color
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: { legend: { display: false } },
-            scales: {
-                x: { grid: { display: false }, ticks: { color: '#64748b', font: { size: 11 } } },
-                y: { grid: { color: 'rgba(0,0,0,0.05)' }, ticks: { color: '#64748b', font: { size: 11 } } }
-            }
+    // --- AUTOCOMPLETE ENGINE ---
+    function handleAutocomplete(inputEl, idx, mode, user = null) {
+        const val = inputEl.value.toLowerCase();
+        const dd = inputEl.nextElementSibling;
+        if(!val) { dd.style.display = 'none'; return; }
+        
+        const matches = state.ingredients.filter(i => i.name.toLowerCase().includes(val));
+        if(matches.length === 0) { dd.style.display = 'none'; return; }
+
+        dd.innerHTML = matches.map(m => `
+            <div class="autocomplete-item" onmousedown="selectAutocomplete(${idx}, '${m.name.replace(/'/g,"\\'")}', ${m.k}, ${m.b}, ${m.j}, ${m.u}, '${mode}', '${user}')">
+                <span>${m.name}</span>
+                <span style="color:var(--text-muted);">${m.k} ккал</span>
+            </div>
+        `).join('');
+        dd.style.display = 'block';
+    }
+    
+    function hideAutocomplete(inputEl) { 
+        setTimeout(() => { if(inputEl.nextElementSibling) inputEl.nextElementSibling.style.display = 'none'; }, 250); 
+    }
+    
+    function selectAutocomplete(idx, name, k, b, j, u, mode, user) {
+        if(mode === 'recipe') {
+            const r = state.recipes.find(x => x.id === currentRecipeId);
+            r.ingredients[idx].name = name; r.ingredients[idx].k = k; r.ingredients[idx].b = b; r.ingredients[idx].j = j; r.ingredients[idx].u = u;
+            saveState(); renderRecipeEditor();
+        } else if(mode === 'topping') {
+            activeToppings[user][idx].name = name;
+            activeToppings[user][idx].k = k;
+            activeToppings[user][idx].b = b;
+            activeToppings[user][idx].j = j;
+            activeToppings[user][idx].u = u;
+            calcSplit();
         }
-    });
-}
+    }
 
-// --- УТИЛИТЫ МОДАЛЬНЫХ ОКОН ---
-function openModal(id) {
-    document.getElementById(id).style.display = 'flex';
-}
+    // --- TOPPINGS INTERACTION LOGIC ---
+    function addTopping(user) {
+        activeToppings[user].push({ name: '', weight: 10, k: 0, b: 0, j: 0, u: 0 });
+        calcSplit();
+    }
+    function removeTopping(user, idx) {
+        activeToppings[user].splice(idx, 1);
+        calcSplit();
+    }
+    function updateToppingWeight(user, idx, weightVal) {
+        activeToppings[user][idx].weight = parseFloat(weightVal) || 0;
+        calcSplit();
+    }
+    function updateToppingNameDirect(user, idx, nameVal) {
+        activeToppings[user][idx].name = nameVal;
+    }
 
-function closeModal(id) {
-    document.getElementById(id).style.display = 'none';
-}
+    // --- SPLIT CALCULATOR ---
+    function calcSplit() {
+        const cookedInput = document.getElementById('calc-cooked-weight');
+        const resDiv = document.getElementById('split-results');
+        if(!cookedInput) return;
+        
+        const totalW = parseFloat(cookedInput.value) || 0;
+        const rHim = parseInt(document.getElementById('calc-split-range').value);
+        const rHer = 100 - rHim;
+        
+        document.getElementById('label-him-pct').innerText = rHim;
+        document.getElementById('label-her-pct').innerText = rHer;
 
-// --- ЗАПУСК ПРИЛОЖЕНИЯ ---
-window.onload = function() {
-    coldStartCheck();
-    
-    // Восстановление активной вкладки
-    const savedTab = localStorage.getItem('nutrisplit_active_tab') || 'settings';
-    switchTab(savedTab);
-    
-    // Первичный рендеринг настроек
-    renderSettingsTab();
-};
+        if (totalW <= 0) { resDiv.innerHTML = '<p style="color:var(--text-muted); width:100%; text-align:center; padding:10px;">Введите общий готовый вес блюда, чтобы рассчитать порции.</p>'; return; }
+
+        const r = state.recipes.find(x => x.id === currentRecipeId);
+        const m = r._computed;
+        const nameHim = state.profiles.him.name || 'Артём';
+        const nameHer = state.profiles.her.name || 'Она';
+
+        const renderToppingRows = (user) => {
+            return activeToppings[user].map((t, idx) => `
+                <div class="topping-row">
+                    <div style="position:relative; margin:0;">
+                        <input type="text" value="${t.name}" placeholder="Сыр / Масло" oninput="handleAutocomplete(this, ${idx}, 'topping', '${user}')" onblur="hideAutocomplete(this)" onchange="updateToppingNameDirect('${user}', ${idx}, this.value)">
+                        <div class="autocomplete-dropdown"></div>
+                    </div>
+                    <input type="number" value="${t.weight}" placeholder="г" oninput="updateToppingWeight('${user}', ${idx}, this.value)">
+                    <button class="btn-del-top" onclick="removeTopping('${user}', ${idx})">✕</button>
+                </div>
+            `).join('');
+        };
+
+        // Calculations HIM
+        const ratioHim = rHim / 100;
+        let pwHim = totalW * ratioHim; let pkHim = m.k * ratioHim; let pbHim = m.b * ratioHim; let pjHim = m.j * ratioHim; let puHim = m.u * ratioHim;
+        activeToppings.him.forEach(t => {
+            let rTop = t.weight / 100;
+            pwHim += t.weight; pkHim += t.k * rTop; pbHim += t.b * rTop; pjHim += t.j * rTop; puHim += t.u * rTop;
+        });
+
+        // Calculations HER
+        const ratioHer = rHer / 100;
+        let pwHer = totalW * ratioHer; let pkHer = m.k * ratioHer; let pbHer = m.b * ratioHer; let pjHer = m.j * ratioHer; let puHer = m.u * ratioHer;
+        activeToppings.her.forEach(t => {
+            let rTop = t.weight / 100;
+            pwHer += t.weight; pkHer += t.k * rTop; pbHer += t.b * rTop; pjHer += t.j * rTop; puHer += t.u * rTop;
+        });
+
+        resDiv.innerHTML = `
+            <div class="portion-card him">
+                <h4>Порция для: ${nameHim} (${rHim}%)</h4>
+                <div style="font-size:1.8rem; font-weight:800; margin:5px 0;">${Math.round(pwHim)} г</div>
+                <div class="portion-stats">
+                    <span>🔥 ${Math.round(pkHim)} ккал</span><span>🥩 Б: ${Math.round(pbHim)}г</span>
+                    <span>🥑 Ж: ${Math.round(pjHim)}г</span><span>🍚 У: ${Math.round(puHim)}г</span>
+                </div>
+                <div class="toppings-zone">
+                    <h5 style="font-size:0.75rem; margin-bottom:8px;">➕ Топпинги:</h5>
+                    ${renderToppingRows('him')}
+                    <button class="secondary" style="width:100%; padding:4px; font-size:0.75rem; background:rgba(255,255,255,0.15); border:none; color:white;" onclick="addTopping('him')">+ Добавка</button>
+                </div>
+                <button class="primary" style="margin-top:12px; background:rgba(255,255,255,0.25);" onclick="logMeal('him', '${r.title.replace(/'/g,"\\'")}', ${pkHim}, ${pbHim}, ${pjHim}, ${puHim})">❤️ В Дневник</button>
+            </div>
+
+            <div class="portion-card her">
+                <h4>Порция для: ${nameHer} (${rHer}%)</h4>
+                <div style="font-size:1.8rem; font-weight:800; margin:5px 0;">${Math.round(pwHer)} г</div>
+                <div class="portion-stats">
+                    <span>🔥 ${Math.round(pkHer)} ккал</span><span>🥩 Б: ${Math.round(pbHer)}г</span>
+                    <span>🥑 Ж: ${Math.round(pjHer)}г</span><span>🍚 У: ${Math.round(puHer)}г</span>
+                </div>
+                <div class="toppings-zone">
+                    <h5 style="font-size:0.75rem; margin-bottom:8px;">➕ Топпинги:</h5>
+                    ${renderToppingRows('her')}
+                    <button class="secondary" style="width:100%; padding:4px; font-size:0.75rem; background:rgba(255,255,255,0.15); border:none; color:white;" onclick="addTopping('her')">+ Добавка</button>
+                </div>
+                <button class="primary" style="margin-top:12px; background:rgba(255,255,255,0.25);" onclick="logMeal('her', '${r.title.replace(/'/g,"\\'")}', ${pkHer}, ${pbHer}, ${pjHer}, ${puHer})">💚 В Дневник</button>
+            </div>
+        `;
+    }
+
+    // --- SHOPPING LIST LOGIC ---
+    function pushToShoppingList(recipeId) {
+        const recipe = state.recipes.find(x => x.id === recipeId);
+        if (!recipe) return;
+        recipe.ingredients.forEach(ing => {
+            if (!ing.name) return;
+            const existing = state.shoppingList.find(x => x.name.toLowerCase() === ing.name.toLowerCase() && !x.done);
+            if (existing) {
+                existing.weight += ing.weight;
+            } else {
+                state.shoppingList.push({ name: ing.name, weight: ing.weight, done: false });
+            }
+        });
+        saveState();
+        renderShoppingList();
+        alert('Ингредиенты добавлены в список покупок!');
+    }
+    function renderShoppingList() {
+        const container = document.getElementById('shopping-list-container');
+        if (!container) return;
+        if (state.shoppingList.length === 0) {
+            container.innerHTML = '<p style="color: var(--text-muted); font-size:0.85rem;">Список покупок пуст.</p>';
+            return;
+        }
+        container.innerHTML = state.shoppingList.map((item, idx) => `
+            <div style="display:flex; align-items:center; justify-content:space-between; padding:8px 0; border-bottom:1px solid var(--border);">
+                <label style="display:flex; align-items:center; gap:8px; font-weight:500; cursor:pointer; text-decoration: ${item.done ? 'line-through':'none'}; color: ${item.done ? 'var(--text-muted)':'var(--text-main)'};">
+                    <input type="checkbox" ${item.done ? 'checked':''} onchange="toggleShoppingItem(${idx})" style="width:auto; margin:0;">
+                    <span>${item.name} (${Math.round(item.weight)} г)</span>
+                </label>
+                <button class="danger" style="padding:2px 6px; font-size:0.75rem;" onclick="removeShoppingItem(${idx})">✕</button>
+            </div>
+        `).join('');
+    }
+    function toggleShoppingItem(idx) {
+        state.shoppingList[idx].done = !state.shoppingList[idx].done;
+        saveState();
+        renderShoppingList();
+    }
+    function removeShoppingItem(idx) {
+        state.shoppingList.splice(idx, 1);
+        saveState();
+        renderShoppingList();
+    }
+    function clearShoppingList() {
+        state.shoppingList = [];
+        saveState();
+        renderShoppingList();
+    }
+
+    // --- TAB 2: DATABASE LOGIC ---
+    function renderDatabase() {
+        const tbody = document.getElementById('db-table-body');
+        tbody.innerHTML = state.ingredients.map((ing, idx) => `
+            <tr>
+                <td style="font-weight:600;">${ing.name}</td>
+                <td>${ing.k}</td><td>${ing.b}</td><td>${ing.j}</td><td>${ing.u}</td>
+                <td style="text-align:right;"><button class="danger" onclick="delDbProduct(${idx})">Удалить</button></td>
+            </tr>
+        `).join('');
+    }
+    function addDbProduct() {
+        const n = document.getElementById('db-name').value;
+        const k = parseFloat(document.getElementById('db-k').value);
+        const b = parseFloat(document.getElementById('db-b').value);
+        const j = parseFloat(document.getElementById('db-j').value);
+        const u = parseFloat(document.getElementById('db-u').value);
+        
+        if(!n || isNaN(k)) return alert('Заполните название и калории!');
+        state.ingredients.unshift({name: n, k:k, b:b||0, j:j||0, u:u||0});
+        saveState(); renderDatabase();
+        
+        document.getElementById('db-name').value = '';
+        document.getElementById('db-k').value = ''; document.getElementById('db-b').value = '';
+        document.getElementById('db-j').value = ''; document.getElementById('db-u').value = '';
+    }
+    function delDbProduct(idx) { state.ingredients.splice(idx,1); saveState(); renderDatabase(); }
+
+    // --- TAB 3: DIARY LOGIC ---
+    function toggleQuickLog(user) {
+        const drawer = document.getElementById(`quick-log-${user}`);
+        drawer.style.display = drawer.style.display === 'none' ? 'block' : 'none';
+    }
+    function handleQuickAutocomplete(inputEl, user) {
+        const val = inputEl.value.toLowerCase();
+        const dd = document.getElementById(`quick-dropdown-${user}`);
+        if (!val) { dd.style.display = 'none'; return; }
+        const matches = state.ingredients.filter(i => i.name.toLowerCase().includes(val));
+        if(matches.length === 0) { dd.style.display = 'none'; return; }
+        dd.innerHTML = matches.map(m => `
+            <div class="autocomplete-item" onmousedown="selectQuickProduct('${user}', '${m.name.replace(/'/g,"\\'")}', ${m.k}, ${m.b}, ${m.j}, ${m.u})">
+                <span>${m.name}</span>
+                <span style="color:var(--text-muted);">${m.k} ккал</span>
+            </div>
+        `).join('');
+        dd.style.display = 'block';
+    }
+    function selectQuickProduct(user, name, k, b, j, u) {
+        document.getElementById(`quick-input-user-${user}` || `quick-input-${user}`).value = name;
+        document.getElementById(`quick-hidden-${user}`).value = JSON.stringify({name, k, b, j, u});
+        document.getElementById(`quick-dropdown-${user}`).style.display = 'none';
+    }
+    function submitQuickLog(user) {
+        const weight = parseFloat(document.getElementById(`quick-weight-user-${user}` || `quick-weight-${user}`).value);
+        const hiddenVal = document.getElementById(`quick-hidden-${user}`).value;
+        if (!weight || !hiddenVal) return alert('Выберите продукт и введите вес!');
+        
+        const prod = JSON.parse(hiddenVal);
+        const ratio = weight / 100;
+        logMeal(user, `${prod.name} (${weight}г)`, prod.k*ratio, prod.b*ratio, prod.j*ratio, prod.u*ratio);
+        
+        document.getElementById(`quick-input-${user}`).value = '';
+        document.getElementById(`quick-weight-${user}`).value = '';
+        document.getElementById(`quick-hidden-${user}`).value = '';
+        toggleQuickLog(user);
+    }
+
+    function logMeal(user, title, k, b, j, u) {
+        if(!state.diary[currentDate]) state.diary[currentDate] = { him: [], her: [] };
+        state.diary[currentDate][user].push({ 
+            id: Math.random().toString(), 
+            title, 
+            k: Math.round(k), 
+            b: Math.round(b), 
+            j: Math.round(j), 
+            u: Math.round(u), 
+            time: new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}) 
+        });
+        saveState();
+        renderDiary();
+    }
+
+    function cloneMealEntry(user, id) {
+        const dayData = state.diary[currentDate] ? state.diary[currentDate][user] : [];
+        const match = dayData.find(x => x.id === id);
+        if (!match) return;
+        logMeal(user, match.title, match.k, match.b, match.j, match.u);
+    }
+
+    function delLog(user, id) {
+        state.diary[currentDate][user] = state.diary[currentDate][user].filter(x => x.id !== id);
+        saveState(); renderDiary();
+    }
+    function changeDate(days) {
+        const d = new Date(currentDate); d.setDate(d.getDate() + days);
+        currentDate = d.toISOString().split('T')[0]; renderDiary();
+    }
+
+    function renderDiary() {
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('diary-date-display').innerText = (currentDate === today) ? 'Сегодня' : currentDate;
+        const dayData = state.diary[currentDate] || { him: [], her: [] };
+
+        const renderUserProgress = (user, data, target, barsId, listId, color) => {
+            let tk=0, tb=0, tj=0, tu=0;
+            data.forEach(x => { tk+=x.k; tb+=x.b; tj+=x.j; tu+=x.u; });
+            
+            const pk = Math.min(100, (tk/target.kcal)*100);
+            const pb = Math.min(100, (tb/target.p)*100);
+            const pf = Math.min(100, (tj/target.f)*100);
+            const pc = Math.min(100, (tu/target.c)*100);
+
+            let remK = target.kcal - tk;
+            let remP = target.p - tb;
+            let remJ = target.f - tj;
+            let remU = target.c - tu;
+
+            const makeCounterLabel = (v, u) => v < 0 
+                ? `<span style="color:#dc2626; font-weight:bold;">${v} ${u}</span>` 
+                : `<span style="color:var(--text-main); font-weight:600;">${v} ${u}</span>`;
+            
+            document.getElementById(barsId).innerHTML = `
+                <div class="progress-container">
+                    <div class="progress-header"><span>Калории (${tk} / ${target.kcal} ккал)</span><span>${Math.round(pk)}%</span></div>
+                    <div class="progress-track"><div class="progress-fill" style="width:${pk}%; background:${color};"></div></div>
+                </div>
+                <div class="progress-container">
+                    <div class="progress-header"><span>Белки (${tb} / ${target.p} г)</span><span>${Math.round(pb)}%</span></div>
+                    <div class="progress-track"><div class="progress-fill" style="width:${pb}%; background:#f59e0b;"></div></div>
+                </div>
+                <div class="progress-container">
+                    <div class="progress-header"><span>Жиры (${tj} / ${target.f} г)</span><span>${Math.round(pf)}%</span></div>
+                    <div class="progress-track"><div class="progress-fill" style="width:${pf}%; background:#ec4899;"></div></div>
+                </div>
+                <div class="progress-container">
+                    <div class="progress-header"><span>Углеводы (${tu} / ${target.c} г)</span><span>${Math.round(pc)}%</span></div>
+                    <div class="progress-track"><div class="progress-fill" style="width:${pc}%; background:#06b6d4;"></div></div>
+                </div>
+                <div style="margin-top: 15px; font-size: 0.85rem; padding: 10px; background: var(--bg-body); border-radius: var(--radius-md); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 5px;">
+                    <span>Осталось:</span>
+                    <span>🔥 ${makeCounterLabel(remK, 'ккал')}</span>
+                    <span>🥩 Б: ${makeCounterLabel(remP, 'г')}</span>
+                    <span>🥑 Ж: ${makeCounterLabel(remJ, 'г')}</span>
+                    <span>🍚 У: ${makeCounterLabel(remU, 'г')}</span>
+                </div>
+            `;
+
+            document.getElementById(listId).innerHTML = data.length === 0 ? '<p style="font-size:0.85rem; color:var(--text-muted);">Пока пусто.</p>' : data.map(x => `
+                <div class="log-entry">
+                    <div>
+                        <div style="font-weight:600; font-size:0.95rem;">${x.title} <span style="font-weight:normal; font-size:0.75rem; color:var(--text-muted);">(${x.time})</span></div>
+                        <div style="font-size:0.8rem; color:var(--text-muted); margin-top:3px;">${x.k} ккал | Б:${x.b} Ж:${x.j} У:${x.u}</div>
+                    </div>
+                    <div style="display:flex; gap:8px;">
+                        <button class="secondary" style="padding:4px 8px; font-size:0.75rem;" onclick="cloneMealEntry('${user}', '${x.id}')">Повторить</button>
+                        <button class="danger" style="padding:5px 10px;" onclick="delLog('${user}', '${x.id}')">✕</button>
+                    </div>
+                </div>
+            `).join('');
+        };
+
+        renderUserProgress('him', dayData.him, TARGETS.him, 'diary-him-bars', 'diary-him-list', 'var(--him-main)');
+        renderUserProgress('her', dayData.her, TARGETS.her, 'diary-her-bars', 'diary-her-list', 'var(--her-main)');
+        updateGlobalProfileNamesText();
+    }
+
+    // --- TAB 4: PROGRESS LOGIC ---
+    function setWeightFilter(user, period) {
+        weightFilters[user] = period;
+        renderProgress();
+    }
+
+    function addWeight(user) {
+        const d = document.getElementById(`weight-date-${user}`).value;
+        const v = parseFloat(document.getElementById(`weight-val-${user}`).value);
+        if(!d || !v) return;
+        
+        const existing = state.weights[user].find(x => x.date === d);
+        if(existing) existing.val = v; else state.weights[user].push({date: d, val: v});
+        
+        state.weights[user].sort((a,b) => new Date(b.date) - new Date(a.date)); // Desc
+        saveState(); renderProgress();
+    }
+
+    function dropWeightLog(user, dateString) {
+        if (!confirm('Удалить запись веса?')) return;
+        state.weights[user] = state.weights[user].filter(x => x.date !== dateString);
+        saveState();
+        renderProgress();
+    }
+
+    function drawPureSVGChart(user, dataset) {
+        const box = document.getElementById(`chart-container-${user}`);
+        if (!box) return;
+        if (dataset.length < 2) {
+            box.innerHTML = '<span style="font-size:0.8rem; color:var(--text-muted);">Недостаточно данных для графика</span>';
+            return;
+        }
+
+        // Chronological mapping
+        const ordered = [...dataset].sort((a,b) => new Date(a.date) - new Date(b.date));
+        const values = ordered.map(o => o.val);
+        const max = Math.max(...values) + 0.5;
+        const min = Math.min(...values) - 0.5;
+        const delta = max - min || 1;
+
+        const w = 500; const h = 110; const p = 15;
+        let coords = ""; let dots = "";
+
+        ordered.forEach((pt, i) => {
+            let cx = p + (i / (ordered.length - 1)) * (w - p * 2);
+            let cy = h - p - ((pt.val - min) / delta) * (h - p * 2);
+            coords += `${cx},${cy} `;
+            dots += `<circle cx="${cx}" cy="${cy}" r="4" fill="${user==='him'?'var(--him-main)':'var(--her-main)'}"><title>${pt.date}: ${pt.val}кг</title></circle>`;
+        });
+
+        box.innerHTML = `
+            <svg viewBox="0 0 ${w} ${h}" style="width:100%; height:100%;">
+                <polyline fill="none" stroke="${user==='him'?'var(--him-main)':'var(--her-main)'}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" points="${coords}" />
+                ${dots}
+            </svg>
+        `;
+    }
+
+    function renderProgress() {
+        const buildTable = (user) => {
+            const rawData = state.weights[user] || [];
+            const filter = weightFilters[user] || 'all';
+
+            let filtered = [...rawData];
+            if (filter !== 'all') {
+                const limitDays = parseInt(filter);
+                const limitDate = new Date();
+                limitDate.setDate(limitDate.getDate() - limitDays);
+                filtered = rawData.filter(x => new Date(x.date) >= limitDate);
+            }
+
+            const tbody = document.getElementById(`weight-table-${user}`);
+            if(filtered.length === 0) { 
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;">Нет данных за этот период</td></tr>'; 
+                drawPureSVGChart(user, []);
+                return; 
+            }
+
+            const firstVal = rawData.length > 0 ? rawData[rawData.length-1].val : filtered[filtered.length-1].val;
+            
+            tbody.innerHTML = filtered.map((entry, i) => {
+                let weekDiff = "-";
+                let pastWeek = rawData.find(w => { const days = (new Date(entry.date) - new Date(w.date))/(1000*3600*24); return days >= 5 && days <= 9; });
+                if(!pastWeek && i < filtered.length-1) pastWeek = filtered[i+1];
+                
+                if(pastWeek && pastWeek.date !== entry.date) {
+                    const diff = (entry.val - pastWeek.val).toFixed(1);
+                    const isGood = user === 'him' ? diff > 0 : diff < 0;
+                    weekDiff = `<span class="${isGood?'trend-good':'trend-bad'}">${diff > 0 ? '+'+diff : diff}</span>`;
+                }
+                
+                const totalDiff = (entry.val - firstVal).toFixed(1);
+                const isTGood = user === 'him' ? totalDiff > 0 : totalDiff < 0;
+                const totalStr = totalDiff == 0 ? "0" : `<span class="${isTGood?'trend-good':'trend-bad'}">${totalDiff > 0 ? '+'+totalDiff : totalDiff}</span>`;
+
+                return `<tr>
+                    <td>${entry.date}</td>
+                    <td style="font-weight:700;">${entry.val}</td>
+                    <td>${weekDiff}</td>
+                    <td>${totalStr}</td>
+                    <td><button class="danger" style="padding: 2px 6px;" onclick="dropWeightLog('${user}', '${entry.date}')">✕</button></td>
+                </tr>`;
+            }).join('');
+
+            drawPureSVGChart(user, filtered);
+        };
+        buildTable('him'); buildTable('her');
+        updateGlobalProfileNamesText();
+    }
+
+    // --- BACKUP ENGINE ---
+    function exportDataBackup() {
+        const fileContent = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(state));
+        const dlNode = document.createElement('a');
+        dlNode.setAttribute("href", fileContent);
+        dlNode.setAttribute("download", "nutrisplit_backup.json");
+        document.body.appendChild(dlNode);
+        dlNode.click();
+        dlNode.remove();
+    }
+
+    function importDataBackup(inputEl) {
+        const targetFile = inputEl.files[0];
+        if (!targetFile) return;
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            try {
+                const parsed = JSON.parse(e.target.result);
+                if (parsed.recipes && parsed.ingredients) {
+                    state = parsed;
+                    saveState();
+                    init();
+                    alert('Данные бэкапа успешно импортированы!');
+                } else {
+                    alert('Некорректная структура файла бэкапа.');
+                }
+            } catch (err) {
+                alert('Ошибка парсинга JSON.');
+            }
+        };
+        reader.readAsText(targetFile);
+    }
+
+    // BOOTSTRAP INIT
+    init();
 </script>
-
 </body>
 </html>

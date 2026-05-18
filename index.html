@@ -137,13 +137,13 @@
     </header>
 
     <nav>
-        <button class="nav-btn active" onclick="switchTab('cookbook')"><span>🍳</span> Книга Рецептов</button>
-        <button class="nav-btn" onclick="switchTab('database')"><span>🥑</span> База Продуктов</button>
-        <button class="nav-btn" onclick="switchTab('diary')"><span>📊</span> Дневник Питания</button>
-        <button class="nav-btn" onclick="switchTab('progress')"><span>📈</span> Прогресс</button>
+        <button id="btn-tab-cookbook" class="nav-btn" onclick="switchTab('cookbook')"><span>🍳</span> Книга Рецептов</button>
+        <button id="btn-tab-database" class="nav-btn" onclick="switchTab('database')"><span>🥑</span> База Продуктов</button>
+        <button id="btn-tab-diary" class="nav-btn" onclick="switchTab('diary')"><span>📊</span> Дневник Питания</button>
+        <button id="btn-tab-progress" class="nav-btn" onclick="switchTab('progress')"><span>📈</span> Прогресс</button>
     </nav>
 
-    <div id="tab-cookbook" class="tab-content active container">
+    <div id="tab-cookbook" class="tab-content container">
         <div id="recipe-list-view">
             <h2>Интерактивная База Рецептов</h2>
             <p style="margin-bottom: 20px;">Бюджетные продукты из Magnum/Small, адаптированные под ваши цели.</p>
@@ -302,16 +302,15 @@
         { id: 'r9', title: 'Котлеты куриные рубленые', category: 'Птица', instructions: 'Мелко порубить филе ножом. Смешать с яйцом, ложкой муки и тертым луком. Выкладывать ложкой на сковороду как оладьи.', modHim: 'Отварить макароны Султан (150г сухих) на гарнир.', modHer: 'Подавать с большой порцией салата Шакараб (помидоры+лук).', ingredients: [{name:'Куриное филе',weight:600,k:113,b:23.6,j:1.9,u:0.4},{name:'Яйцо Курочка Ряба',weight:50,k:157,b:12.7,j:10.9,u:0.7},{name:'Мука пшеничная',weight:30,k:334,b:10.8,j:1.3,u:69.9},{name:'Лук репчатый',weight:100,k:41,b:1.4,j:0.2,u:8.2}] },
         { id: 'r10', title: 'Гуляш из говядины', category: 'Мясо', instructions: 'Обжарить говядину кубиками. Добавить лук, морковь, ложку томатной пасты. Залить водой и тушить на слабом огне 1.5 часа до мягкости.', modHim: 'На гарнир отварить гречку. Порция мяса с обильной подливой.', modHer: 'Минимум подливы (там жиры), мясо подавать с тушеной капустой.', ingredients: [{name:'Говядина мякоть (постная)',weight:600,k:158,b:22.2,j:7.1,u:0},{name:'Морковь',weight:150,k:35,b:1.3,j:0.1,u:6.9},{name:'Лук репчатый',weight:150,k:41,b:1.4,j:0.2,u:8.2},{name:'Масло подсолнечное Маслодел',weight:20,k:899,b:0,j:99.9,u:0}] },
         { id: 'r11', title: 'Макароны по-флотски', category: 'Мясо', instructions: 'Прокрутить говядину в фарш, обжарить с луком на сковороде. Отдельно отварить макароны. Смешать все вместе.', modHim: 'Добавить 30г сыра сверху и есть с хлебом.', modHer: 'Положить в тарелку 30% макарон по-флотски и 70% нарезки из свежих овощей.', ingredients: [{name:'Говядина мякоть (постная)',weight:400,k:158,b:22.2,j:7.1,u:0},{name:'Макароны Султан',weight:300,k:344,b:10.4,j:1.1,u:71.5},{name:'Лук репчатый',weight:150,k:41,b:1.4,j:0.2,u:8.2}] },
-        { id: 'r12', title: 'Жаркое с картофелем', category: 'Мясо', instructions: 'Нарезать мясо и картофель крупными кубиками. Слегка обжарить мясо, закинуть картофель, залить бульоном/водой и тушить 40 минут.', modHim: 'Скушать всю порцию с картофелем и соком от жаркого.', modHer: 'Выбирать куски мяса, картофель ограничить до 100г готового веса.', ingredients: [{name:'Говядина мякоть (постная)',weight:500,k:158,b:22.2,j:7.1,u:0},{name:'Картофель',weight:600,k:77,b:2,j:0.4,u:16.3},{name:'Морковь',weight:100,k:35,b:1.3,j:0.1,u:6.9},{name:'Лук репчатый',weight:100,k:41,b:1.4,j:0.2,u:8.2}] },
+        { id: 'r12', title: 'Жаркое с картофелем', category: 'Мясо', instructions: 'Нарезать мясо и картофель крупными кубиками. Слегка обжарить мясо, закинуть картофель, залить бульеном/водой и тушить 40 минут.', modHim: 'Скушать всю порцию с картофелем и соком от жаркого.', modHer: 'Выбирать куски мяса, картофель ограничить до 100г готового веса.', ingredients: [{name:'Говядина мякоть (постная)',weight:500,k:158,b:22.2,j:7.1,u:0},{name:'Картофель',weight:600,k:77,b:2,j:0.4,u:16.3},{name:'Морковь',weight:100,k:35,b:1.3,j:0.1,u:6.9},{name:'Лук репчатый',weight:100,k:41,b:1.4,j:0.2,u:8.2}] },
         { id: 'r13', title: 'Минтай под овощным маринадом', category: 'Рыба', instructions: 'Филе минтая нарезать. Натереть морковь, нарезать лук. Потушить овощи с томатной пастой. Выложить овощи на рыбу и запечь/потушить 20 минут.', modHim: 'Обязательно отварить рис (150г сухих) на гарнир.', modHer: 'Отличный легкий ужин, кушать просто так.', ingredients: [{name:'Минтай филе',weight:600,k:72,b:15.9,j:0.9,u:0},{name:'Морковь',weight:300,k:35,b:1.3,j:0.1,u:6.9},{name:'Лук репчатый',weight:200,k:41,b:1.4,j:0.2,u:8.2},{name:'Масло подсолнечное Маслодел',weight:15,k:899,b:0,j:99.9,u:0}] },
         { id: 'r14', title: 'Салат Шакараб белковый', category: 'Салаты', instructions: 'Нарезать помидоры крупно, лук тонкими полукольцами. Вместо майонеза добавить зерненый творог. Посолить, поперчить.', modHim: 'Дополнить этим салатом основное блюдо (например, гуляш).', modHer: 'Можно использовать как самостоятельный легкий перекус.', ingredients: [{name:'Помидоры',weight:400,k:20,b:0.6,j:0.2,u:4.2},{name:'Лук репчатый',weight:100,k:41,b:1.4,j:0.2,u:8.2},{name:'Творог Adal 5%',weight:150,k:121,b:16,j:5,u:3}] },
         { id: 'r15', title: 'Салат Витаминный', category: 'Салаты', instructions: 'Нашинковать свежую капусту, натереть морковь. Помять руками с солью. Заправить каплей подсолнечного масла и уксусом.', modHim: 'Добавить горсть семечек или орехов.', modHer: 'Заправить лимонным соком вместо масла.', ingredients: [{name:'Капуста белокочанная',weight:400,k:28,b:1.8,j:0.2,u:4.7},{name:'Морковь',weight:150,k:35,b:1.3,j:0.1,u:6.9},{name:'Масло подсолнечное Маслодел',weight:10,k:899,b:0,j:99.9,u:0}] }
     ];
 
     // --- STATE MANAGEMENT ---
-    let state = { recipes: [], ingredients: [], diary: {}, weights: { him: [], her: [] } };
+    let state = { recipes: [], ingredients: [], diary: {}, weights: { him: [], her: [] }, activeTab: 'cookbook', currentRecipeId: null };
     let currentDate = new Date().toISOString().split('T')[0];
-    let currentRecipeId = null;
 
     // Local temporary store for dynamically added personal toppings in current workspace view
     let activeToppings = { him: [], her: [] };
@@ -321,16 +320,20 @@
         if (saved) {
             state = JSON.parse(saved);
             if(!state.ingredients || state.ingredients.length === 0) state.ingredients = [...defaultIngredients];
+            if(!state.activeTab) state.activeTab = 'cookbook';
         } else {
             state.recipes = JSON.parse(JSON.stringify(defaultRecipes));
             state.ingredients = JSON.parse(JSON.stringify(defaultIngredients));
+            state.activeTab = 'cookbook';
+            state.currentRecipeId = null;
             saveState();
         }
         
         document.getElementById('weight-date-him').value = currentDate;
         document.getElementById('weight-date-her').value = currentDate;
         
-        renderRecipes();
+        switchTab(state.activeTab);
+        
         renderDatabase();
         renderDiary();
         renderProgress();
@@ -339,13 +342,28 @@
     function saveState() { localStorage.setItem('FamilyNutritionApp', JSON.stringify(state)); }
 
     function switchTab(tabId) {
+        state.activeTab = tabId;
+        saveState();
+
         document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
         document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
         
         document.getElementById(`tab-${tabId}`).classList.add('active');
-        event.currentTarget.classList.add('active');
+        
+        const btn = document.getElementById(`btn-tab-${tabId}`);
+        if(btn) btn.classList.add('active');
 
-        if(tabId === 'cookbook') { closeRecipe(); renderRecipes(); }
+        if(tabId === 'cookbook') { 
+            if (state.currentRecipeId) {
+                document.getElementById('recipe-list-view').style.display = 'none';
+                document.getElementById('recipe-detail-view').style.display = 'block';
+                renderRecipeEditor();
+            } else {
+                document.getElementById('recipe-detail-view').style.display = 'none';
+                document.getElementById('recipe-list-view').style.display = 'block';
+                renderRecipes(); 
+            }
+        }
         else if (tabId === 'database') { renderDatabase(); }
         else if (tabId === 'diary') { renderDiary(); }
         else if (tabId === 'progress') { renderProgress(); }
@@ -393,7 +411,8 @@
     }
 
     function openRecipe(id) {
-        currentRecipeId = id;
+        state.currentRecipeId = id;
+        saveState();
         activeToppings = { him: [], her: [] }; // reset
         document.getElementById('recipe-list-view').style.display = 'none';
         document.getElementById('recipe-detail-view').style.display = 'block';
@@ -401,14 +420,15 @@
     }
 
     function closeRecipe() {
-        currentRecipeId = null;
+        state.currentRecipeId = null;
+        saveState();
         document.getElementById('recipe-detail-view').style.display = 'none';
         document.getElementById('recipe-list-view').style.display = 'block';
         renderRecipes();
     }
 
     function renderRecipeEditor() {
-        const r = state.recipes.find(x => x.id === currentRecipeId);
+        const r = state.recipes.find(x => x.id === state.currentRecipeId);
         if(!r) return;
 
         let totalWeight = 0, totalK = 0, totalB = 0, totalJ = 0, totalU = 0;
@@ -420,7 +440,7 @@
                 <div class="ingredient-row">
                     <div style="position:relative;">
                         <span class="hide-mobile" style="font-size:0.75rem; color:var(--text-muted);">Название (Начните вводить)</span>
-                        <input type="text" value="${ing.name}" oninput="handleAutocomplete(this, ${idx}, 'recipe')" onblur="hideAutocomplete(this)" placeholder="Продукт">
+                        <input type="text" value="${ing.name}" oninput="handleAutocomplete(this, ${idx}, 'recipe')" onchange="updateRIng(${idx}, 'name', this.value)" onblur="hideAutocomplete(this)" placeholder="Продукт">
                         <div class="autocomplete-dropdown"></div>
                     </div>
                     <div><span class="hide-mobile" style="font-size:0.75rem; color:var(--text-muted);">Вес(г)</span><input type="number" value="${ing.weight}" onchange="updateRIng(${idx}, 'weight', this.value)"></div>
@@ -485,29 +505,29 @@
     }
 
     function updateR(field, val) {
-        const r = state.recipes.find(x => x.id === currentRecipeId);
+        const r = state.recipes.find(x => x.id === state.currentRecipeId);
         r[field] = val; saveState();
     }
     function updateRIng(idx, field, val) {
-        const r = state.recipes.find(x => x.id === currentRecipeId);
+        const r = state.recipes.find(x => x.id === state.currentRecipeId);
         if(field === 'name') r.ingredients[idx][field] = val;
         else r.ingredients[idx][field] = parseFloat(val) || 0;
         saveState(); renderRecipeEditor();
     }
     function addRIng() {
-        const r = state.recipes.find(x => x.id === currentRecipeId);
+        const r = state.recipes.find(x => x.id === state.currentRecipeId);
         r.ingredients.push({name:'', weight:100, k:0, b:0, j:0, u:0});
         saveState(); renderRecipeEditor();
     }
     function delRIng(idx) {
-        const r = state.recipes.find(x => x.id === currentRecipeId);
+        const r = state.recipes.find(x => x.id === state.currentRecipeId);
         r.ingredients.splice(idx, 1);
         saveState(); renderRecipeEditor();
     }
     function deleteRecipe() {
         if(!confirm('Удалить рецепт навсегда?')) return;
-        state.recipes = state.recipes.filter(x => x.id !== currentRecipeId);
-        saveState(); closeRecipe();
+        state.recipes = state.recipes.filter(x => x.id !== state.currentRecipeId);
+        closeRecipe();
     }
 
     // --- AUTOCOMPLETE ENGINE (RECIPES & TOPPINGS) ---
@@ -534,7 +554,7 @@
     
     function selectAutocomplete(idx, name, k, b, j, u, mode, user) {
         if(mode === 'recipe') {
-            const r = state.recipes.find(x => x.id === currentRecipeId);
+            const r = state.recipes.find(x => x.id === state.currentRecipeId);
             r.ingredients[idx].name = name; r.ingredients[idx].k = k; r.ingredients[idx].b = b; r.ingredients[idx].j = j; r.ingredients[idx].u = u;
             saveState(); renderRecipeEditor();
         } else if(mode === 'topping') {
@@ -580,9 +600,9 @@
         document.getElementById('label-him-pct').innerText = rHim;
         document.getElementById('label-her-pct').innerText = rHer;
 
-        if (totalW <= 0) { resDiv.innerHTML = '<p style="color:var(--text-muted); width:100%; text-align:center; padding:10px;">Введите общий готовый вес блюда, чтобы рассчитать порции и добавить топпинги.</p>'; return; }
+        if (totalW <= 0) { resDiv.innerHTML = '<p style="color:var(--text-muted); width:100%; text-align:center; padding:10px;">Введите общий готовый вес блюда, чтобы рассчитать порции и добавить топгинги.</p>'; return; }
 
-        const r = state.recipes.find(x => x.id === currentRecipeId);
+        const r = state.recipes.find(x => x.id === state.currentRecipeId);
         const m = r._computed;
 
         const renderToppingRows = (user) => {

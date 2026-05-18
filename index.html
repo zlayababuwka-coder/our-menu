@@ -143,7 +143,7 @@
         <button id="nav-progress" class="nav-btn" onclick="switchTab('progress')"><span>📈</span> Прогресс</button>
     </nav>
 
-    <div id="tab-cookbook" class="tab-content container">
+    <div id="tab-cookbook" class="tab-content active container">
         <div id="recipe-list-view">
             <h2>Interactive Recipes</h2>
             <p style="margin-bottom: 20px;">Бюджетные продукты из Magnum/Small, адаптированные под ваши цели.</p>
@@ -322,6 +322,9 @@
     
     let currentDate = new Date().toISOString().split('T')[0];
 
+    // Local temporary store for dynamically added personal toppings in current workspace view
+    let activeToppings = { him: [], her: [] };
+
     function init() {
         const saved = localStorage.getItem('FamilyNutritionApp_v3');
         if (saved) {
@@ -439,12 +442,8 @@
     }
 
     function openRecipe(id) {
-        if (state.currentRecipeId !== id) {
-            state.currentRecipeId = id;
-            state.calcCookedWeight = '';
-            state.calcSplitRange = 65;
-            state.activeToppings = { him: [], her: [] };
-        }
+        currentRecipeId = id;
+        activeToppings = { him: [], her: [] }; // reset
         document.getElementById('recipe-list-view').style.display = 'none';
         document.getElementById('recipe-detail-view').style.display = 'block';
         saveState();
@@ -474,7 +473,7 @@
             return `
                 <div class="ingredient-row">
                     <div style="position:relative;">
-                        <span class="hide-mobile" style="font-size:0.75rem; color:var(--text-muted);">Название</span>
+                        <span class="hide-mobile" style="font-size:0.75rem; color:var(--text-muted);">Название (Начните вводить)</span>
                         <input type="text" value="${ing.name}" oninput="handleAutocomplete(this, ${idx}, 'recipe')" onblur="hideAutocomplete(this)" placeholder="Продукт">
                         <div class="autocomplete-dropdown"></div>
                     </div>
@@ -526,7 +525,7 @@
                 <h3 style="margin-bottom:10px;">⚖️ Калькулятор Готовых Порций + Добавки</h3>
                 <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:15px;">Взвесьте готовое блюдо, укажите индивидуальные топпинги — система пересчитает КБЖУ автоматически.</p>
                 <div style="display:flex; justify-content:center; align-items:center; gap:15px; flex-wrap:wrap;">
-                    <input type="number" id="calc-cooked-weight" value="${state.calcCookedWeight}" placeholder="Общий вес готового блюда (г)" style="max-width:250px; margin:0;" oninput="saveCalcParams(); calcSplit();">
+                    <input type="number" id="calc-cooked-weight" placeholder="Общий вес готового блюда (г)" style="max-width:250px; margin:0;" oninput="calcSplit()">
                     <div style="text-align:left; font-size:0.85rem; font-weight:bold; width:200px;">
                         ОН: <span id="label-him-pct">${state.calcSplitRange}</span>% | ОНА: <span id="label-her-pct">${100 - state.calcSplitRange}</span>%
                         <input type="range" id="calc-split-range" min="10" max="90" value="${state.calcSplitRange}" style="margin:5px 0 0 0;" oninput="saveCalcParams(); calcSplit();">
@@ -571,7 +570,7 @@
         closeRecipe();
     }
 
-    // --- AUTOCOMPLETE ENGINE ---
+    // --- AUTOCOMPLETE ENGINE (RECIPES & TOPPINGS) ---
     function handleAutocomplete(inputEl, idx, mode, user = null) {
         const val = inputEl.value.toLowerCase();
         const dd = inputEl.nextElementSibling;
@@ -595,38 +594,37 @@
     
     function selectAutocomplete(idx, name, k, b, j, u, mode, user) {
         if(mode === 'recipe') {
-            const r = state.recipes.find(x => x.id === state.currentRecipeId);
+            const r = state.recipes.find(x => x.id === currentRecipeId);
             r.ingredients[idx].name = name; r.ingredients[idx].k = k; r.ingredients[idx].b = b; r.ingredients[idx].j = j; r.ingredients[idx].u = u;
             saveState(); renderRecipeEditor();
         } else if(mode === 'topping') {
-            state.activeToppings[user][idx].name = name;
-            state.activeToppings[user][idx].k = k;
-            state.activeToppings[user][idx].b = b;
-            state.activeToppings[user][idx].j = j;
-            state.activeToppings[user][idx].u = u;
-            saveState(); calcSplit();
+            activeToppings[user][idx].name = name;
+            activeToppings[user][idx].k = k;
+            activeToppings[user][idx].b = b;
+            activeToppings[user][idx].j = j;
+            activeToppings[user][idx].u = u;
+            calcSplit();
         }
     }
 
     // --- TOPPINGS INTERACTION LOGIC ---
     function addTopping(user) {
-        state.activeToppings[user].push({ name: '', weight: 10, k: 0, b: 0, j: 0, u: 0 });
-        saveState(); calcSplit();
+        activeToppings[user].push({ name: '', weight: 10, k: 0, b: 0, j: 0, u: 0 });
+        calcSplit();
     }
 
     function removeTopping(user, idx) {
-        state.activeToppings[user].splice(idx, 1);
-        saveState(); calcSplit();
+        activeToppings[user].splice(idx, 1);
+        calcSplit();
     }
 
     function updateToppingWeight(user, idx, weightVal) {
-        state.activeToppings[user][idx].weight = parseFloat(weightVal) || 0;
-        saveState(); calcSplit();
+        activeToppings[user][idx].weight = parseFloat(weightVal) || 0;
+        calcSplit();
     }
     
     function updateToppingNameDirect(user, idx, nameVal) {
-        state.activeToppings[user][idx].name = nameVal;
-        saveState();
+        activeToppings[user][idx].name = nameVal;
     }
 
     // --- SPLIT & ADDITIONS CALCULATOR ---
@@ -636,7 +634,7 @@
         if(!cookedInput) return;
         
         const totalW = parseFloat(cookedInput.value) || 0;
-        const rHim = parseInt(document.getElementById('calc-split-range').value) || 65;
+        const rHim = parseInt(document.getElementById('calc-split-range').value);
         const rHer = 100 - rHim;
         
         document.getElementById('label-him-pct').innerText = rHim;
@@ -644,30 +642,46 @@
 
         if (totalW <= 0) { resDiv.innerHTML = '<p style="color:var(--text-muted); width:100%; text-align:center; padding:10px;">Введите общий готовый вес блюда, чтобы рассчитать порции и добавить топпинги.</p>'; return; }
 
-        const r = state.recipes.find(x => x.id === state.currentRecipeId);
+        const r = state.recipes.find(x => x.id === currentRecipeId);
         const m = r._computed;
 
         const renderToppingRows = (user) => {
-            return state.activeToppings[user].map((t, idx) => `
+            return activeToppings[user].map((t, idx) => `
                 <div class="topping-row">
                     <div style="position:relative; margin:0;">
                         <input type="text" id="top-name-${user}-${idx}" value="${t.name}" placeholder="Орехи / Масло / Сыр" oninput="handleAutocomplete(this, ${idx}, 'topping', '${user}')" onblur="hideAutocomplete(this)" onchange="updateToppingNameDirect('${user}', ${idx}, this.value)">
                         <div class="autocomplete-dropdown"></div>
                     </div>
-                    <input type="number" value="${t.weight}" placeholder="Вес г" oninput="updateToppingWeight('${user}', ${idx}, this.value)">
+                    <input type="number" value="${t.weight}" placeholder="Вес г" ontheme="margin:0;" oninput="updateToppingWeight('${user}', ${idx}, this.value)">
                     <button class="btn-del-top" onclick="removeTopping('${user}', ${idx})">✕</button>
                 </div>
             `).join('');
         };
 
-        let pwHim = totalW * (rHim / 100), pkHim = m.k * (rHim / 100), pbHim = m.b * (rHim / 100), pjHim = m.j * (rHim / 100), puHim = m.u * (rHim / 100);
-        state.activeToppings.him.forEach(t => {
+        // Calculations for HIM
+        const ratioHim = rHim / 100;
+        let pwHim = totalW * ratioHim;
+        let pkHim = m.k * ratioHim;
+        let pbHim = m.b * ratioHim;
+        let pjHim = m.j * ratioHim;
+        let puHim = m.u * ratioHim;
+        
+        // Apply toppings for HIM
+        activeToppings.him.forEach(t => {
             let rTop = t.weight / 100;
             pwHim += t.weight; pkHim += t.k * rTop; pbHim += t.b * rTop; pjHim += t.j * rTop; puHim += t.u * rTop;
         });
 
-        let pwHer = totalW * (rHer / 100), pkHer = m.k * (rHer / 100), pbHer = m.b * (rHer / 100), pjHer = m.j * (rHer / 100), puHer = m.u * (rHer / 100);
-        state.activeToppings.her.forEach(t => {
+        // Calculations for HER
+        const ratioHer = rHer / 100;
+        let pwHer = totalW * ratioHer;
+        let pkHer = m.k * ratioHer;
+        let pbHer = m.b * ratioHer;
+        let pjHer = m.j * ratioHer;
+        let puHer = m.u * ratioHer;
+
+        // Apply toppings for HER
+        activeToppings.her.forEach(t => {
             let rTop = t.weight / 100;
             pwHer += t.weight; pkHer += t.k * rTop; pbHer += t.b * rTop; pjHer += t.j * rTop; puHer += t.u * rTop;
         });
@@ -676,31 +690,37 @@
             <div class="portion-card him">
                 <h4>Порция для Него (${rHim}%)</h4>
                 <div style="font-size:2rem; font-weight:800; margin:5px 0;">${Math.round(pwHim)} г <span style="font-size:1rem; font-weight:normal; opacity:0.8;">итоговый вес</span></div>
+                
                 <div class="portion-stats">
                     <span>🔥 ${Math.round(pkHim)} ккал</span><span>🥩 Б: ${Math.round(pbHim)}г</span>
                     <span>🥑 Ж: ${Math.round(pjHim)}г</span><span>🍚 У: ${Math.round(puHim)}г</span>
                 </div>
+                
                 <div class="toppings-zone">
                     <h5 style="font-size:0.8rem; text-transform:uppercase; margin-bottom:8px; opacity:0.9;">➕ Индивидуальные добавки Ему:</h5>
                     ${renderToppingRows('him')}
-                    <button class="secondary" style="width:100%; padding:5px; font-size:0.8rem; background:rgba(255,255,255,0.15); border:none; color:white;" onclick="addTopping('him')">+ Добавить добавку</button>
+                    <button class="secondary" style="width:100%; padding:5px; font-size:0.8rem; background:rgba(255,255,255,0.15); border:none; color:white;" onclick="addTopping('him')">+ Добавить добавку (орехи/масло/хлеб)</button>
                 </div>
-                <button class="primary" style="margin-top:15px; background:rgba(255,255,255,0.25);" onclick="logMeal('him', '${r.title.replace(/'/g,"\\'")}', ${pkHim}, ${pbHim}, ${pjHim}, ${puHim})">❤️ Записать в Дневник</button>
+                
+                <button class="primary" style="margin-top:15px; background:rgba(255,255,255,0.25);" onclick="logMeal('him', '${r.title.replace(/'/g,"\\'")}', ${pkHim}, ${pbHim}, ${pjHim}, ${puHim})">❤️ Записать порцию Ему в Дневник</button>
             </div>
 
             <div class="portion-card her">
                 <h4>Порция для Неё (${rHer}%)</h4>
                 <div style="font-size:2rem; font-weight:800; margin:5px 0;">${Math.round(pwHer)} г <span style="font-size:1rem; font-weight:normal; opacity:0.8;">итоговый вес</span></div>
+                
                 <div class="portion-stats">
                     <span>🔥 ${Math.round(pkHer)} ккал</span><span>🥩 Б: ${Math.round(pbHer)}г</span>
                     <span>🥑 Ж: ${Math.round(pjHer)}г</span><span>🍚 У: ${Math.round(puHer)}г</span>
                 </div>
+                
                 <div class="toppings-zone">
                     <h5 style="font-size:0.8rem; text-transform:uppercase; margin-bottom:8px; opacity:0.9;">➕ Индивидуальные добавки Ей:</h5>
                     ${renderToppingRows('her')}
-                    <button class="secondary" style="width:100%; padding:5px; font-size:0.8rem; background:rgba(255,255,255,0.15); border:none; color:white;" onclick="addTopping('her')">+ Добавить добавку</button>
+                    <button class="secondary" style="width:100%; padding:5px; font-size:0.8rem; background:rgba(255,255,255,0.15); border:none; color:white;" onclick="addTopping('her')">+ Добавить добавку (овощи/белок)</button>
                 </div>
-                <button class="primary" style="margin-top:15px; background:rgba(255,255,255,0.25);" onclick="logMeal('her', '${r.title.replace(/'/g,"\\'")}', ${pkHer}, ${pbHer}, ${pjHer}, ${puHer})">💚 Записать в Дневник</button>
+                
+                <button class="primary" style="margin-top:15px; background:rgba(255,255,255,0.25);" onclick="logMeal('her', '${r.title.replace(/'/g,"\\'")}', ${pkHer}, ${pbHer}, ${pjHer}, ${puHer})">💚 Записать порцию Ей в Дневник</button>
             </div>
         `;
     }
@@ -737,7 +757,7 @@
     function logMeal(user, title, k, b, j, u) {
         if(!state.diary[currentDate]) state.diary[currentDate] = { him: [], her: [] };
         state.diary[currentDate][user].push({ id: Math.random().toString(), title, k: Math.round(k), b: Math.round(b), j: Math.round(j), u: Math.round(u), time: new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}) });
-        saveState(); alert('Блюдо с топпингами сохранено!');
+        saveState(); alert('Блюдо с учетом всех топпингов успешно сохранено в дневник питания!');
     }
     function delLog(user, id) {
         state.diary[currentDate][user] = state.diary[currentDate][user].filter(x => x.id !== id);

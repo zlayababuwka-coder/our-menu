@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NutriSplit — Умный Конструктор Семейного Рациона</title>
-    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%234f46e5'/%3E%3Cstop offset='50%25' stop-color='%2306b6d4'/%3E%3Cstop offset='100%25' stop-color='%23ec4899'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d='M 15 50 A 35 35 0 0 0 85 50 Z' fill='url(%23g)' /%3E%3Cpath d='M 50 45 C 50 20, 75 10, 75 35 C 75 50, 50 50, 50 45 Z' fill='url(%23g)' opacity='0.8'/%3E%3C/svg%3E">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%234f46e5'/%3E%3Cstop offset='50%25' stop-color='%2306b6d4'/%3E%3Cstop offset='100%25' stop-color='%23ec4899'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d='M50 15 C20 15, 10 40, 20 70 C30 100, 70 100, 80 70 C90 40, 80 15, 50 15 Z M50 15 L50 95' fill='none' stroke='url(%23g)' stroke-width='14' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -171,7 +171,6 @@
             margin-bottom: 30px; 
             transition: var(--transition); 
         }
-        /* Убрали transform, чтобы карточки не двигались при наведении */
         .card:hover { 
             box-shadow: var(--shadow-hover); 
         }
@@ -319,7 +318,7 @@
         .log-entry:last-child { border-bottom: none; }
 
         .food-base-scroll-container { max-height: 380px; overflow-y: auto; padding-right: 4px; margin-top: 15px; display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; }
-        .food-base-item-card { background: rgba(255,255,255,0.4); padding: 14px; border-radius: var(--radius-md); border: 1px solid rgba(148,163,184,0.15); display: flex; justify-content: space-between; align-items: center; }
+        .food-base-item-card { background: rgba(255,255,255,0.4); padding: 14px; border-radius: var(--radius-md); border: 1px solid rgba(148,163,184,0.15); display: flex; flex-direction: column; justify-content: space-between; gap: 10px; }
 
         table { width: 100%; border-collapse: collapse; margin-top: 15px; border-radius: var(--radius-md); overflow: hidden; background: rgba(255,255,255,0.2); }
         th, td { padding: 14px 16px; text-align: left; border-bottom: 1px solid rgba(15,23,42,0.05); font-size: 0.9rem; }
@@ -354,8 +353,9 @@
             border-radius: 4px;
         }
 
+        /* Центрирование контейнера на десктопе */
         @media (min-width: 1024px) {
-            body { flex-direction: row; }
+            body { display: block; padding-left: 280px; }
             nav {
                 width: 280px;
                 height: 100vh;
@@ -384,7 +384,7 @@
                 text-shadow: 0 0 30px rgba(99, 102, 241, 0.15);
             }
             .desktop-brand p { font-size: 0.8rem; color: var(--text-muted); margin-top: 4px; font-weight: 500; }
-            .container { margin-left: 280px; padding: 40px; }
+            .container { margin: 0 auto; max-width: 1100px; padding: 40px; }
         }
 
         @media (max-width: 1023px) {
@@ -420,7 +420,7 @@
             <i class="fa-solid fa-utensils"></i> Рецепты
         </button>
         <button class="nav-btn" id="btn-tab-database" onclick="switchTab('database')">
-            <i class="fa-solid fa-apple-whole"></i> База КБЖУ
+            <i class="fa-solid fa-apple-whole"></i> Каталог продуктов
         </button>
         <button class="nav-btn" id="btn-tab-diary" onclick="switchTab('diary')">
             <i class="fa-solid fa-chart-simple"></i> Дневник
@@ -458,17 +458,17 @@
                             </div>
                             <div>
                                 <label>Возраст (лет)</label>
-                                <input type="number" id="p1-age" value="27">
+                                <input type="number" id="p1-age" placeholder="Напр. 30">
                             </div>
                         </div>
                         <div class="grid-2" style="gap:12px; margin-bottom: 15px;">
                             <div>
                                 <label>Рост (см)</label>
-                                <input type="number" id="p1-height" value="182">
+                                <input type="number" id="p1-height" placeholder="Напр. 175">
                             </div>
                             <div>
                                 <label>Вес (кг)</label>
-                                <input type="number" id="p1-weight" value="85">
+                                <input type="number" id="p1-weight" placeholder="Напр. 70">
                             </div>
                         </div>
                         <div style="margin-bottom: 15px;">
@@ -500,28 +500,28 @@
                                 <label>Пол</label>
                                 <select id="p2-gender">
                                     <option value="male">Мужской</option>
-                                    <option value="female" selected>Женский</option>
+                                    <option value="female">Женский</option>
                                 </select>
                             </div>
                             <div>
                                 <label>Возраст (лет)</label>
-                                <input type="number" id="p2-age" value="26">
+                                <input type="number" id="p2-age" placeholder="Напр. 25">
                             </div>
                         </div>
                         <div class="grid-2" style="gap:12px; margin-bottom: 15px;">
                             <div>
                                 <label>Рост (см)</label>
-                                <input type="number" id="p2-height" value="158">
+                                <input type="number" id="p2-height" placeholder="Напр. 165">
                             </div>
                             <div>
                                 <label>Вес (кг)</label>
-                                <input type="number" id="p2-weight" value="58">
+                                <input type="number" id="p2-weight" placeholder="Напр. 60">
                             </div>
                         </div>
                         <div style="margin-bottom: 15px;">
                             <label>Цель веса</label>
                             <select id="p2-goal">
-                                <option value="loss" selected>Снижение веса</option>
+                                <option value="loss">Снижение веса</option>
                                 <option value="maintenance">Поддержание формы</option>
                                 <option value="gain">Набор массы</option>
                             </select>
@@ -530,7 +530,7 @@
                             <label>Уровень активности</label>
                             <select id="p2-activity">
                                 <option value="sedentary">Почти не двигаюсь (сидячая работа, отсутствие тренировок)</option>
-                                <option value="light" selected>Небольшая активность (работа на ногах, прогулки, ходьба до 10к шагов)</option>
+                                <option value="light">Небольшая активность (работа на ногах, прогулки, ходьба до 10к шагов)</option>
                                 <option value="moderate">Умеренная активность (легкие тренировки или фитнес 3–5 раз в неделю)</option>
                                 <option value="high">Высокая активность (интенсивный спорт или тяжелый физический труд)</option>
                             </select>
@@ -618,7 +618,7 @@
                     </span>
                     <h2>Каталог продуктов и ингредиентов</h2>
                 </div>
-                <p>Глобальная база данных пищевой ценности продуктов на 100 грамм сырого веса.</p>
+                <p>Глобальная база данных пищевой ценности продуктов на 100 грамм сырого веса. Вы можете редактировать и удалять любые записи.</p>
                 
                 <div class="grid-3" style="margin-top: 20px; align-items: flex-end;">
                     <div style="flex: 2;">
@@ -920,62 +920,38 @@
 
     <script>
         const defaultFoodBase = [
-            { name: "Куриное филе", kcal: 113, p: 23.6, f: 1.9, c: 0.4 },
-            { name: "Рис сухой", kcal: 345, p: 6.7, f: 0.7, c: 78.9 },
-            { name: "Гречка сухой", kcal: 343, p: 12.6, f: 3.3, c: 62.1 },
-            { name: "Овсянка сухой", kcal: 352, p: 12.3, f: 6.2, c: 61.8 },
-            { name: "Яйцо куриное", kcal: 157, p: 12.7, f: 11.5, c: 0.7 },
-            { name: "Масло оливковое", kcal: 898, p: 0, f: 99.8, c: 0 },
-            { name: "Молоко 2.5%", kcal: 52, p: 2.9, f: 2.5, c: 4.7 },
-            { name: "Говядина", kcal: 187, p: 18.9, f: 12.4, c: 0 },
-            { name: "Творог 5%", kcal: 121, p: 17.2, f: 5.0, c: 2.8 },
-            { name: "Картофель", kcal: 77, p: 2.0, f: 0.4, c: 16.3 },
-            { name: "Свинина нежирная", kcal: 160, p: 19.4, f: 9.0, c: 0 },
-            { name: "Лосось", kcal: 201, p: 20.0, f: 13.0, c: 0 },
-            { name: "Бананы", kcal: 95, p: 1.5, f: 0.2, c: 21.8 },
-            { name: "Яблоки", kcal: 47, p: 0.4, f: 0.4, c: 9.8 },
-            { name: "Огурцы", kcal: 15, p: 0.8, f: 0.1, c: 2.8 },
-            { name: "Помидоры", kcal: 20, p: 1.1, f: 0.2, c: 3.7 },
-            { name: "Хлеб пшеничный", kcal: 242, p: 8.1, f: 2.4, c: 48.8 },
-            { name: "Сыр Чеддер", kcal: 402, p: 25.0, f: 33.0, c: 1.3 },
-            { name: "Миндаль", kcal: 579, p: 21.2, f: 49.9, c: 21.6 },
-            { name: "Грецкий орех", kcal: 654, p: 15.2, f: 65.2, c: 13.7 },
-            { name: "Киноа", kcal: 368, p: 14.1, f: 6.1, c: 64.2 },
-            { name: "Макароны", kcal: 350, p: 12.0, f: 1.5, c: 71.0 },
-            { name: "Авокадо", kcal: 160, p: 2.0, f: 14.7, c: 8.5 },
-            { name: "Брокколи", kcal: 34, p: 2.8, f: 0.4, c: 6.6 },
-            { name: "Индейка филе", kcal: 110, p: 24.2, f: 1.0, c: 0 },
-            { name: "Масло сливочное 82.5%", kcal: 748, p: 0.5, f: 82.5, c: 0.8 }
-        ];
-
-        const defaultRecipes = [
-            {
-                id: "rec_1",
-                title: "Фирменный домашний плов",
-                category: "main",
-                cookedWeight: 1100,
-                ingredients: [
-                    { name: "Куриное филе", weight: 450, kcal: 113, p: 23.6, f: 1.9, c: 0.4 },
-                    { name: "Рис сухой", weight: 350, kcal: 345, p: 6.7, f: 0.7, c: 78.9 },
-                    { name: "Масло оливковое", weight: 25, kcal: 898, p: 0, f: 99.8, c: 0 }
-                ]
-            },
-            {
-                id: "rec_2",
-                title: "Нежная овсяная каша",
-                category: "breakfast",
-                cookedWeight: 380,
-                ingredients: [
-                    { name: "Овсянка сухой", weight: 120, kcal: 352, p: 12.3, f: 6.2, c: 61.8 },
-                    { name: "Молоко 2.5%", weight: 250, kcal: 52, p: 2.9, f: 2.5, c: 4.7 }
-                ]
-            }
+            { id: "fb_1", name: "Куриное филе", kcal: 113, p: 23.6, f: 1.9, c: 0.4 },
+            { id: "fb_2", name: "Рис сухой", kcal: 345, p: 6.7, f: 0.7, c: 78.9 },
+            { id: "fb_3", name: "Гречка сухой", kcal: 343, p: 12.6, f: 3.3, c: 62.1 },
+            { id: "fb_4", name: "Овсянка сухой", kcal: 352, p: 12.3, f: 6.2, c: 61.8 },
+            { id: "fb_5", name: "Яйцо куриное", kcal: 157, p: 12.7, f: 11.5, c: 0.7 },
+            { id: "fb_6", name: "Масло оливковое", kcal: 898, p: 0, f: 99.8, c: 0 },
+            { id: "fb_7", name: "Молоко 2.5%", kcal: 52, p: 2.9, f: 2.5, c: 4.7 },
+            { id: "fb_8", name: "Говядина", kcal: 187, p: 18.9, f: 12.4, c: 0 },
+            { id: "fb_9", name: "Творог 5%", kcal: 121, p: 17.2, f: 5.0, c: 2.8 },
+            { id: "fb_10", name: "Картофель", kcal: 77, p: 2.0, f: 0.4, c: 16.3 },
+            { id: "fb_11", name: "Свинина нежирная", kcal: 160, p: 19.4, f: 9.0, c: 0 },
+            { id: "fb_12", name: "Лосось", kcal: 201, p: 20.0, f: 13.0, c: 0 },
+            { id: "fb_13", name: "Бананы", kcal: 95, p: 1.5, f: 0.2, c: 21.8 },
+            { id: "fb_14", name: "Яблоки", kcal: 47, p: 0.4, f: 0.4, c: 9.8 },
+            { id: "fb_15", name: "Огурцы", kcal: 15, p: 0.8, f: 0.1, c: 2.8 },
+            { id: "fb_16", name: "Помидоры", kcal: 20, p: 1.1, f: 0.2, c: 3.7 },
+            { id: "fb_17", name: "Хлеб пшеничный", kcal: 242, p: 8.1, f: 2.4, c: 48.8 },
+            { id: "fb_18", name: "Сыр Чеддер", kcal: 402, p: 25.0, f: 33.0, c: 1.3 },
+            { id: "fb_19", name: "Миндаль", kcal: 579, p: 21.2, f: 49.9, c: 21.6 },
+            { id: "fb_20", name: "Грецкий орех", kcal: 654, p: 15.2, f: 65.2, c: 13.7 },
+            { id: "fb_21", name: "Киноа", kcal: 368, p: 14.1, f: 6.1, c: 64.2 },
+            { id: "fb_22", name: "Макароны", kcal: 350, p: 12.0, f: 1.5, c: 71.0 },
+            { id: "fb_23", name: "Авокадо", kcal: 160, p: 2.0, f: 14.7, c: 8.5 },
+            { id: "fb_24", name: "Брокколи", kcal: 34, p: 2.8, f: 0.4, c: 6.6 },
+            { id: "fb_25", name: "Индейка филе", kcal: 110, p: 24.2, f: 1.0, c: 0 },
+            { id: "fb_26", name: "Масло сливочное 82.5%", kcal: 748, p: 0.5, f: 82.5, c: 0.8 }
         ];
 
         let state = {
             settings: {
-                p1: { name: 'Артем', gender: 'male', age: 27, height: 182, weight: 85, activity: 'moderate', goal: 'maintenance', pacing: 'moderate', kcal: 2635, p: 198, f: 88, c: 264 },
-                p2: { name: 'Алина', gender: 'female', age: 26, height: 158, weight: 58, activity: 'light', goal: 'loss', pacing: 'comfortable', kcal: 1493, p: 112, f: 50, c: 149 }
+                p1: { name: '', gender: 'male', age: '', height: '', weight: '', activity: 'sedentary', goal: 'maintenance', pacing: 'moderate', kcal: 0, p: 0, f: 0, c: 0 },
+                p2: { name: '', gender: 'female', age: '', height: '', weight: '', activity: 'sedentary', goal: 'maintenance', pacing: 'moderate', kcal: 0, p: 0, f: 0, c: 0 }
             },
             recipes: [],
             foodBase: [],
@@ -1004,30 +980,20 @@
         };
 
         function initSystemCoreState() {
-            const savedState = localStorage.getItem('nutrisplit_state_v5');
+            const savedState = localStorage.getItem('nutrisplit_state_v6');
             if (savedState) {
                 try {
                     state = JSON.parse(savedState);
                 } catch(e) {
-                    showToast("Ошибка парсинга копии данных. Загружены исходные параметры.", "danger");
+                    showToast("Ошибка парсинга копии данных.", "danger");
                 }
             } else {
-                state.recipes = JSON.parse(JSON.stringify(defaultRecipes));
-                state.foodBase = [];
-                state.weights.p1 = [
-                    { date: new Date(Date.now() - 6*24*3600*1000).toISOString().split('T')[0], val: 86.4 },
-                    { date: new Date(Date.now() - 3*24*3600*1000).toISOString().split('T')[0], val: 85.7 },
-                    { date: todayIsoString, val: 85.0 }
-                ];
-                state.weights.p2 = [
-                    { date: new Date(Date.now() - 6*24*3600*1000).toISOString().split('T')[0], val: 59.2 },
-                    { date: new Date(Date.now() - 2*24*3600*1000).toISOString().split('T')[0], val: 58.5 },
-                    { date: todayIsoString, val: 58.0 }
-                ];
+                // Первый запуск - пустые профили, подгружаем только базовую еду
+                state.foodBase = JSON.parse(JSON.stringify(defaultFoodBase));
                 saveStateToBrowserStorage();
             }
 
-            const cachedTab = localStorage.getItem('nutrisplit_active_tab_v5');
+            const cachedTab = localStorage.getItem('nutrisplit_active_tab_v6');
             if (cachedTab) {
                 currentActiveTabId = cachedTab;
             }
@@ -1046,7 +1012,7 @@
         }
 
         function saveStateToBrowserStorage() {
-            localStorage.setItem('nutrisplit_state_v5', JSON.stringify(state));
+            localStorage.setItem('nutrisplit_state_v6', JSON.stringify(state));
             updateQuickGlobalKcalBadge();
         }
 
@@ -1080,14 +1046,14 @@
             const p1 = state.settings.p1;
             const p2 = state.settings.p2;
             document.getElementById('quick-kcal-badge').innerHTML = `
-                ${p1.name || 'Пользователь 1'}: <strong>${Math.round(p1.kcal)} ккал</strong> | 
-                ${p2.name || 'Пользователь 2'}: <strong>${Math.round(p2.kcal)} ккал</strong>
+                ${p1.name || 'Пользователь 1'}: <strong>${Math.round(p1.kcal || 0)} ккал</strong> | 
+                ${p2.name || 'Пользователь 2'}: <strong>${Math.round(p2.kcal || 0)} ккал</strong>
             `;
         }
 
         function switchTab(tabId) {
             currentActiveTabId = tabId;
-            localStorage.setItem('nutrisplit_active_tab_v5', tabId);
+            localStorage.setItem('nutrisplit_active_tab_v6', tabId);
 
             document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
@@ -1109,9 +1075,9 @@
                 const p = state.settings[pKey];
                 document.getElementById(`${pKey}-name-input`).value = p.name || '';
                 document.getElementById(`${pKey}-gender`).value = p.gender || 'male';
-                document.getElementById(`${pKey}-age`).value = p.age || 30;
-                document.getElementById(`${pKey}-height`).value = p.height || 175;
-                document.getElementById(`${pKey}-weight`).value = p.weight || 70;
+                document.getElementById(`${pKey}-age`).value = p.age || '';
+                document.getElementById(`${pKey}-height`).value = p.height || '';
+                document.getElementById(`${pKey}-weight`).value = p.weight || '';
                 document.getElementById(`${pKey}-goal`).value = p.goal || 'maintenance';
                 document.getElementById(`${pKey}-activity`).value = p.activity || 'sedentary';
             });
@@ -1121,8 +1087,8 @@
             const n1 = document.getElementById('p1-name-input').value.trim() || 'Пользователь 1';
             const n2 = document.getElementById('p2-name-input').value.trim() || 'Пользователь 2';
             
-            state.settings.p1.name = n1;
-            state.settings.p2.name = n2;
+            state.settings.p1.name = n1 === 'Пользователь 1' ? '' : n1;
+            state.settings.p2.name = n2 === 'Пользователь 2' ? '' : n2;
 
             document.querySelectorAll('.p1-name-title').forEach(el => el.innerText = n1);
             document.querySelectorAll('.p2-name-title').forEach(el => el.innerText = n2);
@@ -1130,22 +1096,30 @@
         }
 
         function calculateAndDisplayNorms() {
+            let success = true;
             ['p1', 'p2'].forEach(pKey => {
-                executeIndividualMifflinCalculation(pKey);
+                if(!executeIndividualMifflinCalculation(pKey)) success = false;
             });
-            saveStateToBrowserStorage();
-            renderCalculatedNormsBlockView();
-            showToast("Индивидуальные нормы КБЖУ успешно рассчитаны!", "success");
+            if(success) {
+                saveStateToBrowserStorage();
+                renderCalculatedNormsBlockView();
+                showToast("Индивидуальные нормы КБЖУ успешно рассчитаны!", "success");
+            }
         }
 
         function executeIndividualMifflinCalculation(pKey) {
             const gender = document.getElementById(`${pKey}-gender`).value;
-            const age = parseFloat(document.getElementById(`${pKey}-age`).value) || 30;
-            const height = parseFloat(document.getElementById(`${pKey}-height`).value) || 175;
-            const weight = parseFloat(document.getElementById(`${pKey}-weight`).value) || 70;
+            const age = parseFloat(document.getElementById(`${pKey}-age`).value);
+            const height = parseFloat(document.getElementById(`${pKey}-height`).value);
+            const weight = parseFloat(document.getElementById(`${pKey}-weight`).value);
             const goal = document.getElementById(`${pKey}-goal`).value;
             const activity = document.getElementById(`${pKey}-activity`).value;
             const pacing = state.settings[pKey].pacing || 'moderate';
+
+            if(isNaN(age) || isNaN(height) || isNaN(weight)) {
+                showToast(`Заполните возраст, рост и вес для ${pKey === 'p1' ? 'Пользователя 1' : 'Пользователя 2'}!`, "danger");
+                return false;
+            }
 
             state.settings[pKey].gender = gender;
             state.settings[pKey].age = age;
@@ -1154,6 +1128,7 @@
             state.settings[pKey].goal = goal;
             state.settings[pKey].activity = activity;
 
+            // Формула Миффлина-Сан Жеора
             let bmr = (10 * weight) + (6.25 * height) - (5 * age);
             if (gender === 'male') bmr += 5;
             else bmr -= 161;
@@ -1188,6 +1163,7 @@
             state.settings[pKey].p = Math.round(pGrams);
             state.settings[pKey].f = Math.round(fGrams);
             state.settings[pKey].c = Math.round(cGrams);
+            return true;
         }
 
         function changePacingTier(pKey, tier) {
@@ -1202,6 +1178,7 @@
             if(!isNaN(num) && num >= 0) {
                 state.settings[pKey][macro] = num;
                 saveStateToBrowserStorage();
+                updateQuickGlobalKcalBadge();
             } else {
                 showToast("Введите корректное число", "danger");
                 renderCalculatedNormsBlockView();
@@ -1230,26 +1207,28 @@
 
             targetGrid.innerHTML = `
                 <div class="profile-setup-box" style="--p-color: var(--p1-main);">
-                    <h3 style="color:var(--p1-main); margin-bottom:10px;">${p1.name}</h3>
+                    <h3 style="color:var(--p1-main); margin-bottom:10px;">${p1.name || 'Пользователь 1'}</h3>
                     <p style="font-size:1.4rem; font-weight:800; color:var(--text-main); margin-bottom:10px; display:flex; align-items:baseline; gap:6px;">
-                        <input type="number" class="editable-macro" value="${p1.kcal}" onchange="manualOverrideMacro('p1', 'kcal', this.value)" style="width: 80px; font-size:1.4rem; font-weight:800; padding:0;"> ккал <span style="font-size:0.85rem; font-weight:500; color:var(--text-muted);">/ сутки</span>
+                        <i class="fa-solid fa-fire" style="color:var(--text-muted); font-size: 1.1rem;"></i>
+                        <input type="number" class="editable-macro" value="${Math.round(p1.kcal !== undefined ? p1.kcal : 0)}" onchange="manualOverrideMacro('p1', 'kcal', this.value)" style="width: 80px; font-size:1.4rem; font-weight:800; padding:0;"> ккал <span style="font-size:0.85rem; font-weight:500; color:var(--text-muted);">/ сутки</span>
                     </p>
-                    <div style="font-size:0.9rem; line-height:1.7; color:var(--text-main);">
-                        🧬 Белки: <input type="number" class="editable-macro" value="${p1.p}" onchange="manualOverrideMacro('p1', 'p', this.value)" style="width: 45px; font-weight:bold;"> г | 
-                        💧 Жиры: <input type="number" class="editable-macro" value="${p1.f}" onchange="manualOverrideMacro('p1', 'f', this.value)" style="width: 45px; font-weight:bold;"> г | 
-                        🌾 Углеводы: <input type="number" class="editable-macro" value="${p1.c}" onchange="manualOverrideMacro('p1', 'c', this.value)" style="width: 45px; font-weight:bold;"> г
+                    <div style="font-size:0.9rem; line-height:1.7; color:var(--text-main); display:flex; gap: 12px; flex-wrap: wrap;">
+                        <span><i class="fa-solid fa-drumstick-bite" style="color:var(--text-muted)"></i> Белки: <input type="number" class="editable-macro" value="${Math.round(p1.p !== undefined ? p1.p : 0)}" onchange="manualOverrideMacro('p1', 'p', this.value)" style="width: 45px; font-weight:bold;"> г</span> 
+                        <span><i class="fa-solid fa-droplet" style="color:var(--text-muted)"></i> Жиры: <input type="number" class="editable-macro" value="${Math.round(p1.f !== undefined ? p1.f : 0)}" onchange="manualOverrideMacro('p1', 'f', this.value)" style="width: 45px; font-weight:bold;"> г</span> 
+                        <span><i class="fa-solid fa-wheat-awn" style="color:var(--text-muted)"></i> Углеводы: <input type="number" class="editable-macro" value="${Math.round(p1.c !== undefined ? p1.c : 0)}" onchange="manualOverrideMacro('p1', 'c', this.value)" style="width: 45px; font-weight:bold;"> г</span>
                     </div>
                     ${getPacingHtml('p1', p1.pacing || 'moderate')}
                 </div>
                 <div class="profile-setup-box" style="--p-color: var(--p2-main);">
-                    <h3 style="color:var(--p2-main); margin-bottom:10px;">${p2.name}</h3>
+                    <h3 style="color:var(--p2-main); margin-bottom:10px;">${p2.name || 'Пользователь 2'}</h3>
                     <p style="font-size:1.4rem; font-weight:800; color:var(--text-main); margin-bottom:10px; display:flex; align-items:baseline; gap:6px;">
-                        <input type="number" class="editable-macro" value="${p2.kcal}" onchange="manualOverrideMacro('p2', 'kcal', this.value)" style="width: 80px; font-size:1.4rem; font-weight:800; padding:0;"> ккал <span style="font-size:0.85rem; font-weight:500; color:var(--text-muted);">/ сутки</span>
+                        <i class="fa-solid fa-fire" style="color:var(--text-muted); font-size: 1.1rem;"></i>
+                        <input type="number" class="editable-macro" value="${Math.round(p2.kcal !== undefined ? p2.kcal : 0)}" onchange="manualOverrideMacro('p2', 'kcal', this.value)" style="width: 80px; font-size:1.4rem; font-weight:800; padding:0;"> ккал <span style="font-size:0.85rem; font-weight:500; color:var(--text-muted);">/ сутки</span>
                     </p>
-                    <div style="font-size:0.9rem; line-height:1.7; color:var(--text-main);">
-                        🧬 Белки: <input type="number" class="editable-macro" value="${p2.p}" onchange="manualOverrideMacro('p2', 'p', this.value)" style="width: 45px; font-weight:bold;"> г | 
-                        💧 Жиры: <input type="number" class="editable-macro" value="${p2.f}" onchange="manualOverrideMacro('p2', 'f', this.value)" style="width: 45px; font-weight:bold;"> г | 
-                        🌾 Углеводы: <input type="number" class="editable-macro" value="${p2.c}" onchange="manualOverrideMacro('p2', 'c', this.value)" style="width: 45px; font-weight:bold;"> г
+                    <div style="font-size:0.9rem; line-height:1.7; color:var(--text-main); display:flex; gap: 12px; flex-wrap: wrap;">
+                        <span><i class="fa-solid fa-drumstick-bite" style="color:var(--text-muted)"></i> Белки: <input type="number" class="editable-macro" value="${Math.round(p2.p !== undefined ? p2.p : 0)}" onchange="manualOverrideMacro('p2', 'p', this.value)" style="width: 45px; font-weight:bold;"> г</span> 
+                        <span><i class="fa-solid fa-droplet" style="color:var(--text-muted)"></i> Жиры: <input type="number" class="editable-macro" value="${Math.round(p2.f !== undefined ? p2.f : 0)}" onchange="manualOverrideMacro('p2', 'f', this.value)" style="width: 45px; font-weight:bold;"> г</span> 
+                        <span><i class="fa-solid fa-wheat-awn" style="color:var(--text-muted)"></i> Углеводы: <input type="number" class="editable-macro" value="${Math.round(p2.c !== undefined ? p2.c : 0)}" onchange="manualOverrideMacro('p2', 'c', this.value)" style="width: 45px; font-weight:bold;"> г</span>
                     </div>
                     ${getPacingHtml('p2', p2.pacing || 'comfortable')}
                 </div>
@@ -1445,8 +1424,7 @@
                 return;
             }
 
-            const targetBase = [...defaultFoodBase, ...state.foodBase];
-            const matchingItems = targetBase.filter(i => i.name.toLowerCase().includes(query));
+            const matchingItems = state.foodBase.filter(i => i.name.toLowerCase().includes(query));
 
             if(matchingItems.length === 0) {
                 dropdown.style.display = 'none';
@@ -1605,7 +1583,7 @@
 
             state.diary.push(logItem);
             saveStateToBrowserStorage();
-            showToast(`Блюдо записано в дневник для ${state.settings[pKey].name}!`, "success");
+            showToast(`Блюдо записано в дневник для ${state.settings[pKey].name || (pKey==='p1'?'Пользователя 1':'Пользователя 2')}!`, "success");
         }
 
         function commitRecipeToStateDatabase() {
@@ -1660,27 +1638,65 @@
             wrapper.innerHTML = '';
 
             const q = document.getElementById('db-search-input').value.toLowerCase();
-            const unifiedBase = [...defaultFoodBase, ...state.foodBase];
-            const filtered = unifiedBase.filter(x => x.name.toLowerCase().includes(q));
+            const filtered = state.foodBase.filter(x => x.name.toLowerCase().includes(q));
 
             if(filtered.length === 0) {
                 wrapper.innerHTML = `<p style="color:var(--text-muted); grid-column:1/-1; text-align:center; padding:20px;">В каталоге продуктов ничего не найдено...</p>`;
                 return;
             }
 
-            filtered.forEach(item => {
+            filtered.forEach((item, index) => {
                 const el = document.createElement('div');
                 el.className = 'food-base-item-card';
                 el.innerHTML = `
                     <div>
-                        <strong style="display:block; margin-bottom:4px; font-size:0.95rem;">${item.name}</strong>
+                        <strong style="display:block; margin-bottom:4px; font-size:0.95rem;">${escapeHtml(item.name)}</strong>
                         <span style="font-size:0.8rem; color:var(--text-muted);">
                             ${item.kcal} ккал | Б:${item.p}г | Ж:${item.f}г | У:${item.c}г
                         </span>
                     </div>
+                    <div style="display:flex; gap: 10px; align-self: flex-end;">
+                        <button onclick="editProductInBase('${item.id}')" style="background:none; border:none; color:var(--text-muted); cursor:pointer; font-size:1rem;" onmouseover="this.style.color='#4f46e5'" onmouseout="this.style.color='var(--text-muted)'"><i class="fa-solid fa-pen"></i></button>
+                        <button onclick="deleteProductFromBase('${item.id}')" style="background:none; border:none; color:var(--text-muted); cursor:pointer; font-size:1rem;" onmouseover="this.style.color='#dc2626'" onmouseout="this.style.color='var(--text-muted)'"><i class="fa-solid fa-trash"></i></button>
+                    </div>
                 `;
                 wrapper.appendChild(el);
             });
+        }
+
+        function deleteProductFromBase(id) {
+            if(confirm("Удалить этот продукт из каталога?")) {
+                state.foodBase = state.foodBase.filter(item => item.id !== id);
+                saveStateToBrowserStorage();
+                renderDatabase();
+            }
+        }
+
+        function editProductInBase(id) {
+            const index = state.foodBase.findIndex(item => item.id === id);
+            if(index === -1) return;
+            const item = state.foodBase[index];
+
+            const newName = prompt("Название продукта:", item.name);
+            if(!newName) return;
+            const newKcal = prompt("Калории (ккал):", item.kcal);
+            const newP = prompt("Белки (г):", item.p);
+            const newF = prompt("Жиры (г):", item.f);
+            const newC = prompt("Углеводы (г):", item.c);
+
+            if(newKcal !== null && !isNaN(parseFloat(newKcal))) {
+                state.foodBase[index] = {
+                    id: item.id,
+                    name: newName,
+                    kcal: parseFloat(newKcal) || 0,
+                    p: parseFloat(newP) || 0,
+                    f: parseFloat(newF) || 0,
+                    c: parseFloat(newC) || 0
+                };
+                saveStateToBrowserStorage();
+                renderDatabase();
+                showToast("Продукт успешно обновлен!", "success");
+            }
         }
 
         function submitCustomProductToBase() {
@@ -1695,7 +1711,15 @@
                 return;
             }
 
-            state.foodBase.push({ name, kcal, p, f, c });
+            const newItem = { 
+                id: 'fb_c_' + Date.now(), 
+                name, 
+                kcal, 
+                p, 
+                f, 
+                c 
+            };
+            state.foodBase.push(newItem);
             saveStateToBrowserStorage();
             
             document.getElementById('new-prod-name').value = '';
@@ -1724,10 +1748,15 @@
                     consumedC += l.c || 0;
                 });
 
-                const remKcal = pNorms.kcal - consumedKcal;
-                const remP = pNorms.p - consumedP;
-                const remF = pNorms.f - consumedF;
-                const remC = pNorms.c - consumedC;
+                const targetKcal = pNorms.kcal || 0;
+                const targetP = pNorms.p || 0;
+                const targetF = pNorms.f || 0;
+                const targetC = pNorms.c || 0;
+
+                const remKcal = targetKcal - consumedKcal;
+                const remP = targetP - consumedP;
+                const remF = targetF - consumedF;
+                const remC = targetC - consumedC;
 
                 const readoutBox = document.getElementById(`${pKey}-remaining-metrics`);
                 readoutBox.className = "remaining-row";
@@ -1736,10 +1765,10 @@
                 }
                 readoutBox.innerHTML = `Осталось: <strong>${remKcal}</strong> ккал | Б: <strong>${Math.round(remP)}г</strong> | Ж: <strong>${Math.round(remF)}г</strong> | У: <strong>${Math.round(remC)}г</strong>`;
 
-                setMacroTrackDataProgress(pKey, 'kcal', consumedKcal, pNorms.kcal, 'ккал');
-                setMacroTrackDataProgress(pKey, 'p', consumedP, pNorms.p, 'г');
-                setMacroTrackDataProgress(pKey, 'f', consumedF, pNorms.f, 'г');
-                setMacroTrackDataProgress(pKey, 'c', consumedC, pNorms.c, 'г');
+                setMacroTrackDataProgress(pKey, 'kcal', consumedKcal, targetKcal, 'ккал');
+                setMacroTrackDataProgress(pKey, 'p', consumedP, targetP, 'г');
+                setMacroTrackDataProgress(pKey, 'f', consumedF, targetF, 'г');
+                setMacroTrackDataProgress(pKey, 'c', consumedC, targetC, 'г');
 
                 const timelinesContainer = document.getElementById(`${pKey}-meals-timeline-container`);
                 timelinesContainer.innerHTML = '';
@@ -1993,8 +2022,8 @@
         function triggerTotalSystemResetLoop() {
             if(confirm("ВНИМАНИЕ! Данное действие безвозвратно удалит все сохраненные профили, рецепты и дневники. Выполнить полный сброс приложения?")) {
                 if(confirm("ПОДТВЕРДИТЕ СБРОС: Вы уверены, что резервная копия сохранена на внешнее устройство?")) {
-                    localStorage.removeItem('nutrisplit_state_v5');
-                    localStorage.removeItem('nutrisplit_active_tab_v5');
+                    localStorage.removeItem('nutrisplit_state_v6');
+                    localStorage.removeItem('nutrisplit_active_tab_v6');
                     showToast("Все данные успешно стерты. Перезагрузка...", "danger");
                     setTimeout(() => window.location.reload(), 1000);
                 }

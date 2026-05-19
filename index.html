@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NutriSplit — Умный Конструктор Семейного Рациона</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%234f46e5'/%3E%3Cstop offset='50%25' stop-color='%2306b6d4'/%3E%3Cstop offset='100%25' stop-color='%23ec4899'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d='M 15 50 A 35 35 0 0 0 85 50 Z' fill='url(%23g)' /%3E%3Cpath d='M 50 45 C 50 20, 75 10, 75 35 C 75 50, 50 50, 50 45 Z' fill='url(%23g)' opacity='0.8'/%3E%3C/svg%3E">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -170,9 +171,9 @@
             margin-bottom: 30px; 
             transition: var(--transition); 
         }
+        /* Убрали transform, чтобы карточки не двигались при наведении */
         .card:hover { 
             box-shadow: var(--shadow-hover); 
-            transform: translateY(-1px); 
         }
 
         .card-header-wrapper {
@@ -267,7 +268,6 @@
         .split-slider-container { margin: 25px 0; background: rgba(255,255,255,0.4); padding: 20px; border-radius: var(--radius-md); }
         .split-labels { display: flex; justify-content: space-between; font-size: 0.9rem; font-weight: 600; margin-bottom: 10px; }
         
-        /* Minimalist Range Slider */
         .range-slider {
             -webkit-appearance: none; 
             width: 100%; 
@@ -336,6 +336,23 @@
         
         @keyframes toastIn { from { opacity: 0; transform: translateY(-10px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
         @keyframes toastOut { from { opacity: 1; transform: translateY(0) scale(1); } to { opacity: 0; transform: translateY(-10px) scale(0.95); } }
+
+        /* Стили для редактируемых инпутов КБЖУ */
+        .editable-macro {
+            background: transparent;
+            border: none;
+            border-bottom: 2px dashed rgba(15,23,42,0.2);
+            outline: none;
+            color: inherit;
+            text-align: center;
+            font-family: inherit;
+            transition: var(--transition);
+        }
+        .editable-macro:focus {
+            border-bottom-color: #4f46e5;
+            background: rgba(255,255,255,0.5);
+            border-radius: 4px;
+        }
 
         @media (min-width: 1024px) {
             body { flex-direction: row; }
@@ -531,11 +548,11 @@
             <div id="kbju-results-card" class="card glass" style="display: none; animation: slideUp 0.3s ease-out;">
                 <div class="card-header-wrapper">
                     <span class="header-icon">
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9M3 20v-8a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v8M15 20v-4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v8M3 12V6a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v6"/></svg>
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
                     </span>
                     <h2>Сводка результатов КБЖУ</h2>
                 </div>
-                <p>Ваши индивидуальные нормы рассчитаны. Вы можете выбрать желаемый темп изменения веса персонально для каждого.</p>
+                <p>Ваши индивидуальные нормы рассчитаны. Вы можете выбрать желаемый темп изменения веса персонально для каждого, а также <strong>отредактировать любые значения вручную</strong>, просто нажав на цифры ниже.</p>
 
                 <div class="grid-2" id="kbju-summary-readout-grid" style="margin-top: 20px;">
                     </div>
@@ -568,7 +585,7 @@
             <div class="card glass">
                 <div class="card-header-wrapper">
                     <span class="header-icon">
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 11.5a6 6 0 0 0-6 6v1h12v-1a6 6 0 0 0-6-6zM12 2a4 4 0 1 0 0 8 4 4 0 1 0 0-8z"/></svg>
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
                     </span>
                     <h2>Управление кулинарными рецептами</h2>
                 </div>
@@ -597,7 +614,7 @@
             <div class="card glass">
                 <div class="card-header-wrapper">
                     <span class="header-icon">
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"></ellipse><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path></svg>
                     </span>
                     <h2>Каталог продуктов и ингредиентов</h2>
                 </div>
@@ -652,7 +669,7 @@
             <div class="card glass">
                 <div class="card-header-wrapper">
                     <span class="header-icon">
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9M3 20v-8a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v8M15 20v-4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v8M3 12V6a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v6"/></svg>
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
                     </span>
                     <h2>Дневник питания и баланса нутриентов</h2>
                 </div>
@@ -752,10 +769,12 @@
                     <div class="chart-container glass" style="padding:20px; border-radius:var(--radius-lg); background:#ffffff;">
                         <h4 style="text-align: center; margin-bottom: 10px; color: var(--p1-main);" class="p1-name-title">Пользователь 1</h4>
                         <div style="height: 250px;"><canvas id="weightChartP1"></canvas></div>
+                        <div id="weight-history-list-p1" style="margin-top: 20px;"></div>
                     </div>
                     <div class="chart-container glass" style="padding:20px; border-radius:var(--radius-lg); background:#ffffff;">
                         <h4 style="text-align: center; margin-bottom: 10px; color: var(--p2-main);" class="p2-name-title">Пользователь 2</h4>
                         <div style="height: 250px;"><canvas id="weightChartP2"></canvas></div>
+                        <div id="weight-history-list-p2" style="margin-top: 20px;"></div>
                     </div>
                 </div>
             </div>
@@ -1177,6 +1196,17 @@
             saveStateToBrowserStorage();
             renderCalculatedNormsBlockView();
         }
+        
+        function manualOverrideMacro(pKey, macro, val) {
+            let num = parseInt(val);
+            if(!isNaN(num) && num >= 0) {
+                state.settings[pKey][macro] = num;
+                saveStateToBrowserStorage();
+            } else {
+                showToast("Введите корректное число", "danger");
+                renderCalculatedNormsBlockView();
+            }
+        }
 
         function getPacingHtml(pKey, currentPacing) {
             return `
@@ -1201,17 +1231,25 @@
             targetGrid.innerHTML = `
                 <div class="profile-setup-box" style="--p-color: var(--p1-main);">
                     <h3 style="color:var(--p1-main); margin-bottom:10px;">${p1.name}</h3>
-                    <p style="font-size:1.4rem; font-weight:800; color:var(--text-main); margin-bottom:10px;">${p1.kcal} ккал <span style="font-size:0.85rem; font-weight:500; color:var(--text-muted);">/ сутки</span></p>
+                    <p style="font-size:1.4rem; font-weight:800; color:var(--text-main); margin-bottom:10px; display:flex; align-items:baseline; gap:6px;">
+                        <input type="number" class="editable-macro" value="${p1.kcal}" onchange="manualOverrideMacro('p1', 'kcal', this.value)" style="width: 80px; font-size:1.4rem; font-weight:800; padding:0;"> ккал <span style="font-size:0.85rem; font-weight:500; color:var(--text-muted);">/ сутки</span>
+                    </p>
                     <div style="font-size:0.9rem; line-height:1.7; color:var(--text-main);">
-                        🧬 Белки: <strong>${p1.p} г</strong> | 💧 Жиры: <strong>${p1.f} г</strong> | 🌾 Углеводы: <strong>${p1.c} г</strong>
+                        🧬 Белки: <input type="number" class="editable-macro" value="${p1.p}" onchange="manualOverrideMacro('p1', 'p', this.value)" style="width: 45px; font-weight:bold;"> г | 
+                        💧 Жиры: <input type="number" class="editable-macro" value="${p1.f}" onchange="manualOverrideMacro('p1', 'f', this.value)" style="width: 45px; font-weight:bold;"> г | 
+                        🌾 Углеводы: <input type="number" class="editable-macro" value="${p1.c}" onchange="manualOverrideMacro('p1', 'c', this.value)" style="width: 45px; font-weight:bold;"> г
                     </div>
                     ${getPacingHtml('p1', p1.pacing || 'moderate')}
                 </div>
                 <div class="profile-setup-box" style="--p-color: var(--p2-main);">
                     <h3 style="color:var(--p2-main); margin-bottom:10px;">${p2.name}</h3>
-                    <p style="font-size:1.4rem; font-weight:800; color:var(--text-main); margin-bottom:10px;">${p2.kcal} ккал <span style="font-size:0.85rem; font-weight:500; color:var(--text-muted);">/ сутки</span></p>
+                    <p style="font-size:1.4rem; font-weight:800; color:var(--text-main); margin-bottom:10px; display:flex; align-items:baseline; gap:6px;">
+                        <input type="number" class="editable-macro" value="${p2.kcal}" onchange="manualOverrideMacro('p2', 'kcal', this.value)" style="width: 80px; font-size:1.4rem; font-weight:800; padding:0;"> ккал <span style="font-size:0.85rem; font-weight:500; color:var(--text-muted);">/ сутки</span>
+                    </p>
                     <div style="font-size:0.9rem; line-height:1.7; color:var(--text-main);">
-                        🧬 Белки: <strong>${p2.p} г</strong> | 💧 Жиры: <strong>${p2.f} г</strong> | 🌾 Углеводы: <strong>${p2.c} г</strong>
+                        🧬 Белки: <input type="number" class="editable-macro" value="${p2.p}" onchange="manualOverrideMacro('p2', 'p', this.value)" style="width: 45px; font-weight:bold;"> г | 
+                        💧 Жиры: <input type="number" class="editable-macro" value="${p2.f}" onchange="manualOverrideMacro('p2', 'f', this.value)" style="width: 45px; font-weight:bold;"> г | 
+                        🌾 Углеводы: <input type="number" class="editable-macro" value="${p2.c}" onchange="manualOverrideMacro('p2', 'c', this.value)" style="width: 45px; font-weight:bold;"> г
                     </div>
                     ${getPacingHtml('p2', p2.pacing || 'comfortable')}
                 </div>
@@ -1472,7 +1510,6 @@
                 `;
             }
             
-            // Динамическое обновление порций при изменении ингредиентов
             const sliderVal = document.getElementById('recipe-proportion-range-slider').value;
             handleSliderProportionShift(sliderVal);
         }
@@ -1810,7 +1847,7 @@
             if(!periodSelect) return;
             const periodDays = periodSelect.value;
             
-            let cutoffDate = new Date(0); // All time
+            let cutoffDate = new Date(0); 
             if (periodDays !== 'all') {
                 cutoffDate = new Date();
                 cutoffDate.setDate(cutoffDate.getDate() - parseInt(periodDays));
@@ -1822,6 +1859,57 @@
 
             renderChartForUser('weightChartP1', w1Filtered, state.settings.p1.name || 'Пользователь 1', '#4f46e5', 'rgba(99, 102, 241, 0.05)', 1);
             renderChartForUser('weightChartP2', w2Filtered, state.settings.p2.name || 'Пользователь 2', '#06b6d4', 'rgba(6, 182, 212, 0.05)', 2);
+            renderWeightHistoryLists();
+        }
+
+        function renderWeightHistoryLists() {
+            ['p1', 'p2'].forEach(pKey => {
+                const container = document.getElementById(`weight-history-list-${pKey}`);
+                if(!container) return;
+                
+                let html = '<h5 style="margin-bottom: 10px; color: var(--text-muted); font-size: 0.85rem; text-transform: uppercase;">История записей:</h5>';
+                const reversedWeights = [...state.weights[pKey]].reverse();
+                
+                if(reversedWeights.length === 0) {
+                    html += '<p style="font-size: 0.85rem; color: var(--text-muted);">Нет данных</p>';
+                } else {
+                    reversedWeights.forEach(entry => {
+                        html += `
+                            <div style="display:flex; justify-content:space-between; align-items:center; padding: 8px 12px; border-bottom: 1px solid rgba(0,0,0,0.05); font-size: 0.9rem;">
+                                <span><strong>${entry.date}</strong> — ${entry.val} кг</span>
+                                <div style="display:flex; gap: 14px;">
+                                    <button onclick="promptEditWeight('${pKey}', '${entry.date}', ${entry.val})" style="background:none; border:none; color:var(--text-muted); cursor:pointer; padding:0; font-size:1rem; transition:color 0.2s;" onmouseover="this.style.color='#4f46e5'" onmouseout="this.style.color='var(--text-muted)'"><i class="fa-solid fa-pen"></i></button>
+                                    <button onclick="deleteWeightRecord('${pKey}', '${entry.date}')" style="background:none; border:none; color:var(--text-muted); cursor:pointer; padding:0; font-size:1rem; transition:color 0.2s;" onmouseover="this.style.color='#dc2626'" onmouseout="this.style.color='var(--text-muted)'"><i class="fa-solid fa-trash"></i></button>
+                                </div>
+                            </div>
+                        `;
+                    });
+                }
+                container.innerHTML = html;
+            });
+        }
+        
+        function deleteWeightRecord(pKey, date) {
+            if(confirm('Вы уверены, что хотите удалить эту запись о весе?')) {
+                state.weights[pKey] = state.weights[pKey].filter(w => w.date !== date);
+                saveStateToBrowserStorage();
+                renderProgressChartLayout();
+            }
+        }
+
+        function promptEditWeight(pKey, date, oldVal) {
+            const newVal = prompt('Введите новый вес (кг) для ' + date + ':', oldVal);
+            if(newVal !== null && newVal.trim() !== '' && !isNaN(parseFloat(newVal))) {
+                const target = state.weights[pKey].find(w => w.date === date);
+                if(target) {
+                    target.val = parseFloat(newVal);
+                    saveStateToBrowserStorage();
+                    renderProgressChartLayout();
+                    showToast("Запись успешно обновлена!", "success");
+                }
+            } else if (newVal !== null) {
+                 showToast("Введите корректное число", "danger");
+            }
         }
 
         function renderChartForUser(canvasId, dataArray, labelText, colorLine, colorBg, pIndex) {

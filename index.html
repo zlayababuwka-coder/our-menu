@@ -8,6 +8,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><circle cx=%2250%22 cy=%2250%22 r=%2240%22 stroke=%22%236366f1%22 stroke-width=%228%22 fill=%22none%22 stroke-dasharray=%22180 50%22/><circle cx=%2250%22 cy=%2250%22 r=%2225%22 stroke=%22%23ec4899%22 stroke-width=%228%22 fill=%22none%22 stroke-dasharray=%22100 40%22/></svg>">
+
     <style>
         :root {
             --bg-mesh: radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.15) 0, transparent 45%),
@@ -16,1896 +18,1986 @@
                        #f8fafc;
             --text-main: #0f172a;
             --text-muted: #64748b;
-            --glass-bg: rgba(255, 255, 255, 0.7);
-            --glass-border: rgba(255, 255, 255, 0.6);
-            --glass-input: rgba(255, 255, 255, 0.6);
-            --shadow-soft: 0 10px 40px -10px rgba(15, 23, 42, 0.05);
-            --shadow-hover: 0 20px 50px -12px rgba(15, 23, 42, 0.1);
-            --radius-lg: 24px;
-            --radius-md: 14px;
-            --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-            
-            --p1-main: #4f46e5;
-            --p1-light: rgba(99, 102, 241, 0.1);
-            --p1-gradient: linear-gradient(135deg, #4f46e5, #6366f1);
-            
-            --p2-main: #06b6d4;
-            --p2-light: rgba(6, 182, 212, 0.1);
-            --p2-gradient: linear-gradient(135deg, #06b6d4, #22d3ee);
+            --glass-bg: rgba(255, 255, 255, 0.75);
+            --glass-border: rgba(255, 255, 255, 0.5);
+            --shadow-sm: 0 2px 8px rgba(15, 23, 42, 0.04);
+            --shadow-md: 0 10px 30px rgba(15, 23, 42, 0.08);
+            --accent-primary: #6366f1;
+            --accent-secondary: #ec4899;
+            --success: #10b981;
+            --danger: #ef4444;
         }
 
-        * { 
-            margin: 0; 
-            padding: 0; 
-            box-sizing: border-box; 
-            font-family: 'Inter', sans-serif; 
+        [data-theme="dark"] {
+            --bg-mesh: radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.2) 0, transparent 50%),
+                       radial-gradient(at 100% 0%, rgba(236, 72, 153, 0.15) 0, transparent 50%),
+                       #0f172a;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --glass-bg: rgba(15, 23, 42, 0.6);
+            --glass-border: rgba(255, 255, 255, 0.05);
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.2);
+            --shadow-md: 0 10px 30px rgba(0, 0, 0, 0.4);
         }
-        
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+        }
+
         body {
             background: var(--bg-mesh);
+            background-attachment: fixed;
             color: var(--text-main);
             min-height: 100vh;
-            -webkit-font-smoothing: antialiased;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        .app-container {
             display: flex;
-            flex-direction: column;
+            min-height: 100vh;
         }
 
-        ::-webkit-scrollbar {
-            width: 8px;
-            height: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: transparent;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: rgba(148, 163, 184, 0.3);
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: rgba(148, 163, 184, 0.5);
-        }
-
-        .glass {
+        .sidebar {
+            width: 280px;
             background: var(--glass-bg);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid var(--glass-border);
-            box-shadow: var(--shadow-soft);
-        }
-
-        h1, h2, h3, h4 { 
-            font-weight: 700; 
-            color: var(--text-main); 
-            letter-spacing: -0.02em; 
-        }
-        p { 
-            color: var(--text-muted); 
-            font-size: 0.95rem; 
-            line-height: 1.6; 
-        }
-
-        .app-wrapper { 
-            display: flex; 
-            flex: 1; 
-            width: 100%; 
-            position: relative; 
-        }
-
-        nav {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 80px;
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            padding: 0 10px;
-            z-index: 1000;
-            border-top: 1px solid var(--glass-border);
-            border-radius: var(--radius-lg) var(--radius-lg) 0 0;
-        }
-
-        .nav-btn {
-            background: none;
-            border: none;
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: var(--text-muted);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-right: 1px solid var(--glass-border);
+            padding: 2rem 1.5rem;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            gap: 6px;
-            cursor: pointer;
-            transition: var(--transition);
-            padding: 10px 16px;
-            border-radius: var(--radius-md);
+            gap: 2.5rem;
+            position: fixed;
+            height: 100vh;
+            z-index: 100;
         }
 
-        .nav-btn i { font-size: 1.25rem; }
-        .nav-btn:hover { color: var(--text-main); background: rgba(255,255,255,0.4); }
-        .nav-btn.active { color: #0f172a; background: rgba(255,255,255,0.8); box-shadow: 0 4px 12px rgba(15,23,42,0.05); }
-
-        header {
-            padding: 20px 30px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: sticky;
-            top: 0;
-            z-index: 900;
-            border-bottom: 1px solid var(--glass-border);
-            border-radius: 0 0 var(--radius-md) var(--radius-md);
-        }
-
-        .logo-area h1 { 
-            font-size: 1.6rem; 
-            font-weight: 800; 
-            background: linear-gradient(to right, #4f46e5, #06b6d4, #ec4899, #8b5cf6); 
-            -webkit-background-clip: text; 
+        .sidebar-brand {
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 30px rgba(99, 102, 241, 0.15);
-        }
-        .logo-area p { font-size: 0.8rem; font-weight: 500; margin-top: 2px; }
-
-        .container {
-            flex: 1;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 30px 20px 120px 20px;
-            width: 100%;
-        }
-
-        .tab-content { display: none; animation: slideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1); }
-        .tab-content.active { display: block; }
-
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(12px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .card { 
-            border-radius: var(--radius-lg); 
-            padding: 30px; 
-            margin-bottom: 30px; 
-            transition: var(--transition); 
-        }
-        .card:hover { 
-            box-shadow: var(--shadow-hover); 
-            transform: translateY(-1px); 
-        }
-
-        .card-header-wrapper {
             display: flex;
             align-items: center;
-            gap: 12px;
-            margin-bottom: 18px;
-            padding-bottom: 12px;
-            border-bottom: 1px solid rgba(15, 23, 42, 0.05);
+            gap: 0.75rem;
         }
-        
-        .header-icon {
-            color: var(--text-main);
-            display: inline-flex;
+
+        .sidebar-menu {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            list-style: none;
+        }
+
+        .menu-item {
+            display: flex;
             align-items: center;
-        }
-
-        label { 
-            display: block; 
-            font-size: 0.8rem; 
-            font-weight: 600; 
-            color: var(--text-muted); 
-            margin-bottom: 8px; 
-            text-transform: uppercase; 
-            letter-spacing: 0.04em; 
-        }
-        
-        input, select, textarea {
-            width: 100%;
-            padding: 12px 16px;
-            border: 1px solid rgba(148, 163, 184, 0.25);
-            border-radius: var(--radius-md);
-            font-size: 0.95rem;
-            color: var(--text-main);
-            background: var(--glass-input);
-            transition: var(--transition);
-            outline: none;
-        }
-        input:focus, select:focus, textarea:focus {
-            border-color: #4f46e5;
-            background: #ffffff;
-            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.12);
-        }
-
-        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
-        .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 24px; }
-
-        button {
-            padding: 12px 24px;
-            border-radius: var(--radius-md);
-            font-size: 0.95rem;
-            font-weight: 600;
+            gap: 1rem;
+            padding: 0.85rem 1rem;
+            color: var(--text-muted);
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: 500;
+            transition: all 0.2s ease;
             cursor: pointer;
-            transition: var(--transition);
+        }
+
+        .menu-item:hover, .menu-item.active {
+            color: var(--text-main);
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateX(4px);
+        }
+
+        [data-theme="dark"] .menu-item:hover, [data-theme="dark"] .menu-item.active {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .menu-item i {
+            font-size: 1.15rem;
+            width: 24px;
+        }
+
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            padding: 2.5rem;
+            max-width: 1400px;
+            width: calc(100% - 280px);
+        }
+
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 2rem;
+            box-shadow: var(--shadow-md);
+            margin-bottom: 2rem;
+        }
+
+        .page-title {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.025em;
+        }
+
+        .page-subtitle {
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+            font-size: 1rem;
+        }
+
+        .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2rem; }
+        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+        .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.25rem; }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .form-group label {
+            font-size: 0.87rem;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        .input-field {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            padding: 0.75rem 1rem;
+            border-radius: 12px;
+            color: var(--text-main);
+            font-size: 0.95rem;
+            outline: none;
+            transition: all 0.2s ease;
+            width: 100%;
+        }
+
+        .input-field:focus {
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+        }
+
+        select.input-field {
+            cursor: pointer;
+        }
+
+        .btn {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 0.95rem;
             border: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
         }
-        button.primary { background: #0f172a; color: white; }
-        button.primary:hover { background: #1e293b; box-shadow: 0 4px 14px rgba(15,23,42,0.12); }
-        button.secondary { background: rgba(255,255,255,0.7); color: var(--text-main); border: 1px solid rgba(148, 163, 184, 0.2); }
-        button.secondary:hover { background: #ffffff; border-color: rgba(148,163,184,0.4); }
-        button.danger { background: #fef2f2; color: #dc2626; border: 1px solid #fee2e2; }
-        button.danger:hover { background: #fee2e2; }
 
-        .profile-setup-box { 
-            padding: 25px; 
-            border-radius: var(--radius-lg); 
-            background: rgba(255,255,255,0.4);
-            border-top: 4px solid var(--p-color, #cbd5e1); 
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            color: white;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
         }
-        
-        .filters-panel { display: flex; gap: 12px; margin-bottom: 24px; flex-wrap: wrap; }
-        .recipe-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 24px; }
-        .recipe-card { display: flex; flex-direction: column; height: 100%; cursor: pointer; position: relative; }
-        .recipe-card .badge { position: absolute; top: 20px; right: 20px; font-size: 0.75rem; font-weight: 700; padding: 4px 10px; border-radius: 20px; background: rgba(255,255,255,0.9); color: var(--text-main); border: 1px solid rgba(148,163,184,0.15); }
-        .recipe-body { flex: 1; padding-top: 8px; }
-        .recipe-footer { margin-top: 18px; padding-top: 14px; border-top: 1px solid rgba(15,23,42,0.05); display: flex; justify-content: space-between; font-size: 0.85rem; color: var(--text-muted); }
 
-        .ingredient-table-header { display: grid; grid-template-columns: 2.5fr 1.2fr 1fr 1fr 1fr 1fr 45px; gap: 10px; padding: 0 10px 10px 10px; font-weight: 600; font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.03em; }
-        .ingredient-row { display: grid; grid-template-columns: 2.5fr 1.2fr 1fr 1fr 1fr 1fr 45px; gap: 10px; margin-bottom: 10px; align-items: center; background: rgba(255,255,255,0.4); padding: 10px; border-radius: var(--radius-md); position: relative; }
-        .ingredient-row input { padding: 8px 12px; font-size: 0.85rem; }
-        .row-kbju-readout { font-size: 0.8rem; color: var(--text-muted); text-align: center; font-weight: 500; }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
+        }
 
-        .pacing-btn-group { display: flex; gap: 8px; margin-top: 10px; }
-        .pacing-btn { flex: 1; padding: 10px; font-size: 0.85rem; background: rgba(255,255,255,0.5); border: 1px solid rgba(148,163,184,0.2); border-radius: var(--radius-md); transition: var(--transition); font-weight: 500; }
-        .pacing-btn.active { background: #0f172a; color: white; border-color: #0f172a; }
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-main);
+            border: 1px solid var(--glass-border);
+        }
 
-        .split-slider-container { margin: 25px 0; background: rgba(255,255,255,0.4); padding: 20px; border-radius: var(--radius-md); }
-        .split-labels { display: flex; justify-content: space-between; font-size: 0.9rem; font-weight: 600; margin-bottom: 10px; }
-        .range-slider { -webkit-appearance: none; width: 100%; height: 8px; border-radius: 4px; background: linear-gradient(to right, var(--p1-main), var(--p2-main)); outline: none; }
-        .range-slider::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 20px; height: 20px; border-radius: 50%; background: #ffffff; border: 3px solid #0f172a; cursor: pointer; transition: transform 0.1s; }
-        .range-slider::-webkit-slider-thumb:hover { transform: scale(1.15); }
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
 
-        .portion-card { padding: 20px; border-radius: var(--radius-md); color: white; box-shadow: var(--shadow-soft); }
-        .portion-card.p1 { background: var(--p1-gradient); }
-        .portion-card.p2 { background: var(--p2-gradient); }
-        .portion-stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 12px; font-size: 0.85rem; background: rgba(255,255,255,0.15); padding: 10px; border-radius: var(--radius-md); backdrop-filter: blur(4px); }
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
 
-        .autocomplete-dropdown { position: absolute; top: 100%; left: 0; width: 100%; background: #ffffff; border: 1px solid rgba(148,163,184,0.2); border-radius: var(--radius-md); max-height: 200px; overflow-y: auto; z-index: 1050; box-shadow: var(--shadow-hover); display: none; }
-        .autocomplete-item { padding: 10px 14px; cursor: pointer; font-size: 0.85rem; border-bottom: 1px solid #f1f5f9; display: flex; justify-content: space-between; color: var(--text-main); }
-        .autocomplete-item:hover { background: #f1f5f9; }
+        .btn-danger:hover {
+            opacity: 0.9;
+        }
 
-        .macro-bar-container { margin-bottom: 14px; }
-        .macro-bar-header { display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: 600; margin-bottom: 4px; }
-        .macro-track { height: 10px; background: rgba(15,23,42,0.06); border-radius: 6px; overflow: hidden; position: relative; }
-        .macro-fill { height: 100%; border-radius: 6px; transition: width 0.4s ease-out; }
-        
-        .remaining-row { font-size: 0.88rem; font-weight: 600; padding: 8px 12px; border-radius: var(--radius-md); margin-bottom: 15px; background: rgba(255,255,255,0.4); }
-        .remaining-warning { color: #dc2626; background: #fef2f2 !important; border: 1px solid #fee2e2; }
+        .tab-content {
+            display: none;
+        }
 
-        .meal-timeline-panel { background: rgba(255,255,255,0.3); border-radius: var(--radius-md); padding: 15px; margin-bottom: 15px; }
-        .meal-timeline-title { font-size: 0.85rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
-        .log-entry { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid rgba(15,23,42,0.04); font-size: 0.9rem; }
-        .log-entry:last-child { border-bottom: none; }
+        .tab-content.active {
+            display: block;
+        }
 
-        .food-base-scroll-container { max-height: 380px; overflow-y: auto; padding-right: 4px; margin-top: 15px; display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; }
-        .food-base-item-card { background: rgba(255,255,255,0.4); padding: 14px; border-radius: var(--radius-md); border: 1px solid rgba(148,163,184,0.15); display: flex; justify-content: space-between; align-items: center; }
+        /* CUSTOM TABLE AND LIST STYLES */
+        .custom-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
 
-        table { width: 100%; border-collapse: collapse; margin-top: 15px; border-radius: var(--radius-md); overflow: hidden; background: rgba(255,255,255,0.2); }
-        th, td { padding: 14px 16px; text-align: left; border-bottom: 1px solid rgba(15,23,42,0.05); font-size: 0.9rem; }
-        th { background: rgba(15,23,42,0.03); font-weight: 700; color: var(--text-muted); text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.03em; }
-        
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.3); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); z-index: 2000; align-items: center; justify-content: center; padding: 20px; }
-        .modal-content { background: #ffffff; border-radius: var(--radius-lg); max-width: 900px; width: 100%; max-height: 90vh; overflow-y: auto; padding: 30px; position: relative; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.15); }
-        .modal-close { position: absolute; top: 20px; right: 20px; font-size: 1.5rem; cursor: pointer; color: var(--text-muted); transition: var(--transition); border: none; background: none; }
-        .modal-close:hover { color: var(--text-main); }
+        .custom-table th, .custom-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--glass-border);
+        }
 
-        .discipline-badge { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 20px; background: linear-gradient(135deg, #f97316, #ef4444); color: white; font-size: 0.8rem; font-weight: 700; box-shadow: 0 4px 12px rgba(239,68,68,0.2); }
+        .custom-table th {
+            font-weight: 600;
+            color: var(--text-muted);
+        }
 
-        #toast-container { position: fixed; top: 20px; right: 20px; z-index: 3000; display: flex; flex-direction: column; gap: 10px; pointer-events: none; }
-        
-        @keyframes toastIn { from { opacity: 0; transform: translateY(-10px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
-        @keyframes toastOut { from { opacity: 1; transform: translateY(0) scale(1); } to { opacity: 0; transform: translateY(-10px) scale(0.95); } }
+        /* MODAL LAYER SYSTEM */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.4);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
 
-        @media (min-width: 1024px) {
-            body { flex-direction: row; }
-            nav {
-                width: 280px;
-                height: 100vh;
-                position: fixed;
-                top: 0;
-                left: 0;
-                bottom: 0;
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        /* PROGRESS TRACKING BARS */
+        .progress-wrapper {
+            margin-bottom: 1rem;
+        }
+
+        .progress-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            margin-bottom: 0.25rem;
+            font-weight: 500;
+        }
+
+        .progress-container {
+            background: rgba(255, 255, 255, 0.1);
+            height: 8px;
+            border-radius: 4px;
+            overflow: hidden;
+            width: 100%;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            border-radius: 4px;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        /* DYNAMIC NOTIFICATIONS */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 10000;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .toast-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--shadow-md);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            padding: 1rem 1.5rem;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: var(--text-main);
+            transform: translateY(-20px);
+            opacity: 0;
+            animation: toastIn 0.3s forwards;
+        }
+
+        @keyframes toastIn {
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        /* MINIMALIST RANGE TRACK OVERRIDES */
+        input[type="range"].minimal-slider {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.15);
+            height: 4px;
+            border-radius: 2px;
+            outline: none;
+            margin: 15px 0;
+        }
+
+        input[type="range"].minimal-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+            transition: transform 0.1s, background 0.1s;
+        }
+
+        input[type="range"].minimal-slider::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+            background: rgba(255, 255, 255, 0.8);
+        }
+
+        /* FOOD BASE DIRECTORY SELECTOR PILLS */
+        .pill-tab {
+            padding: 0.5rem 1.25rem;
+            border-radius: 30px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 0.87rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .pill-tab:hover {
+            background: rgba(255, 255, 255, 0.15);
+            color: var(--text-main);
+        }
+
+        .pill-tab.active {
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            color: white;
+            border-color: transparent;
+            box-shadow: 0 4px 10px rgba(99, 102, 241, 0.2);
+        }
+
+        /* DEVICE RESPONSIVENESS AND BOTTOM BAR LAYOUT OVERRIDES */
+        @media (max-width: 768px) {
+            .app-container {
                 flex-direction: column;
-                justify-content: flex-start;
-                padding: 40px 24px;
-                gap: 12px;
-                border-top: none;
-                border-right: 1px solid var(--glass-border);
-                border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
             }
-            .nav-btn { width: 100%; flex-direction: row; gap: 14px; padding: 14px 20px; font-size: 0.95rem; }
-            .nav-btn i { font-size: 1.2rem; width: 24px; text-align: center; }
-            header { display: none; }
-            .desktop-brand { display: block; width: 100%; margin-bottom: 35px; text-align: center; }
-            .desktop-brand h2 { 
-                font-size: 1.8rem; 
-                font-weight: 800; 
-                background: linear-gradient(to right, #4f46e5, #06b6d4, #ec4899, #8b5cf6); 
-                -webkit-background-clip: text; 
-                -webkit-text-fill-color: transparent;
-                text-shadow: 0 0 30px rgba(99, 102, 241, 0.15);
+            
+            .sidebar {
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                top: auto;
+                width: 100%;
+                height: 65px;
+                flex-direction: row;
+                justify-content: space-around;
+                align-items: center;
+                padding: 0;
+                z-index: 9999;
+                background: var(--glass-bg);
+                backdrop-filter: blur(20px);
+                -webkit-backdrop-filter: blur(20px);
+                border-right: none;
+                border-top: 1px solid var(--glass-border);
+                box-shadow: 0 -4px 20px rgba(0,0,0,0.05);
             }
-            .desktop-brand p { font-size: 0.8rem; color: var(--text-muted); margin-top: 4px; font-weight: 500; }
-            .container { margin-left: 280px; padding: 40px; }
-        }
+            
+            .sidebar-brand {
+                display: none;
+            }
+            
+            .sidebar-menu {
+                flex-direction: row;
+                width: 100%;
+                justify-content: space-around;
+                margin: 0;
+            }
+            
+            .menu-item {
+                padding: 10px;
+                margin: 0;
+                justify-content: center;
+                flex-direction: column;
+                gap: 0;
+            }
+            
+            .menu-item span {
+                display: none; /* App-style tab icon bar with labels hidden */
+            }
+            
+            .menu-item i {
+                font-size: 1.5rem;
+                margin: 0;
+            }
+            
+            .main-content {
+                margin-left: 0 !important;
+                padding: 1.25rem;
+                padding-bottom: 90px !important;
+                width: 100% !important;
+                max-width: 100%;
+            }
+            
+            .grid-2, .grid-3, .grid-4 {
+                grid-template-columns: 1fr !important;
+                gap: 1.25rem;
+            }
 
-        @media (max-width: 1023px) {
-            .desktop-brand { display: none; }
-            .ingredient-table-header { display: none; }
-            .ingredient-row { grid-template-columns: 1fr; gap: 8px; padding: 15px; }
-            .row-kbju-readout { text-align: left; font-size: 0.85rem; background: rgba(255,255,255,0.5); padding: 4px 8px; border-radius: 6px; }
-            .grid-2, .grid-3 { grid-template-columns: 1fr; }
+            .unified-split-box {
+                flex-direction: column !important;
+            }
+            
+            table.custom-table, .custom-table thead, .custom-table tbody, .custom-table th, .custom-table td, .custom-table tr {
+                display: block;
+                width: 100%;
+            }
+            
+            .custom-table thead {
+                display: none;
+            }
+            
+            .custom-table tr {
+                margin-bottom: 12px;
+                border: 1px solid var(--glass-border);
+                border-radius: 16px;
+                padding: 10px;
+                background: rgba(255, 255, 255, 0.02);
+            }
+            
+            .custom-table td {
+                text-align: right;
+                padding-left: 50%;
+                position: relative;
+                border-bottom: 1px solid rgba(255,255,255,0.05);
+            }
+            
+            .custom-table td:last-child {
+                border-bottom: none;
+            }
+            
+            .custom-table td::before {
+                content: attr(data-label);
+                position: absolute;
+                left: 12px;
+                width: 45%;
+                text-align: left;
+                font-weight: 600;
+                color: var(--text-muted);
+            }
         }
     </style>
 </head>
 <body>
 
-    <div id="toast-container"></div>
+    <div class="toast-container" id="toast-box"></div>
 
-    <header class="glass">
-        <div class="logo-area">
-            <h1>NutriSplit</h1>
-            <p>Умный конструктор семейного рациона</p>
-        </div>
-        <div id="quick-kcal-badge" style="font-size:0.85rem; font-weight:600; color:var(--text-muted); text-align:right;"></div>
-    </header>
+    <div class="app-container">
+        <aside class="sidebar">
+            <div class="sidebar-brand">
+                <i class="fas fa-layer-group"></i> NutriSplit
+            </div>
+            <ul class="sidebar-menu">
+                <li><a class="menu-item active" id="nav-kbju_calc" onclick="switchTab('kbju_calc')"><i class="fas fa-calculator"></i><span>Расчет КБЖУ</span></a></li>
+                <li><a class="menu-item" id="nav-recipes" onclick="switchTab('recipes')"><i class="fas fa-utensils"></i><span>Конструктор</span></a></li>
+                <li><a class="menu-item" id="nav-food_db" onclick="switchTab('food_db')"><i class="fas fa-database"></i><span>База КБЖУ</span></a></li>
+                <li><a class="menu-item" id="nav-diary" onclick="switchTab('diary')"><i class="fas fa-book-open"></i><span>Дневник</span></a></li>
+                <li><a class="menu-item" id="nav-weight_progress" onclick="switchTab('weight_progress')"><i class="fas fa-chart-line"></i><span>Прогресс</span></a></li>
+                <li><a class="menu-item" id="nav-settings" onclick="switchTab('settings')"><i class="fas fa-sliders"></i><span>Настройки</span></a></li>
+            </ul>
+            <button class="btn btn-secondary" style="margin-top:auto" onclick="toggleThemeSystem()">
+                <i class="fas fa-moon"></i> <span>Сменить тему</span>
+            </button>
+        </aside>
 
-    <nav class="glass">
-        <div class="desktop-brand">
-            <h2>NutriSplit</h2>
-            <p>Конструктор семейного рациона</p>
-        </div>
-        <button class="nav-btn active" id="btn-tab-kbju_calc" onclick="switchTab('kbju_calc')">
-            <i class="fa-solid fa-sliders"></i> Расчет КБЖУ
-        </button>
-        <button class="nav-btn" id="btn-tab-cookbook" onclick="switchTab('cookbook')">
-            <i class="fa-solid fa-utensils"></i> Рецепты
-        </button>
-        <button class="nav-btn" id="btn-tab-database" onclick="switchTab('database')">
-            <i class="fa-solid fa-apple-whole"></i> База КБЖУ
-        </button>
-        <button class="nav-btn" id="btn-tab-diary" onclick="switchTab('diary')">
-            <i class="fa-solid fa-chart-simple"></i> Дневник
-        </button>
-        <button class="nav-btn" id="btn-tab-progress" onclick="switchTab('progress')">
-            <i class="fa-solid fa-chart-line"></i> Прогресс
-        </button>
-    </nav>
-
-    <div class="container">
-
-        <div id="tab-kbju_calc" class="tab-content active">
-            <div class="card glass">
-                <div class="card-header-wrapper">
-                    <span class="header-icon">
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M7 7h10M7 12h10M7 17h10"/></svg>
-                    </span>
-                    <h2>Персональный расчет КБЖУ</h2>
-                </div>
-                <p>Настройте профили пользователей. Наш калькулятор автоматически рассчитает идеальную норму калорий и макронутриентов под ваши цели по формуле Миффлина-Сан Жеора.</p>
+        <main class="main-content">
+            
+            <section id="tab-kbju_calc" class="tab-content active">
+                <h1 class="page-title">Расчет КБЖУ</h1>
+                <p class="page-subtitle">Индивидуальные параметры метаболизма и выбор темпа прогресса</p>
                 
-                <div class="grid-2" style="margin-top: 25px;">
-                    <div class="profile-setup-box" style="--p-color: var(--p1-main);">
-                        <div style="margin-bottom: 15px;">
-                            <label>Имя</label>
-                            <input type="text" id="p1-name-input" oninput="liveUpdateProfileNames()" placeholder="Пользователь 1">
+                <div class="grid-2">
+                    <div class="glass-card">
+                        <h2 style="margin-bottom:1.25rem;"><i class="fas fa-user text-primary"></i> Профиль Пользователя 1</h2>
+                        <div class="form-group">
+                            <label>Имя профиля</label>
+                            <input type="text" id="u1-name" class="input-field" value="Пользователь 1">
                         </div>
-                        <div class="grid-2" style="gap:12px; margin-bottom: 15px;">
-                            <div>
+                        <div class="grid-2">
+                            <div class="form-group">
                                 <label>Пол</label>
-                                <select id="p1-gender">
+                                <select id="u1-gender" class="input-field">
                                     <option value="male">Мужской</option>
                                     <option value="female">Женский</option>
                                 </select>
                             </div>
-                            <div>
+                            <div class="form-group">
                                 <label>Возраст (лет)</label>
-                                <input type="number" id="p1-age" value="27">
+                                <input type="number" id="u1-age" class="input-field" value="30">
                             </div>
                         </div>
-                        <div class="grid-2" style="gap:12px; margin-bottom: 15px;">
-                            <div>
-                                <label>Рост (см)</label>
-                                <input type="number" id="p1-height" value="182">
-                            </div>
-                            <div>
+                        <div class="grid-2">
+                            <div class="form-group">
                                 <label>Вес (кг)</label>
-                                <input type="number" id="p1-weight" value="85">
+                                <input type="number" id="u1-weight" class="input-field" value="80">
+                            </div>
+                            <div class="form-group">
+                                <label>Рост (см)</label>
+                                <input type="number" id="u1-height" class="input-field" value="180">
                             </div>
                         </div>
-                        <div style="margin-bottom: 15px;">
-                            <label>Цель веса</label>
-                            <select id="p1-goal">
-                                <option value="loss">Снижение веса</option>
-                                <option value="maintenance">Поддержание формы</option>
-                                <option value="gain">Набор массы</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label>Уровень активности</label>
-                            <select id="p1-activity">
-                                <option value="sedentary">Почти не двигаюсь (сидячая работа, отсутствие тренировок)</option>
-                                <option value="light">Небольшая активность (работа на ногах, прогулки, ходьба до 10к шагов)</option>
-                                <option value="moderate">Умеренная активность (легкие тренировки или фитнес 3–5 раз в неделю)</option>
-                                <option value="high">Высокая активность (интенсивный спорт или тяжелый физический труд)</option>
+                        <div class="form-group">
+                            <label>Физическая активность</label>
+                            <select id="u1-activity" class="input-field">
+                                <option value="1.2">Минимальная (сидячий быт)</option>
+                                <option value="1.375">Легкая (1-3 тренировки/нед)</option>
+                                <option value="1.55">Умеренная (3-5 тренировок/нед)</option>
+                                <option value="1.725">Высокая (тяжелые нагрузки)</option>
                             </select>
                         </div>
                     </div>
 
-                    <div class="profile-setup-box" style="--p-color: var(--p2-main);">
-                        <div style="margin-bottom: 15px;">
-                            <label>Имя</label>
-                            <input type="text" id="p2-name-input" oninput="liveUpdateProfileNames()" placeholder="Пользователь 2">
+                    <div class="glass-card">
+                        <h2 style="margin-bottom:1.25rem;"><i class="fas fa-user-friends text-secondary"></i> Профиль Пользователя 2</h2>
+                        <div class="form-group">
+                            <label>Имя профиля</label>
+                            <input type="text" id="u2-name" class="input-field" value="Пользователь 2">
                         </div>
-                        <div class="grid-2" style="gap:12px; margin-bottom: 15px;">
-                            <div>
+                        <div class="grid-2">
+                            <div class="form-group">
                                 <label>Пол</label>
-                                <select id="p2-gender">
+                                <select id="u2-gender" class="input-field">
                                     <option value="male">Мужской</option>
                                     <option value="female" selected>Женский</option>
                                 </select>
                             </div>
-                            <div>
+                            <div class="form-group">
                                 <label>Возраст (лет)</label>
-                                <input type="number" id="p2-age" value="26">
+                                <input type="number" id="u2-age" class="input-field" value="28">
                             </div>
                         </div>
-                        <div class="grid-2" style="gap:12px; margin-bottom: 15px;">
-                            <div>
-                                <label>Рост (см)</label>
-                                <input type="number" id="p2-height" value="158">
-                            </div>
-                            <div>
+                        <div class="grid-2">
+                            <div class="form-group">
                                 <label>Вес (кг)</label>
-                                <input type="number" id="p2-weight" value="58">
+                                <input type="number" id="u2-weight" class="input-field" value="60">
+                            </div>
+                            <div class="form-group">
+                                <label>Рост (см)</label>
+                                <input type="number" id="u2-height" class="input-field" value="165">
                             </div>
                         </div>
-                        <div style="margin-bottom: 15px;">
-                            <label>Цель веса</label>
-                            <select id="p2-goal">
-                                <option value="loss" selected>Снижение веса</option>
-                                <option value="maintenance">Поддержание формы</option>
-                                <option value="gain">Набор массы</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label>Уровень активности</label>
-                            <select id="p2-activity">
-                                <option value="sedentary">Почти не двигаюсь (сидячая работа, отсутствие тренировок)</option>
-                                <option value="light" selected>Небольшая активность (работа на ногах, прогулки, ходьба до 10к шагов)</option>
-                                <option value="moderate">Умеренная активность (легкие тренировки или фитнес 3–5 раз в неделю)</option>
-                                <option value="high">Высокая активность (интенсивный спорт или тяжелый физический труд)</option>
+                        <div class="form-group">
+                            <label>Физическая активность</label>
+                            <select id="u2-activity" class="input-field">
+                                <option value="1.2" selected>Минимальная (сидячий быт)</option>
+                                <option value="1.375">Легкая (1-3 тренировки/нед)</option>
+                                <option value="1.55">Умеренная (3-5 тренировок/нед)</option>
+                                <option value="1.725">Высокая (тяжелые нагрузки)</option>
                             </select>
                         </div>
                     </div>
                 </div>
 
-                <div style="margin-top: 25px; text-align: center;">
-                    <button class="primary" style="width: 100%; max-width: 400px;" onclick="calculateAndDisplayNorms()">
-                        <i class="fa-solid fa-calculator"></i> Рассчитать нормы КБЖУ
-                    </button>
-                </div>
-            </div>
-
-            <div id="kbju-results-card" class="card glass" style="display: none; animation: slideUp 0.3s ease-out;">
-                <div class="card-header-wrapper">
-                    <span class="header-icon">
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9M3 20v-8a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v8M15 20v-4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v8M3 12V6a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v6"/></svg>
-                    </span>
-                    <h2>Сводка результатов КБЖУ</h2>
-                </div>
-                <p>Выберите темп изменения веса для автоматической динамической корректировки целевого дефицита или профицита энергии:</p>
-                
-                <div style="margin: 20px 0;">
-                    <label>Интенсивность прогресса</label>
-                    <div class="pacing-btn-group">
-                        <button class="pacing-btn active" id="pacing-btn-comfortable" onclick="changePacingTier('comfortable')">Комфортный</button>
-                        <button class="pacing-btn" id="pacing-btn-moderate" onclick="changePacingTier('moderate')">Умеренный</button>
-                        <button class="pacing-btn" id="pacing-btn-intensive" onclick="changePacingTier('intensive')">Интенсивный</button>
-                    </div>
+                <div style="text-align: center; margin-bottom: 2rem;">
+                    <button class="btn btn-primary id-calc-action" onclick="executeSystemMacroCalculation()"><i class="fas fa-bolt"></i> Рассчитать базовый рацион</button>
                 </div>
 
-                <div class="grid-2" id="kbju-summary-readout-grid" style="margin-top: 20px;">
-                    </div>
-            </div>
-
-            <div class="card glass">
-                <div class="card-header-wrapper">
-                    <span class="header-icon">
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
-                    </span>
-                    <h2>Синхронизация данных</h2>
-                </div>
-                <p>Ваши данные хранятся только в этом браузере. Сохраните копию на устройство для переноса данных или нажмите Сброс для очистки.</p>
-                <div style="margin-top: 20px; display: flex; gap: 12px; flex-wrap: wrap;">
-                    <button class="secondary" onclick="exportDataBackup()">
-                        <i class="fa-solid fa-download"></i> Сохранить копию
-                    </button>
-                    <button class="secondary" style="position: relative;">
-                        <i class="fa-solid fa-upload"></i> Загрузить копию
-                        <input type="file" onchange="importDataBackup(event)" style="position: absolute; top:0; left:0; width:100%; height:100%; opacity:0; cursor:pointer;">
-                    </button>
-                    <button class="danger" onclick="triggerTotalSystemResetLoop()">
-                        <i class="fa-solid fa-trash-can"></i> Очистить все данные
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <div id="tab-cookbook" class="tab-content">
-            <div class="card glass">
-                <div class="card-header-wrapper">
-                    <span class="header-icon">
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 11.5a6 6 0 0 0-6 6v1h12v-1a6 6 0 0 0-6-6zM12 2a4 4 0 1 0 0 8 4 4 0 1 0 0-8z"/></svg>
-                    </span>
-                    <h2>Управление кулинарными рецептами</h2>
-                </div>
-                <div class="filters-panel">
-                    <input type="text" id="recipe-search-bar" placeholder="Поиск рецепта по названию..." oninput="renderRecipes()" style="flex:1; min-width:200px;">
-                    <button class="primary" onclick="openRecipeCreateModal()">
-                        <i class="fa-solid fa-plus"></i> Создать рецепт
-                    </button>
-                </div>
-                
-                <div class="recipe-grid" id="recipes-display-grid">
-                    </div>
-            </div>
-        </div>
-
-        <div id="tab-database" class="tab-content">
-            <div class="card glass">
-                <div class="card-header-wrapper">
-                    <span class="header-icon">
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
-                    </span>
-                    <h2>Каталог продуктов и ингредиентов</h2>
-                </div>
-                <p>Глобальная база данных пищевой ценности продуктов на 100 грамм сырого веса.</p>
-                
-                <div class="grid-3" style="margin-top: 20px; align-items: flex-end;">
-                    <div style="flex: 2;">
-                        <label>Поиск по каталогу</label>
-                        <input type="text" id="db-search-input" placeholder="Введите название для мгновенной фильтрации..." oninput="renderDatabase()">
-                    </div>
-                </div>
-
-                <div class="food-base-scroll-container" id="food-base-items-wrapper">
-                    </div>
-
-                <div class="profile-setup-box" style="margin-top:30px; --p-color:#cbd5e1;">
-                    <h3 style="font-size:1.1rem; margin-bottom:15px;">Добавить новый продукт в базу</h3>
-                    <div class="grid-3" style="gap:12px; margin-bottom:15px;">
-                        <div>
-                            <label>Название продукта</label>
-                            <input type="text" id="new-prod-name" placeholder="Напр., Филе индейки">
+                <div id="pacing-results-area" class="glass-card" style="display:none; border-top: 4px solid var(--accent-primary);">
+                    <h3 style="margin-bottom: 1.5rem; text-align:center;"><i class="fas fa-chart-pie"></i> Результаты расчета и выбор дефицита</h3>
+                    <div class="grid-2" id="pacing-columns-box">
                         </div>
-                        <div>
-                            <label>Калории (ккал)</label>
-                            <input type="number" id="new-prod-kcal" placeholder="0">
-                        </div>
-                        <div>
-                            <label>Белки (г)</label>
-                            <input type="number" id="new-prod-p" placeholder="0" step="0.1">
-                        </div>
-                    </div>
-                    <div class="grid-3" style="gap:12px; margin-bottom:20px;">
-                        <div>
-                            <label>Жиры (г)</label>
-                            <input type="number" id="new-prod-f" placeholder="0" step="0.1">
-                        </div>
-                        <div>
-                            <label>Углеводы (г)</label>
-                            <input type="number" id="new-prod-c" placeholder="0" step="0.1">
-                        </div>
-                        <div style="display:flex; align-items:flex-end;">
-                            <button class="primary" style="width:100%;" onclick="submitCustomProductToBase()">
-                                <i class="fa-solid fa-square-plus"></i> Добавить в базу
-                            </button>
-                        </div>
-                    </div>
                 </div>
-            </div>
-        </div>
+            </section>
 
-        <div id="tab-diary" class="tab-content">
-            <div class="card glass">
-                <div class="card-header-wrapper">
-                    <span class="header-icon">
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9M3 20v-8a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v8M15 20v-4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v8M3 12V6a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v6"/></svg>
-                    </span>
-                    <h2>Дневник питания и баланса нутриентов</h2>
-                </div>
-                
-                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:25px; flex-wrap:wrap; gap:15px;">
+            <section id="tab-recipes" class="tab-content">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2rem;">
                     <div>
-                        <label>Выбранная дата дневника</label>
-                        <input type="date" id="diary-current-date" onchange="renderDiary()" style="width:220px;">
+                        <h1 class="page-title">Конструктор Рецептов</h1>
+                        <p class="page-subtitle">Создание многокомпонентных блюд с авторасчетом сушки и деления</p>
                     </div>
-                    <div id="discipline-streak-container">
+                    <button class="btn btn-primary" onclick="openRecipeCreationView()"><i class="fas fa-plus"></i> Создать рецепт</button>
+                </div>
+
+                <div class="grid-3" id="recipe-cards-deck">
+                    </div>
+            </section>
+
+            <section id="tab-food_db" class="tab-content">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2rem;">
+                    <div>
+                        <h1 class="page-title">База КБЖУ Продуктов</h1>
+                        <p class="page-subtitle">Добавление, редактирование и быстрый фильтр по категориям</p>
+                    </div>
+                    <button class="btn btn-primary" onclick="openFoodDbInsertWindow()"><i class="fas fa-plus"></i> Добавить продукт</button>
+                </div>
+
+                <div class="glass-card" style="padding: 1.25rem;">
+                    <div style="display:flex; gap:1rem; margin-bottom:1.5rem; align-items:center;">
+                        <i class="fas fa-search text-muted" style="font-size:1.2rem"></i>
+                        <input type="text" id="food-search-box" class="input-field" placeholder="Поиск по названию ингредиента..." oninput="triggerFoodDirectoryFiltering()">
+                    </div>
+
+                    <div style="display:flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1.5rem;" id="pills-container-row">
+                        <button class="pill-tab active" onclick="setFoodCategoryFilter('Все')">Все</button>
+                        <button class="pill-tab" onclick="setFoodCategoryFilter('Крупы/Бобовые')">Крупы/Бобовые</button>
+                        <button class="pill-tab" onclick="setFoodCategoryFilter('Мясо/Рыба')">Мясо/Рыба</button>
+                        <button class="pill-tab" onclick="setFoodCategoryFilter('Молочные продукты')">Молочные продукты</button>
+                        <button class="pill-tab" onclick="setFoodCategoryFilter('Овощи/Фрукты')">Овощи/Фрукты</button>
+                        <button class="pill-tab" onclick="setFoodCategoryFilter('Разное')">Разное</button>
+                    </div>
+
+                    <table class="custom-table" id="food-db-table">
+                        <thead>
+                            <tr>
+                                <th>Название</th>
+                                <th>Категория</th>
+                                <th>Калории</th>
+                                <th>Белки</th>
+                                <th>Жиры</th>
+                                <th>Углеводы</th>
+                                <th style="width:100px; text-align:right">Действия</th>
+                            </tr>
+                        </thead>
+                        <tbody id="food-db-rows-body"></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section id="tab-diary" class="tab-content">
+                <h1 class="page-title">Дневник Питания</h1>
+                <p class="page-subtitle">Учет съеденного за день и отслеживание средних значений за периоды</p>
+
+                <div class="glass-card" style="display:flex; gap: 1rem; align-items:center; flex-wrap:wrap; padding:1.2rem;">
+                    <div class="form-group" style="margin:0; flex:1; min-width:200px;">
+                        <input type="date" id="diary-date-picker" class="input-field" onchange="syncDiaryViewToSelectedRange()">
+                    </div>
+                    <div style="display:flex; gap:0.5rem;" id="diary-range-pills">
+                        <button class="pill-tab active" onclick="setDiaryRangeMode('today')">Сегодня</button>
+                        <button class="pill-tab" onclick="setDiaryRangeMode('week')">Текущая неделя</button>
+                        <button class="pill-tab" onclick="setDiaryRangeMode('month')">Текущий месяц</button>
+                    </div>
+                </div>
+
+                <div class="grid-2" id="diary-profiles-grid">
+                    </div>
+
+                <div id="meal-logs-wrapper">
+                    </div>
+            </section>
+
+            <section id="tab-weight_progress" class="tab-content">
+                <h1 class="page-title">Контроль Веса</h1>
+                <p class="page-subtitle">Ввод текущих метрик и независимый анализ динамики изменения веса</p>
+
+                <div class="glass-card">
+                    <h3 style="margin-bottom:1.25rem"><i class="fas fa-weight"></i> Зафиксировать утренний вес</h3>
+                    <div class="grid-3" style="align-items:flex-end">
+                        <div class="form-group" style="margin:0">
+                            <label>Дата замера</label>
+                            <input type="date" id="weight-log-date" class="input-field">
                         </div>
+                        <div class="form-group" style="margin:0">
+                            <label id="lbl-w1-input">Вес Пользователь 1 (кг)</label>
+                            <input type="number" step="0.1" id="weight-log-u1" class="input-field">
+                        </div>
+                        <div class="form-group" style="margin:0">
+                            <label id="lbl-w2-input">Вес Пользователь 2 (кг)</label>
+                            <input type="number" step="0.1" id="weight-log-u2" class="input-field">
+                        </div>
+                    </div>
+                    <div style="margin-top:1.25rem; text-align:right">
+                        <button class="btn btn-primary" onclick="commitWeightLogEntries()"><i class="fas fa-save"></i> Сохранить замеры</button>
+                    </div>
                 </div>
 
                 <div class="grid-2">
-                    <div class="profile-setup-box diary-profile-block" id="diary-block-p1" style="--p-color: var(--p1-main);">
-                        <h3 style="margin-bottom: 15px;" class="p1-name-title">Пользователь 1</h3>
-                        
-                        <div class="remaining-row" id="p1-remaining-metrics">
+                    <div class="glass-card">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; flex-wrap:wrap; gap:10px;">
+                            <h4 id="graph-u1-title" style="font-weight:700">График: Пользователь 1</h4>
+                            <div style="display:flex; gap:4px">
+                                <button class="btn btn-secondary style-compact-pill active" id="btn-graph-u1-7" onclick="setGraphPeriod('u1', 7)">7д</button>
+                                <button class="btn btn-secondary style-compact-pill" id="btn-graph-u1-30" onclick="setGraphPeriod('u1', 30)">1м</button>
+                                <button class="btn btn-secondary style-compact-pill" id="btn-graph-u1-90" onclick="setGraphPeriod('u1', 90)">3м</button>
+                                <button class="btn btn-secondary style-compact-pill" id="btn-graph-u1-all" onclick="setGraphPeriod('u1', 0)">Все</button>
                             </div>
-
-                        <div class="macro-bar-container">
-                            <div class="macro-bar-header"><span>Калории</span><span id="p1-bar-txt-kcal">0 / 0 ккал</span></div>
-                            <div class="macro-track"><div id="p1-bar-fill-kcal" class="macro-fill" style="background:var(--p1-main); width:0%;"></div></div>
                         </div>
-                        <div class="macro-bar-container">
-                            <div class="macro-bar-header"><span>Белки</span><span id="p1-bar-txt-p">0 / 0 г</span></div>
-                            <div class="macro-track"><div id="p1-bar-fill-p" class="macro-fill" style="background:#3b82f6; width:0%;"></div></div>
+                        <div style="position:relative; height:280px; width:100%;">
+                            <canvas id="chart-frame-user1"></canvas>
                         </div>
-                        <div class="macro-bar-container">
-                            <div class="macro-bar-header"><span>Жиры</span><span id="p1-bar-txt-f">0 / 0 г</span></div>
-                            <div class="macro-track"><div id="p1-bar-fill-f" class="macro-fill" style="background:#eab308; width:0%;"></div></div>
-                        </div>
-                        <div class="macro-bar-container" style="margin-bottom:25px;">
-                            <div class="macro-bar-header"><span>Углеводы</span><span id="p1-bar-txt-c">0 / 0 г</span></div>
-                            <div class="macro-track"><div id="p1-bar-fill-c" class="macro-fill" style="background:#10b981; width:0%;"></div></div>
-                        </div>
-
-                        <div id="p1-meals-timeline-container">
-                            </div>
                     </div>
 
-                    <div class="profile-setup-box diary-profile-block" id="diary-block-p2" style="--p-color: var(--p2-main);">
-                        <h3 style="margin-bottom: 15px;" class="p2-name-title">Пользователь 2</h3>
-                        
-                        <div class="remaining-row" id="p2-remaining-metrics">
+                    <div class="glass-card">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; flex-wrap:wrap; gap:10px;">
+                            <h4 id="graph-u2-title" style="font-weight:700">График: Пользователь 2</h4>
+                            <div style="display:flex; gap:4px">
+                                <button class="btn btn-secondary style-compact-pill active" id="btn-graph-u2-7" onclick="setGraphPeriod('u2', 7)">7д</button>
+                                <button class="btn btn-secondary style-compact-pill" id="btn-graph-u2-30" onclick="setGraphPeriod('u2', 30)">1м</button>
+                                <button class="btn btn-secondary style-compact-pill" id="btn-graph-u2-90" onclick="setGraphPeriod('u2', 90)">3м</button>
+                                <button class="btn btn-secondary style-compact-pill" id="btn-graph-u2-all" onclick="setGraphPeriod('u2', 0)">Все</button>
                             </div>
-
-                        <div class="macro-bar-container">
-                            <div class="macro-bar-header"><span>Калории</span><span id="p2-bar-txt-kcal">0 / 0 ккал</span></div>
-                            <div class="macro-track"><div id="p2-bar-fill-kcal" class="macro-fill" style="background:var(--p2-main); width:0%;"></div></div>
                         </div>
-                        <div class="macro-bar-container">
-                            <div class="macro-bar-header"><span>Белки</span><span id="p2-bar-txt-p">0 / 0 г</span></div>
-                            <div class="macro-track"><div id="p2-bar-fill-p" class="macro-fill" style="background:#3b82f6; width:0%;"></div></div>
-                        </div>
-                        <div class="macro-bar-container">
-                            <div class="macro-bar-header"><span>Жиры</span><span id="p2-bar-txt-f">0 / 0 г</span></div>
-                            <div class="macro-track"><div id="p2-bar-fill-f" class="macro-fill" style="background:#eab308; width:0%;"></div></div>
-                        </div>
-                        <div class="macro-bar-container" style="margin-bottom:25px;">
-                            <div class="macro-bar-header"><span>Углеводы</span><span id="p2-bar-txt-c">0 / 0 г</span></div>
-                            <div class="macro-track"><div id="p2-bar-fill-c" class="macro-fill" style="background:#10b981; width:0%;"></div></div>
-                        </div>
-
-                        <div id="p2-meals-timeline-container">
-                            </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div id="tab-progress" class="tab-content">
-            <div class="card glass">
-                <div class="card-header-wrapper">
-                    <span class="header-icon">
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
-                    </span>
-                    <h2>Мониторинг массы тела и антропометрии</h2>
-                </div>
-                
-                <div class="grid-2">
-                    <div class="profile-setup-box" style="--p-color: var(--p1-main);">
-                        <h4 style="margin-bottom:12px;" class="p1-name-title">Пользователь 1</h4>
-                        <div style="display:flex; gap:10px;">
-                            <input type="number" id="weight-val-p1" placeholder="Вес (кг)" step="0.1" style="flex:1;">
-                            <input type="date" id="weight-date-p1" style="width:150px;">
-                            <button class="primary" onclick="logProfileWeightEntry('p1')">Записать</button>
-                        </div>
-                    </div>
-                    <div class="profile-setup-box" style="--p-color: var(--p2-main);">
-                        <h4 style="margin-bottom:12px;" class="p2-name-title">Пользователь 2</h4>
-                        <div style="display:flex; gap:10px;">
-                            <input type="number" id="weight-val-p2" placeholder="Вес (кг)" step="0.1" style="flex:1;">
-                            <input type="date" id="weight-date-p2" style="width:150px;">
-                            <button class="primary" onclick="logProfileWeightEntry('p2')">Записать</button>
+                        <div style="position:relative; height:280px; width:100%;">
+                            <canvas id="chart-frame-user2"></canvas>
                         </div>
                     </div>
                 </div>
 
-                <div class="chart-container glass" style="padding:20px; border-radius:var(--radius-lg); background:#ffffff; margin-top:30px;">
-                    <canvas id="weightAnalyticsChartCanvas"></canvas>
+                <div class="glass-card">
+                    <h3 style="margin-bottom:1rem">История взвешиваний</h3>
+                    <table class="custom-table">
+                        <thead>
+                            <tr>
+                                <th>Дата</th>
+                                <th id="th-w1-lbl">Вес Пользователь 1</th>
+                                <th id="th-w2-lbl">Вес Пользователь 2</th>
+                                <th style="width:80px; text-align:right">Удалить</th>
+                            </tr>
+                        </thead>
+                        <tbody id="weight-history-rows-box"></tbody>
+                    </table>
                 </div>
-            </div>
-        </div>
+            </section>
 
+            <section id="tab-settings" class="tab-content">
+                <h1 class="page-title">Настройки системы</h1>
+                <p class="page-subtitle">Резервное копирование, восстановление и полный сброс данных</p>
+
+                <div class="glass-card">
+                    <h3 style="margin-bottom:1.5rem">Управление базой данных</h3>
+                    <div style="display:flex; gap:1rem; flex-wrap:wrap;">
+                        <button class="btn btn-secondary" onclick="exportApplicationStateData()"><i class="fas fa-download"></i> Экспортировать JSON копию</button>
+                        <button class="btn btn-secondary" onclick="document.getElementById('import-file-broker').click()"><i class="fas fa-upload"></i> Импортировать копию</button>
+                        <input type="file" id="import-file-broker" style="display:none" onchange="importApplicationStateData(event)">
+                        <button class="btn btn-danger" onclick="triggerTotalSystemResetLoop()"><i class="fas fa-trash-can"></i> Очистить приложение</button>
+                    </div>
+                </div>
+            </section>
+
+        </main>
     </div>
 
-    <div id="recipe-editor-modal" class="modal">
-        <div class="modal-content">
-            <button class="modal-close" onclick="closeRecipeModal()">&times;</button>
-            <h2 id="recipe-modal-headline-title" style="margin-bottom: 20px;">Конструктор сложного блюда</h2>
+    <div class="modal-overlay" id="unified-recipe-modal">
+        <div class="glass-card" style="width:90%; max-width:1100px; padding:2rem; position:relative; max-height:90vh; overflow-y:auto;">
+            <button style="position:absolute; top:15px; right:20px; background:none; border:none; font-size:2rem; color:var(--text-main); cursor:pointer;" onclick="closeUnifiedRecipeModal()">&times;</button>
+            <h2 id="unified-recipe-title" style="margin-bottom:1.5rem;">Название блюда</h2>
             
-            <div style="margin-bottom:20px;">
-                <label>Название кулинарного шедевра</label>
-                <input type="text" id="recipe-meta-title" placeholder="Введите название блюда (например, Плов запеченный с овощами)" oninput="syncRecipeGlobalMeta('title', this.value)">
-            </div>
-
-            <div style="margin-bottom:20px;">
-                <h3 style="font-size:1rem; margin-bottom:10px; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.02em;">Ингредиенты сырого блюда</h3>
-                
-                <div class="ingredient-table-header">
-                    <div>Продукт / Ингредиент</div>
-                    <div>Вес сырого (г)</div>
-                    <div style="text-align:center;">Ккал</div>
-                    <div style="text-align:center;">Б (г)</div>
-                    <div style="text-align:center;">Ж (г)</div>
-                    <div style="text-align:center;">У (г)</div>
-                    <div></div>
+            <div style="display:flex; gap:2rem; flex-direction:row;" class="unified-split-box">
+                <div style="flex:1;">
+                    <h3 style="font-size:1.1rem; margin-bottom:1rem; color:var(--accent-primary)"><i class="fas fa-basket-shopping"></i> Состав и сырой вес</h3>
+                    <div id="unified-ingredients-list" style="display:flex; flex-direction:column; gap:0.75rem; margin-bottom:1.5rem;">
+                        </div>
+                    <div class="form-group">
+                        <label>Вес готового блюда (грамм)</label>
+                        <input type="number" id="unified-cooked-weight-input" class="input-field" placeholder="Введите вес готового блюда..." oninput="recalculateUnifiedRecipeSplitMetrics()">
+                    </div>
+                    <div id="unified-density-output" style="font-size:0.9rem; font-weight:600; color:var(--text-muted)">
+                        Итоговая плотность КБЖУ на 100г готового продукта: --
+                    </div>
                 </div>
 
-                <div id="recipe-dynamic-rows-root">
+                <div style="flex:1; border-left:1px solid var(--glass-border); padding-left:2rem;" id="unified-right-panel-border">
+                    <h3 style="font-size:1.1rem; margin-bottom:1rem; color:var(--accent-secondary)"><i class="fas fa-sliders"></i> Пропорция разделения порций</h3>
+                    
+                    <div style="display:flex; justify-content:space-between; margin-bottom:0.5rem; font-weight:600;">
+                        <span id="slider-u1-label">Пользователь 1: 50%</span>
+                        <span id="slider-u2-label">Пользователь 2: 50%</span>
+                    </div>
+                    <input type="range" min="0" max="100" value="50" class="minimal-slider" id="unified-proportion-range" oninput="recalculateUnifiedRecipeSplitMetrics()">
+
+                    <div class="grid-2" style="margin-top:1.5rem; margin-bottom:1.5rem;">
+                        <div class="glass-card" style="padding:1rem; margin:0; background:rgba(99, 102, 241, 0.05)">
+                            <h4 id="calc-u1-name-lbl" style="font-size:0.9rem; margin-bottom:0.5rem;">Пользователь 1</h4>
+                            <div style="font-size:1.1rem; font-weight:700; margin-bottom:0.25rem;" id="u1-serving-weight">0 г</div>
+                            <div style="font-size:0.8rem; color:var(--text-muted)" id="u1-serving-kbju">0 ккал | Б: 0 | Ж: 0 | У: 0</div>
+                        </div>
+                        <div class="glass-card" style="padding:1rem; margin:0; background:rgba(236, 72, 153, 0.05)">
+                            <h4 id="calc-u2-name-lbl" style="font-size:0.9rem; margin-bottom:0.5rem;">Пользователь 2</h4>
+                            <div style="font-size:1.1rem; font-weight:700; margin-bottom:0.25rem;" id="u2-serving-weight">0 г</div>
+                            <div style="font-size:0.8rem; color:var(--text-muted)" id="u2-serving-kbju">0 ккал | Б: 0 | Ж: 0 | У: 0</div>
+                        </div>
                     </div>
 
-                <button class="secondary" style="margin-top:10px;" onclick="addBlankRowToRecipeConstructor()">
-                    <i class="fa-solid fa-plus"></i> Добавить ингредиент
-                </button>
-            </div>
-
-            <div class="grid-2" style="background: rgba(15,23,42,0.02); padding: 20px; border-radius: var(--radius-md); border: 1px solid rgba(15,23,42,0.05); margin-bottom: 25px;">
-                <div>
-                    <label style="color:#0f172a;">Вес готового блюда (грамм) ⚖️</label>
-                    <input type="number" id="recipe-cooked-weight-input" placeholder="Введите вес после уварки/ужарки..." oninput="syncRecipeGlobalMeta('cookedWeight', this.value)">
-                    <p style="font-size:0.75rem; margin-top:6px;">Критически важно для вычисления истинной плотности КБЖУ готовой еды.</p>
+                    <div style="display:flex; flex-direction:column; gap:0.5rem;">
+                        <div class="form-group" style="margin:0">
+                            <label>Категория приема пищи для отправки в дневник</label>
+                            <select id="unified-meal-select" class="input-field">
+                                <option value="breakfast">🥞 Завтрак</option>
+                                <option value="lunch">🍲 Обед</option>
+                                <option value="dinner">🥩 Ужин</option>
+                                <option value="snacks">🍎 Перекусы</option>
+                            </select>
+                        </div>
+                        <button class="btn btn-primary" onclick="dispatchUnifiedSplitToDiary()" style="width:100%; margin-top:0.5rem;"><i class="fas fa-cart-plus"></i> Собрать список 🛒</button>
+                    </div>
                 </div>
-                <div style="display:flex; flex-direction:column; justify-content:center;" id="recipe-true-density-readout-box">
-                    </div>
-            </div>
-
-            <div style="text-align:right;">
-                <button class="primary" style="padding:14px 35px;" onclick="commitRecipeToStateDatabase()">
-                    <i class="fa-solid fa-floppy-disk"></i> Сохранить рецепт в кулинарную книгу
-                </button>
             </div>
         </div>
     </div>
 
-    <div id="recipe-viewer-modal" class="modal">
-        <div class="modal-content" style="max-width: 800px;">
-            <button class="modal-close" onclick="closeRecipeViewerModal()">&times;</button>
-            <h2 id="viewer-recipe-title" style="margin-bottom: 6px; background: linear-gradient(to right, #4f46e5, #06b6d4); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Название рецепта</h2>
-            <p id="viewer-recipe-meta-sub" style="margin-bottom: 20px;">Расчет плотности КБЖУ на 100г готового продукта</p>
-
-            <div class="split-slider-container">
-                <div class="split-labels">
-                    <span id="slider-label-p1" style="color: var(--p1-main);">Пользователь A: 50%</span>
-                    <span id="slider-label-p2" style="color: var(--p2-main);">Пользователь B: 50%</span>
-                </div>
-                <input type="range" min="1" max="99" value="50" class="range-slider" id="recipe-proportion-range-slider" oninput="handleSliderProportionShift(this.value)">
-                <p style="font-size:0.78rem; text-align:center; color:var(--text-muted); margin-top:10px;">Ползунок по умолчанию выставлен на идеальное соотношение суточных норм калорий пользователей.</p>
+    <div class="modal-overlay" id="recipe-editor-modal">
+        <div class="glass-card" style="width:90%; max-width:600px;">
+            <h3 style="margin-bottom:1.25rem" id="recipe-editor-headline">Создать новый рецепт</h3>
+            <div class="form-group">
+                <label>Название блюда</label>
+                <input type="text" id="edit-rec-name" class="input-field">
             </div>
-
-            <div class="grid-2" style="margin-bottom:25px;">
-                <div class="portion-card p1">
-                    <h3 id="portion-title-p1" style="color:white; margin-bottom:6px;">Порция пользователя 1</h3>
-                    <div style="font-size:1.4rem; font-weight:800;" id="portion-weight-p1">0 грамм</div>
-                    
-                    <div class="portion-stats">
-                        <div>Ккал: <strong id="portion-kcal-p1">0</strong></div>
-                        <div>Белки: <strong id="portion-p-p1">0г</strong></div>
-                        <div>Жиры: <strong id="portion-f-p1">0г</strong></div>
-                        <div>Углеводы: <strong id="portion-c-p1">0г</strong></div>
-                    </div>
-
-                    <div style="margin-top:15px; display:flex; gap:8px;">
-                        <select id="diary-meal-select-p1" style="padding:6px; font-size:0.8rem; height:36px; background:white; color:black;">
-                            <option value="breakfast">Завтрак</option>
-                            <option value="lunch">Обед</option>
-                            <option value="dinner">Ужин</option>
-                            <option value="snack">Перекусы</option>
-                        </select>
-                        <button class="secondary" style="font-size:0.8rem; padding:0 12px; height:36px; background:white; color:black; border:none;" onclick="logPortionToUserDiary('p1')">В дневник</button>
-                    </div>
-                </div>
-
-                <div class="portion-card p2">
-                    <h3 id="portion-title-p2" style="color:white; margin-bottom:6px;">Порция пользователя 2</h3>
-                    <div style="font-size:1.4rem; font-weight:800;" id="portion-weight-p2">0 грамм</div>
-                    
-                    <div class="portion-stats">
-                        <div>Ккал: <strong id="portion-kcal-p2">0</strong></div>
-                        <div>Белки: <strong id="portion-p-p2">0г</strong></div>
-                        <div>Жиры: <strong id="portion-f-p2">0г</strong></div>
-                        <div>Углеводы: <strong id="portion-c-p2">0г</strong></div>
-                    </div>
-
-                    <div style="margin-top:15px; display:flex; gap:8px;">
-                        <select id="diary-meal-select-p2" style="padding:6px; font-size:0.8rem; height:36px; background:white; color:black;">
-                            <option value="breakfast">Завтрак</option>
-                            <option value="lunch">Обед</option>
-                            <option value="dinner">Ужин</option>
-                            <option value="snack">Перекусы</option>
-                        </select>
-                        <button class="secondary" style="font-size:0.8rem; padding:0 12px; height:36px; background:white; color:black; border:none;" onclick="logPortionToUserDiary('p2')">В дневник</button>
-                    </div>
-                </div>
-            </div>
-
-            <div style="display:flex; justify-content:space-between; align-items:center; border-top:1px solid rgba(0,0,0,0.05); padding-top:20px;">
-                <button class="secondary" onclick="generateShoppingListContainerPopup()">
-                    <i class="fa-solid fa-basket-shopping"></i> Собрать список 🛒
-                </button>
-                <button class="primary" onclick="closeRecipeViewerModal()">Закрыть просмотр</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="shopping-list-modal" class="modal">
-        <div class="modal-content" style="max-width: 500px; border-left: 6px solid var(--p1-main);">
-            <button class="modal-close" onclick="closeShoppingListModal()">&times;</button>
-            <h2 style="margin-bottom: 12px;">Список необходимых ингредиентов</h2>
-            <p style="font-size:0.85rem; margin-bottom:20px;">Точный перечень сырых продуктов, необходимых для приготовления данного блюда в указанной пропорции.</p>
             
-            <div id="shopping-list-ingredients-output-box" style="background:rgba(15,23,42,0.03); padding:20px; border-radius:var(--radius-md); margin-bottom:20px; line-height:1.8; font-weight:500;">
+            <label style="font-size:0.87rem; font-weight:600; margin-bottom:0.5rem; display:block;">Ингредиенты в рецепте</label>
+            <div id="editor-ingredients-rows" style="display:flex; flex-direction:column; gap:0.5rem; max-height:220px; overflow-y:auto; margin-bottom:1rem; padding-right:5px;">
                 </div>
+            <button class="btn btn-secondary" onclick="addIngredientRowToRecipeEditor()" style="width:100%; margin-bottom:1.5rem;"><i class="fas fa-plus"></i> Добавить строку ингредиента</button>
 
-            <button class="primary" style="width:100%;" onclick="closeShoppingListModal()">Готово, закрыть список</button>
+            <div style="display:flex; justify-content:flex-end; gap:0.75rem;">
+                <button class="btn btn-secondary" onclick="closeRecipeEditorWindow()">Отмена</button>
+                <button class="btn btn-primary" onclick="commitRecipeToStateDatabase()">Сохранить рецепт</button>
+            </div>
         </div>
     </div>
 
+    <div class="modal-overlay" id="food-db-modal">
+        <div class="glass-card" style="width:90%; max-width:500px;">
+            <h3 style="margin-bottom:1.25rem" id="food-modal-headline">Добавить продукт</h3>
+            <div class="form-group">
+                <label>Название продукта</label>
+                <input type="text" id="food-item-name" class="input-field">
+            </div>
+            <div class="form-group">
+                <label>Категория</label>
+                <select id="food-item-category" class="input-field">
+                    <option value="Крупы/Бобовые">Крупы/Бобовые</option>
+                    <option value="Мясо/Рыба">Мясо/Рыба</option>
+                    <option value="Молочные продукты">Молочные продукты</option>
+                    <option value="Овощи/Фрукты">Овощи/Фрукты</option>
+                    <option value="Разное">Разное</option>
+                </select>
+            </div>
+            <div class="grid-2">
+                <div class="form-group">
+                    <label>Калории на 100г</label>
+                    <input type="number" id="food-item-kcal" class="input-field">
+                </div>
+                <div class="form-group">
+                    <label>Белки на 100г</label>
+                    <input type="number" step="0.1" id="food-item-p" class="input-field">
+                </div>
+            </div>
+            <div class="grid-2">
+                <div class="form-group">
+                    <label>Жиры на 100г</label>
+                    <input type="number" step="0.1" id="food-item-f" class="input-field">
+                </div>
+                <div class="form-group">
+                    <label>Углеводы на 100г</label>
+                    <input type="number" step="0.1" id="food-item-c" class="input-field">
+                </div>
+            </div>
+            <div style="display:flex; justify-content:flex-end; gap:0.75rem; margin-top:1.5rem;">
+                <button class="btn btn-secondary" onclick="closeFoodDbInsertWindow()">Отмена</button>
+                <button class="btn btn-primary" onclick="commitFoodDbItemToState()">Сохранить</button>
+            </div>
+        </div>
+    </div>
 
     <script>
-        // PRE-INSTALLED MICRO DICTIONARY UNDER THE HOOD DATABASE (25+ KEY BASIC INGREDIENTS)
-        const defaultFoodBase = [
-            { name: "Куриное филе", kcal: 113, p: 23.6, f: 1.9, c: 0.4 },
-            { name: "Рис сухой", kcal: 345, p: 6.7, f: 0.7, c: 78.9 },
-            { name: "Гречка сухой", kcal: 343, p: 12.6, f: 3.3, c: 62.1 },
-            { name: "Овсянка сухой", kcal: 352, p: 12.3, f: 6.2, c: 61.8 },
-            { name: "Яйцо куриное", kcal: 157, p: 12.7, f: 11.5, c: 0.7 },
-            { name: "Масло оливковое", kcal: 898, p: 0, f: 99.8, c: 0 },
-            { name: "Молоко 2.5%", kcal: 52, p: 2.9, f: 2.5, c: 4.7 },
-            { name: "Говядина", kcal: 187, p: 18.9, f: 12.4, c: 0 },
-            { name: "Творог 5%", kcal: 121, p: 17.2, f: 5.0, c: 2.8 },
-            { name: "Картофель", kcal: 77, p: 2.0, f: 0.4, c: 16.3 },
-            { name: "Свинина нежирная", kcal: 160, p: 19.4, f: 9.0, c: 0 },
-            { name: "Лосось", kcal: 201, p: 20.0, f: 13.0, c: 0 },
-            { name: "Бананы", kcal: 95, p: 1.5, f: 0.2, c: 21.8 },
-            { name: "Яблоки", kcal: 47, p: 0.4, f: 0.4, c: 9.8 },
-            { name: "Огурцы", kcal: 15, p: 0.8, f: 0.1, c: 2.8 },
-            { name: "Помидоры", kcal: 20, p: 1.1, f: 0.2, c: 3.7 },
-            { name: "Хлеб пшеничный", kcal: 242, p: 8.1, f: 2.4, c: 48.8 },
-            { name: "Сыр Чеддер", kcal: 402, p: 25.0, f: 33.0, c: 1.3 },
-            { name: "Миндаль", kcal: 579, p: 21.2, f: 49.9, c: 21.6 },
-            { name: "Грецкий орех", kcal: 654, p: 15.2, f: 65.2, c: 13.7 },
-            { name: "Киноа", kcal: 368, p: 14.1, f: 6.1, c: 64.2 },
-            { name: "Макароны", kcal: 350, p: 12.0, f: 1.5, c: 71.0 },
-            { name: "Авокадо", kcal: 160, p: 2.0, f: 14.7, c: 8.5 },
-            { name: "Брокколи", kcal: 34, p: 2.8, f: 0.4, c: 6.6 },
-            { name: "Индейка филе", kcal: 110, p: 24.2, f: 1.0, c: 0 },
-            { name: "Масло сливочное 82.5%", kcal: 748, p: 0.5, f: 82.5, c: 0.8 }
-        ];
-
-        const defaultRecipes = [
-            {
-                id: "rec_1",
-                title: "Фирменный домашний плов",
-                cookedWeight: 1100,
-                ingredients: [
-                    { name: "Куриное филе", weight: 450, kcal: 113, p: 23.6, f: 1.9, c: 0.4 },
-                    { name: "Рис сухой", weight: 350, kcal: 345, p: 6.7, f: 0.7, c: 78.9 },
-                    { name: "Масло оливковое", weight: 25, kcal: 898, p: 0, f: 99.8, c: 0 }
-                ]
-            },
-            {
-                id: "rec_2",
-                title: "Нежная овсяная каша",
-                cookedWeight: 380,
-                ingredients: [
-                    { name: "Овсянка сухой", weight: 120, kcal: 352, p: 12.3, f: 6.2, c: 61.8 },
-                    { name: "Молоко 2.5%", weight: 250, kcal: 52, p: 2.9, f: 2.5, c: 4.7 }
-                ]
-            }
-        ];
-
-        // MASTER STATE ARCHITECTURE
-        let state = {
-            settings: {
-                p1: { name: 'Артем', gender: 'male', age: 27, height: 182, weight: 85, activity: 'moderate', goal: 'maintenance', pacing: 'moderate', kcal: 2635, p: 198, f: 88, c: 264 },
-                p2: { name: 'Алина', gender: 'female', age: 26, height: 158, weight: 58, activity: 'light', goal: 'loss', pacing: 'comfortable', kcal: 1493, p: 112, f: 50, c: 149 }
-            },
+        // ARCHITECTURE ENGINE STATE SPECIFICATION v4
+        let state = JSON.parse(localStorage.getItem('nutrisplit_state_v4')) || {
+            user1: { name: "Пользователь 1", gender: "male", age: 30, weight: 80, height: 180, activity: "1.375", paceMode: "comfort", baseTdee: 2400, targetKcal: 2160, targetP: 140, targetF: 75, targetC: 231 },
+            user2: { name: "Пользователь 2", gender: "female", age: 28, weight: 60, height: 165, activity: "1.2", paceMode: "comfort", baseTdee: 1650, targetKcal: 1485, targetP: 95, targetF: 50, targetC: 164 },
             recipes: [],
-            foodBase: [],
-            diary: [],
-            weights: { p1: [], p2: [] },
-            currentPacingTier: 'moderate'
+            foodBase: [
+                { id: 1, name: "Куриное филе сырое", category: "Мясо/Рыба", kcal: 110, p: 23.0, f: 2.0, c: 0.0 },
+                { id: 2, name: "Гречка ядрица", category: "Крупы/Бобовые", kcal: 330, p: 12.0, f: 3.0, c: 64.0 },
+                { id: 3, name: "Овсяные хлопья", category: "Крупы/Бобовые", kcal: 350, p: 12.0, f: 6.0, c: 62.0 },
+                { id: 4, name: "Творог 5%", category: "Молочные продукты", kcal: 120, p: 16.0, f: 5.0, c: 3.0 },
+                { id: 5, name: "Банан", category: "Овощи/Фрукты", kcal: 90, p: 1.5, f: 0.2, c: 22.0 }
+            ],
+            diary: {},
+            weightHistory: []
         };
 
-        let currentActiveTabId = 'kbju_calc';
-        let currentRecipeEditingObject = null;
-        let currentRecipeViewerObject = null;
-        let weightChartInstance = null;
-        const todayIsoString = new Date().toISOString().split('T')[0];
+        let currentActiveTab = localStorage.getItem('nutrisplit_active_tab_v4') || 'kbju_calc';
+        let activeFoodCategoryFilter = 'Все';
+        let activeDiaryRangeMode = 'today'; // Options: today, week, month
+        let currentEditingRecipeId = null;
+        let activeSelectedRecipeForUnifiedViewer = null;
 
-        // BOOT INTERFACE LIFECYCLE INITIALIZER
-        window.onload = function() {
-            initSystemCoreState();
-        };
+        let u1ChartInstance = null;
+        let u2ChartInstance = null;
+        let activeGraphPeriodU1 = 7;
+        let activeGraphPeriodU2 = 7;
 
-        function initSystemCoreState() {
-            const savedState = localStorage.getItem('nutrisplit_state_v4');
-            if (savedState) {
-                try {
-                    state = JSON.parse(savedState);
-                } catch(e) {
-                    showToast("Ошибка парсинга копии данных. Загружены исходные параметры.", "danger");
-                }
-            } else {
-                state.recipes = JSON.parse(JSON.stringify(defaultRecipes));
-                state.foodBase = [];
-                // Prepopulate basic historical records for analytical chart layout representation
-                state.weights.p1 = [
-                    { date: new Date(Date.now() - 6*24*3600*1000).toISOString().split('T')[0], val: 86.4 },
-                    { date: new Date(Date.now() - 3*24*3600*1000).toISOString().split('T')[0], val: 85.7 },
-                    { date: todayIsoString, val: 85.0 }
-                ];
-                state.weights.p2 = [
-                    { date: new Date(Date.now() - 6*24*3600*1000).toISOString().split('T')[0], val: 59.2 },
-                    { date: new Date(Date.now() - 2*24*3600*1000).toISOString().split('T')[0], val: 58.5 },
-                    { date: todayIsoString, val: 58.0 }
-                ];
-                saveStateToBrowserStorage();
-            }
-
-            const cachedTab = localStorage.getItem('nutrisplit_active_tab_v4');
-            if (cachedTab) {
-                currentActiveTabId = cachedTab;
-            }
-
-            document.getElementById('diary-current-date').value = todayIsoString;
-            document.getElementById('weight-date-p1').value = todayIsoString;
-            document.getElementById('weight-date-p2').value = todayIsoString;
-
-            populateFormsFromInternalState();
-            liveUpdateProfileNames();
-            switchTab(currentActiveTabId);
-            
-            if (state.settings.p1.kcal && state.settings.p2.kcal) {
-                renderCalculatedNormsBlockView();
-            }
-        }
-
-        function saveStateToBrowserStorage() {
-            localStorage.setItem('nutrisplit_state_v4', JSON.stringify(state));
-            updateQuickGlobalKcalBadge();
-        }
-
-        function showToast(message, type = 'success') {
-            const container = document.getElementById('toast-container');
-            const toast = document.createElement('div');
-            toast.style.cssText = `
-                padding: 14px 22px;
-                border-radius: 14px;
-                background: rgba(255, 255, 255, 0.85);
-                backdrop-filter: blur(14px);
-                -webkit-backdrop-filter: blur(14px);
-                border: 1px solid rgba(255, 255, 255, 0.6);
-                box-shadow: 0 10px 30px rgba(15,23,42,0.08);
-                font-size: 0.9rem;
-                font-weight: 600;
-                color: ${type === 'danger' ? '#dc2626' : '#0f172a'};
-                border-left: 4px solid ${type === 'danger' ? '#dc2626' : '#4f46e5'};
-                animation: toastIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-                pointer-events: auto;
-            `;
-            toast.innerText = message;
-            container.appendChild(toast);
-            
-            setTimeout(() => {
-                toast.style.animation = 'toastOut 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards';
-                setTimeout(() => toast.remove(), 250);
-            }, 3500);
-        }
-
-        function updateQuickGlobalKcalBadge() {
-            const p1 = state.settings.p1;
-            const p2 = state.settings.p2;
-            document.getElementById('quick-kcal-badge').innerHTML = `
-                ${p1.name || 'Пользователь 1'}: <strong>${Math.round(p1.kcal)} ккал</strong> | 
-                ${p2.name || 'Пользователь 2'}: <strong>${Math.round(p2.kcal)} ккал</strong>
-            `;
-        }
-
-        // TAB SWITCH UTILITY UTILITIES
-        function switchTab(tabId) {
-            currentActiveTabId = tabId;
-            localStorage.setItem('nutrisplit_active_tab_v4', tabId);
-
-            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
-
-            const targetContent = document.getElementById(`tab-${tabId}`);
-            const targetButton = document.getElementById(`btn-tab-${tabId}`);
-            
-            if(targetContent) targetContent.classList.add('active');
-            if(targetButton) targetButton.classList.add('active');
-
-            if (tabId === 'cookbook') renderRecipes();
-            if (tabId === 'database') renderDatabase();
-            if (tabId === 'diary') renderDiary();
-            if (tabId === 'progress') renderProgressChartLayout();
-        }
-
-        function populateFormsFromInternalState() {
-            ['p1', 'p2'].forEach(pKey => {
-                const p = state.settings[pKey];
-                document.getElementById(`${pKey}-name-input`).value = p.name || '';
-                document.getElementById(`${pKey}-gender`).value = p.gender || 'male';
-                document.getElementById(`${pKey}-age`).value = p.age || 30;
-                document.getElementById(`${pKey}-height`).value = p.height || 175;
-                document.getElementById(`${pKey}-weight`).value = p.weight || 70;
-                document.getElementById(`${pKey}-goal`).value = p.goal || 'maintenance';
-                document.getElementById(`${pKey}-activity`).value = p.activity || 'sedentary';
-            });
-            if(state.currentPacingTier) {
-                setActivePacingButtonUI(state.currentPacingTier);
-            }
-        }
-
-        function liveUpdateProfileNames() {
-            const n1 = document.getElementById('p1-name-input').value.trim() || 'Пользователь 1';
-            const n2 = document.getElementById('p2-name-input').value.trim() || 'Пользователь 2';
-            
-            state.settings.p1.name = n1;
-            state.settings.p2.name = n2;
-
-            document.querySelectorAll('.p1-name-title').forEach(el => el.innerText = n1);
-            document.querySelectorAll('.p2-name-title').forEach(el => el.innerText = n2);
-            updateQuickGlobalKcalBadge();
-        }
-
-        // 1. FORMULAS & PACING LOGIC (МИФФЛИН-САН ЖЕОР)
-        function calculateAndDisplayNorms() {
-            ['p1', 'p2'].forEach(pKey => {
-                executeIndividualMifflinCalculation(pKey);
-            });
-            saveStateToBrowserStorage();
-            renderCalculatedNormsBlockView();
-            showToast("Индивидуальные нормы КБЖУ успешно рассчитаны!", "success");
-        }
-
-        function executeIndividualMifflinCalculation(pKey) {
-            const gender = document.getElementById(`${pKey}-gender`).value;
-            const age = parseFloat(document.getElementById(`${pKey}-age`).value) || 30;
-            const height = parseFloat(document.getElementById(`${pKey}-height`).value) || 175;
-            const weight = parseFloat(document.getElementById(`${pKey}-weight`).value) || 70;
-            const goal = document.getElementById(`${pKey}-goal`).value;
-            const activity = document.getElementById(`${pKey}-activity`).value;
-
-            // Update variables inside global memory state structure
-            state.settings[pKey].gender = gender;
-            state.settings[pKey].age = age;
-            state.settings[pKey].height = height;
-            state.settings[pKey].weight = weight;
-            state.settings[pKey].goal = goal;
-            state.settings[pKey].activity = activity;
-
-            // Mifflin equation
-            let bmr = (10 * weight) + (6.25 * height) - (5 * age);
-            if (gender === 'male') {
-                bmr += 5;
-            } else {
-                bmr -= 161;
-            }
-
-            // Physical Activity Multiplying Matrix coefficients
-            let am = 1.2;
-            if (activity === 'light') am = 1.375;
-            if (activity === 'moderate') am = 1.55;
-            if (activity === 'high') am = 1.725;
-
-            let tdee = bmr * am;
-
-            // Target adjustment factor logic based on goal and current selected pacing state variables
-            let adjustmentPercent = 0;
-            if (goal === 'loss') {
-                if (state.currentPacingTier === 'comfortable') adjustmentPercent = -10;
-                if (state.currentPacingTier === 'moderate') adjustmentPercent = -15;
-                if (state.currentPacingTier === 'intensive') adjustmentPercent = -25;
-            } else if (goal === 'gain') {
-                if (state.currentPacingTier === 'comfortable') adjustmentPercent = 10;
-                if (state.currentPacingTier === 'moderate') adjustmentPercent = 15;
-                if (state.currentPacingTier === 'intensive') adjustmentPercent = 25;
-            }
-
-            let finalKcal = tdee * (1 + (adjustmentPercent / 100));
-            if (finalKcal < 1200 && gender === 'female') finalKcal = 1200; 
-            if (finalKcal < 1500 && gender === 'male') finalKcal = 1500;
-
-            // Balanced dynamic macro layout distribution split logic variables
-            let pGrams = (finalKcal * 0.30) / 4;
-            let fGrams = (finalKcal * 0.30) / 9;
-            let cGrams = (finalKcal * 0.40) / 4;
-
-            state.settings[pKey].kcal = Math.round(finalKcal);
-            state.settings[pKey].p = Math.round(pGrams);
-            state.settings[pKey].f = Math.round(fGrams);
-            state.settings[pKey].c = Math.round(cGrams);
-        }
-
-        function changePacingTier(tier) {
-            state.currentPacingTier = tier;
-            setActivePacingButtonUI(tier);
-            
-            // Recalculate values directly on the fly dynamically inside internal state memory layout tracks
-            ['p1', 'p2'].forEach(pKey => {
-                executeIndividualMifflinCalculation(pKey);
-            });
-            saveStateToBrowserStorage();
-            renderCalculatedNormsBlockView();
-        }
-
-        function setActivePacingButtonUI(tier) {
-            document.querySelectorAll('.pacing-btn').forEach(b => b.classList.remove('active'));
-            const activeBtn = document.getElementById(`pacing-btn-${tier}`);
-            if(activeBtn) activeBtn.classList.add('active');
-        }
-
-        function renderCalculatedNormsBlockView() {
-            const containerBox = document.getElementById('kbju-results-card');
-            const targetGrid = document.getElementById('kbju-summary-readout-grid');
-            
-            if(!containerBox || !targetGrid) return;
-            containerBox.style.display = 'block';
-
-            const p1 = state.settings.p1;
-            const p2 = state.settings.p2;
-
-            let lossModifierText = "";
-            if (state.currentPacingTier === 'comfortable') lossModifierText = "Комфортный темп (Дефицит -10% / Профицит +10%)";
-            if (state.currentPacingTier === 'moderate') lossModifierText = "Умеренный темп (Дефицит -15% / Профицит +15%)";
-            if (state.currentPacingTier === 'intensive') lossModifierText = "Интенсивный темп (Дефицит -25% / Профицит +25%)";
-
-            targetGrid.innerHTML = `
-                <div class="profile-setup-box" style="--p-color: var(--p1-main);">
-                    <h3 style="color:var(--p1-main); margin-bottom:10px;">${p1.name}</h3>
-                    <p style="font-size:1.4rem; font-weight:800; color:var(--text-main); margin-bottom:10px;">${p1.kcal} ккал <span style="font-size:0.85rem; font-weight:500; color:var(--text-muted);">/ сутки</span></p>
-                    <div style="font-size:0.9rem; line-height:1.7; color:var(--text-main);">
-                        🧬 Белки: <strong>${p1.p} г</strong><br>
-                        💧 Жиры: <strong>${p1.f} г</strong><br>
-                        🌾 Углеводы: <strong>${p1.c} г</strong>
-                    </div>
-                </div>
-                <div class="profile-setup-box" style="--p-color: var(--p2-main);">
-                    <h3 style="color:var(--p2-main); margin-bottom:10px;">${p2.name}</h3>
-                    <p style="font-size:1.4rem; font-weight:800; color:var(--text-main); margin-bottom:10px;">${p2.kcal} ккал <span style="font-size:0.85rem; font-weight:500; color:var(--text-muted);">/ сутки</span></p>
-                    <div style="font-size:0.9rem; line-height:1.7; color:var(--text-main);">
-                        🧬 Белки: <strong>${p2.p} г</strong><br>
-                        💧 Жиры: <strong>${p2.f} г</strong><br>
-                        🌾 Углеводы: <strong>${p2.c} г</strong>
-                    </div>
-                </div>
-            `;
-        }
-
-        // 2. ADVANCED RECIPE ENGINE & AUTOCOMPLETE LOOKUPS
-        function renderRecipes() {
-            const grid = document.getElementById('recipes-display-grid');
-            if(!grid) return;
-            grid.innerHTML = '';
-
-            const filterQuery = document.getElementById('recipe-search-bar').value.toLowerCase();
-            const filteredCollection = state.recipes.filter(r => r.title.toLowerCase().includes(filterQuery));
-
-            if(filteredCollection.length === 0) {
-                grid.innerHTML = `<p style="color:var(--text-muted); grid-column:1/-1; text-align:center; padding:30px;">Рецепты не найдены. Создайте свой первый рецепт!</p>`;
-                return;
-            }
-
-            filteredCollection.forEach(recipe => {
-                const density = calculateSingleRecipeAbsoluteDensity(recipe);
-                const el = document.createElement('div');
-                el.className = 'card glass recipe-card';
-                el.onclick = () => openRecipeViewerModalLayout(recipe.id);
-                el.innerHTML = `
-                    <div class="badge">${recipe.cookedWeight || 0}г готового</div>
-                    <div class="recipe-body">
-                        <h3 style="font-size:1.2rem; margin-bottom:10px; padding-right:80px;">${recipe.title}</h3>
-                        <p style="font-size:0.88rem; color:var(--text-muted);">Плотность КБЖУ блюда на 100г готового веса:</p>
-                        <div style="margin-top:10px; font-size:0.9rem; font-weight:600; color:var(--text-main);">
-                            🔥 ${density.kcal} ккал | Б: ${density.p}г | Ж: ${density.f}г | У: ${density.c}г
-                        </div>
-                    </div>
-                    <div class="recipe-footer">
-                        <span>Ингредиентов: ${recipe.ingredients.length}</span>
-                        <span style="color:#4f46e5; font-weight:600;" onclick="event.stopPropagation(); openRecipeEditModal('${recipe.id}');"><i class="fa-solid fa-pen-to-square"></i> Изменить</span>
-                    </div>
-                `;
-                grid.appendChild(el);
-            });
-        }
-
-        function calculateSingleRecipeAbsoluteDensity(recipe) {
-            let tKcal = 0, tP = 0, tF = 0, tC = 0;
-            recipe.ingredients.forEach(ing => {
-                const multiplier = (ing.weight || 0) / 100;
-                tKcal += (ing.kcal || 0) * multiplier;
-                tP += (ing.p || 0) * multiplier;
-                tF += (ing.f || 0) * multiplier;
-                tC += (ing.c || 0) * multiplier;
-            });
-            const cWeight = recipe.cookedWeight || 100;
-            return {
-                kcal: Math.round((tKcal / cWeight) * 100),
-                p: Math.round(((tP / cWeight) * 100) * 10) / 10,
-                f: Math.round(((tF / cWeight) * 100) * 10) / 10,
-                c: Math.round(((tC / cWeight) * 100) * 10) / 10
-            };
-        }
-
-        function openRecipeCreateModal() {
-            currentRecipeEditingObject = {
-                id: 'rec_' + Date.now(),
-                title: '',
-                cookedWeight: 0,
-                ingredients: [{ name: '', weight: 100, kcal: 0, p: 0, f: 0, c: 0 }]
-            };
-            document.getElementById('recipe-modal-headline-title').innerText = "Создание нового сложного блюда";
-            syncRecipeFormValuesToModalControls();
-            document.getElementById('recipe-editor-modal').style.display = 'flex';
-        }
-
-        function openRecipeEditModal(id) {
-            const target = state.recipes.find(r => r.id === id);
-            if(!target) return;
-            currentRecipeEditingObject = JSON.parse(JSON.stringify(target));
-            document.getElementById('recipe-modal-headline-title').innerText = "Редактирование параметров рецепта";
-            syncRecipeFormValuesToModalControls();
-            document.getElementById('recipe-editor-modal').style.display = 'flex';
-        }
-
-        function closeRecipeModal() {
-            document.getElementById('recipe-editor-modal').style.display = 'none';
-            currentRecipeEditingObject = null;
-        }
-
-        function syncRecipeFormValuesToModalControls() {
-            if(!currentRecipeEditingObject) return;
-            document.getElementById('recipe-meta-title').value = currentRecipeEditingObject.title;
-            document.getElementById('recipe-cooked-weight-input').value = currentRecipeEditingObject.cookedWeight || '';
-            renderRecipeConstructorDynamicRows();
-            recalculateConstructorLiveMetricsSummary();
-        }
-
-        function syncRecipeGlobalMeta(field, val) {
-            if(!currentRecipeEditingObject) return;
-            if(field === 'cookedWeight') {
-                currentRecipeEditingObject.cookedWeight = parseFloat(val) || 0;
-                recalculateConstructorLiveMetricsSummary();
-            } else {
-                currentRecipeEditingObject[field] = val;
-            }
-        }
-
-        function renderRecipeConstructorDynamicRows() {
-            const root = document.getElementById('recipe-dynamic-rows-root');
-            if(!root || !currentRecipeEditingObject) return;
-            root.innerHTML = '';
-
-            currentRecipeEditingObject.ingredients.forEach((ing, idx) => {
-                const row = document.createElement('div');
-                row.className = 'ingredient-row';
-                row.innerHTML = `
-                    <div style="position:relative;">
-                        <input type="text" value="${escapeHtml(ing.name)}" placeholder="Начните вводить продукт..." oninput="handleKeystrokeAutocompleteLookup(this, ${idx})">
-                        <div class="autocomplete-dropdown" id="constructor-dropdown-${idx}"></div>
-                    </div>
-                    <div>
-                        <input type="number" value="${ing.weight}" placeholder="Вес, г" oninput="handleConstructorRowWeightUpdate(${idx}, this.value)">
-                    </div>
-                    <div class="row-kbju-readout" id="row-kcal-${idx}">0</div>
-                    <div class="row-kbju-readout" id="row-p-${idx}">0</div>
-                    <div class="row-kbju-readout" id="row-f-${idx}">0</div>
-                    <div class="row-kbju-readout" id="row-c-${idx}">0</div>
-                    <div>
-                        <button class="danger" style="padding: 8px 12px; width: 100%;" onclick="removeRowFromRecipeConstructor(${idx})">
-                            <i class="fa-solid fa-xmark"></i>
-                        </button>
-                    </div>
-                `;
-                root.appendChild(row);
-                updateConstructorRowVisualMetricsReadout(idx);
-            });
-        }
-
-        function addBlankRowToRecipeConstructor() {
-            if(!currentRecipeEditingObject) return;
-            currentRecipeEditingObject.ingredients.push({ name: '', weight: 100, kcal: 0, p: 0, f: 0, c: 0 });
-            renderRecipeConstructorDynamicRows();
-            recalculateConstructorLiveMetricsSummary();
-        }
-
-        function removeRowFromRecipeConstructor(idx) {
-            if(!currentRecipeEditingObject) return;
-            currentRecipeEditingObject.ingredients.splice(idx, 1);
-            if(currentRecipeEditingObject.ingredients.length === 0) {
-                currentRecipeEditingObject.ingredients.push({ name: '', weight: 100, kcal: 0, p: 0, f: 0, c: 0 });
-            }
-            renderRecipeConstructorDynamicRows();
-            recalculateConstructorLiveMetricsSummary();
-        }
-
-        function handleConstructorRowWeightUpdate(idx, val) {
-            if(!currentRecipeEditingObject) return;
-            currentRecipeEditingObject.ingredients[idx].weight = parseFloat(val) || 0;
-            updateConstructorRowVisualMetricsReadout(idx);
-            recalculateConstructorLiveMetricsSummary();
-        }
-
-        function updateConstructorRowVisualMetricsReadout(idx) {
-            if(!currentRecipeEditingObject) return;
-            const ing = currentRecipeEditingObject.ingredients[idx];
-            const multiplier = (ing.weight || 0) / 100;
-
-            document.getElementById(`row-kcal-${idx}`).innerText = Math.round((ing.kcal || 0) * multiplier);
-            document.getElementById(`row-p-${idx}`).innerText = Math.round(((ing.p || 0) * multiplier) * 10) / 10;
-            document.getElementById(`row-f-${idx}`).innerText = Math.round(((ing.f || 0) * multiplier) * 10) / 10;
-            document.getElementById(`row-c-${idx}`).innerText = Math.round(((ing.c || 0) * multiplier) * 10) / 10;
-        }
-
-        function handleKeystrokeAutocompleteLookup(inputEl, idx) {
-            const dropdown = document.getElementById(`constructor-dropdown-${idx}`);
-            const query = inputEl.value.trim().toLowerCase();
-            if(!dropdown || !currentRecipeEditingObject) return;
-
-            currentRecipeEditingObject.ingredients[idx].name = inputEl.value;
-
-            if(!query) {
-                dropdown.style.display = 'none';
-                return;
-            }
-
-            // Unify search context matching array loops across global default systems and custom user additions
-            const targetBase = [...defaultFoodBase, ...state.foodBase];
-            const matchingItems = targetBase.filter(i => i.name.toLowerCase().includes(query));
-
-            if(matchingItems.length === 0) {
-                dropdown.style.display = 'none';
-                return;
-            }
-
-            dropdown.innerHTML = '';
-            dropdown.style.display = 'block';
-
-            matchingItems.slice(0, 5).forEach(item => {
-                const rowItem = document.createElement('div');
-                rowItem.className = 'autocomplete-item';
-                rowItem.innerHTML = `<span>${item.name}</span> <small style="color:var(--text-muted);">[${item.kcal} ккал]</small>`;
-                rowItem.onmousedown = () => {
-                    inputEl.value = item.name;
-                    currentRecipeEditingObject.ingredients[idx].name = item.name;
-                    currentRecipeEditingObject.ingredients[idx].kcal = item.kcal;
-                    currentRecipeEditingObject.ingredients[idx].p = item.p;
-                    currentRecipeEditingObject.ingredients[idx].f = item.f;
-                    currentRecipeEditingObject.ingredients[idx].c = item.c;
-                    
-                    dropdown.style.display = 'none';
-                    updateConstructorRowVisualMetricsReadout(idx);
-                    recalculateConstructorLiveMetricsSummary();
-                };
-                dropdown.appendChild(rowItem);
-            });
-        }
-
-        // Hide menus asynchronously to maintain mouse coordinate capturing flows
-        document.addEventListener('click', function(e) {
-            if(!e.target.closest('.ingredient-row')) {
-                document.querySelectorAll('.autocomplete-dropdown').forEach(d => d.style.display = 'none');
-            }
+        // LIFE CYCLE INITIALIZATION
+        window.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('diary-date-picker').value = getSystemLocalDateString(new Date());
+            document.getElementById('weight-log-date').value = getSystemLocalDateString(new Date());
+            applyApplicationThemeOnInit();
+            switchTab(currentActiveTab);
+            syncProfileLabelsEverywhere();
+            renderFoodDirectoryRows();
+            renderRecipesDeck();
+            renderDiaryWorkspace();
+            initializeSeparateChartFrames();
+            triggerAutoPacingMatrixRestore();
         });
 
-        function recalculateConstructorLiveMetricsSummary() {
-            if(!currentRecipeEditingObject) return;
-            const tempRecObj = currentRecipeEditingObject;
-            let totalKcal = 0, totalP = 0, totalF = 0, totalC = 0, totalRawWeight = 0;
+        function saveSystemStateToBrowserStorage() {
+            localStorage.setItem('nutrisplit_state_v4', JSON.stringify(state));
+        }
 
-            tempRecObj.ingredients.forEach(i => {
-                const m = (i.weight || 0) / 100;
-                totalKcal += (i.kcal || 0) * m;
-                totalP += (i.p || 0) * m;
-                totalF += (i.f || 0) * m;
-                totalC += (i.c || 0) * m;
-                totalRawWeight += (i.weight || 0);
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.menu-item').forEach(el => el.classList.remove('active'));
+            
+            const targetedTab = document.getElementById(`tab-${tabId}`);
+            const targetedNav = document.getElementById(`nav-${tabId}`);
+            if(targetedTab) targetedTab.classList.add('active');
+            if(targetedNav) targetedNav.classList.add('active');
+            
+            currentActiveTab = tabId;
+            localStorage.setItem('nutrisplit_active_tab_v4', tabId);
+
+            if (tabId === 'weight_progress') {
+                rebuildSeparateCharts();
+            }
+        }
+
+        function toggleThemeSystem() {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const targetTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', targetTheme);
+            localStorage.setItem('nutrisplit_theme_v4', targetTheme);
+            rebuildSeparateCharts();
+        }
+
+        function applyApplicationThemeOnInit() {
+            const savedTheme = localStorage.getItem('nutrisplit_theme_v4') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+        }
+
+        function getSystemLocalDateString(dateObj) {
+            let tzOffset = dateObj.getTimezoneOffset() * 60000;
+            let localISOTime = (new Date(dateObj - tzOffset)).toISOString().slice(0, 10);
+            return localISOTime;
+        }
+
+        function syncProfileLabelsEverywhere() {
+            const name1 = state.user1.name || "Пользователь 1";
+            const name2 = state.user2.name || "Пользователь 2";
+            
+            document.getElementById('lbl-w1-input').innerText = `Вес ${name1} (кг)`;
+            document.getElementById('lbl-w2-input').innerText = `Вес ${name2} (кг)`;
+            document.getElementById('th-w1-lbl').innerText = `Вес ${name1}`;
+            document.getElementById('th-w2-lbl').innerText = `Вес ${name2}`;
+            document.getElementById('graph-u1-title').innerText = `График: ${name1}`;
+            document.getElementById('graph-u2-title').innerText = `График: ${name2}`;
+        }
+
+        function showToastNotificationMessage(msg, category='success') {
+            const container = document.getElementById('toast-box');
+            const card = document.createElement('div');
+            card.className = `toast-card`;
+            let icon = '<i class="fas fa-check-circle text-success"></i>';
+            if (category === 'danger') icon = '<i class="fas fa-exclamation-circle" style="color:var(--danger)"></i>';
+            card.innerHTML = `${icon} <span>${msg}</span>`;
+            container.appendChild(card);
+            setTimeout(() => {
+                card.style.opacity = '0';
+                setTimeout(() => card.remove(), 400);
+            }, 3000);
+        }
+
+        // ==========================================
+        // FEATURE 1: PACING SEPARATION & RECALCULATION
+        // ==========================================
+        function executeSystemMacroCalculation() {
+            // Live capture inputs
+            state.user1.name = document.getElementById('u1-name').value || "Пользователь 1";
+            state.user1.gender = document.getElementById('u1-gender').value;
+            state.user1.age = parseInt(document.getElementById('u1-age').value) || 30;
+            state.user1.weight = parseFloat(document.getElementById('u1-weight').value) || 70;
+            state.user1.height = parseFloat(document.getElementById('u1-height').value) || 170;
+            state.user1.activity = parseFloat(document.getElementById('u1-activity').value) || 1.2;
+
+            state.user2.name = document.getElementById('u2-name').value || "Пользователь 2";
+            state.user2.gender = document.getElementById('u2-gender').value;
+            state.user2.age = parseInt(document.getElementById('u2-age').value) || 30;
+            state.user2.weight = parseFloat(document.getElementById('u2-weight').value) || 60;
+            state.user2.height = parseFloat(document.getElementById('u2-height').value) || 165;
+            state.user2.activity = parseFloat(document.getElementById('u2-activity').value) || 1.2;
+
+            // Mifflin-St Jeor formula baseline
+            state.user1.baseTdee = Math.round((10 * state.user1.weight + 6.25 * state.user1.height - 5 * state.user1.age + (state.user1.gender === 'male' ? 5 : -161)) * state.user1.activity);
+            state.user2.baseTdee = Math.round((10 * state.user2.weight + 6.25 * state.user2.height - 5 * state.user2.age + (state.user2.gender === 'male' ? 5 : -161)) * state.user2.activity);
+
+            syncProfileLabelsEverywhere();
+            applyPacingFormulaTarget('user1', state.user1.paceMode || 'comfort');
+            applyPacingFormulaTarget('user2', state.user2.paceMode || 'comfort');
+            saveSystemStateToBrowserStorage();
+
+            renderPacingDisplaySummaryCards();
+            renderDiaryWorkspace();
+            showToastNotificationMessage("Базовый рацион рассчитан. Задайте темп дефицита ниже.");
+        }
+
+        function triggerAutoPacingMatrixRestore() {
+            if(state.user1.baseTdee) {
+                renderPacingDisplaySummaryCards();
+            }
+        }
+
+        function applyPacingFormulaTarget(userKey, pace) {
+            state[userKey].paceMode = pace;
+            let coefficient = 0.90; // comfort -10%
+            if(pace === 'moderate') coefficient = 0.85; // moderate -15%
+            if(pace === 'intensive') coefficient = 0.75; // intensive -25%
+
+            let tdee = state[userKey].baseTdee || 2000;
+            let targetKcal = Math.round(tdee * coefficient);
+            let w = state[userKey].weight || 70;
+
+            // Macro Split Proportional Allocation
+            let p = Math.round(w * 1.8);
+            let f = Math.round(w * 0.9);
+            let residualKcal = targetKcal - (p * 4 + f * 9);
+            let c = Math.round(residualKcal > 0 ? residualKcal / 4 : 0);
+
+            state[userKey].targetKcal = targetKcal;
+            state[userKey].targetP = p;
+            state[userKey].targetF = f;
+            state[userKey].targetC = c;
+        }
+
+        function updateIndependentProfilePacing(userNum, paceType) {
+            const userKey = `user${userNum}`;
+            applyPacingFormulaTarget(userKey, paceType);
+            saveSystemStateToBrowserStorage();
+            renderPacingDisplaySummaryCards();
+            renderDiaryWorkspace();
+            showToastNotificationMessage(`Обновлен темп для ${state[userKey].name}!`);
+        }
+
+        function renderPacingDisplaySummaryCards() {
+            const area = document.getElementById('pacing-results-area');
+            const container = document.getElementById('pacing-columns-box');
+            area.style.display = 'block';
+            container.innerHTML = '';
+
+            [1, 2].forEach(num => {
+                const u = state[`user${num}`];
+                const activePace = u.paceMode || 'comfort';
+                
+                const col = document.createElement('div');
+                col.className = 'glass-card';
+                col.style.margin = '0';
+                col.style.background = 'rgba(255,255,255,0.02)';
+                col.innerHTML = `
+                    <h4 style="font-size:1.2rem; font-weight:700; margin-bottom:1rem; border-bottom:1px solid var(--glass-border); padding-bottom:0.5rem">${escapeHtml(u.name)}</h4>
+                    <div style="margin-bottom:1.25rem;">
+                        <div style="font-size:1.6rem; font-weight:800; color:var(--accent-primary)">${u.targetKcal} ккал/день</div>
+                        <div style="font-size:0.9rem; color:var(--text-muted); margin-top:0.25rem;">Базовое поддержание: ${u.baseTdee} ккал</div>
+                    </div>
+                    <div class="grid-3" style="text-align:center; margin-bottom:1.5rem;">
+                        <div style="padding:0.5rem; background:rgba(255,255,255,0.05); border-radius:8px"><strong>Б:</strong> ${u.targetP}г</div>
+                        <div style="padding:0.5rem; background:rgba(255,255,255,0.05); border-radius:8px"><strong>Ж:</strong> ${u.targetF}г</div>
+                        <div style="padding:0.5rem; background:rgba(255,255,255,0.05); border-radius:8px"><strong>У:</strong> ${u.targetC}г</div>
+                    </div>
+                    <label style="font-size:0.8rem; font-weight:700; margin-bottom:0.5rem; display:block; color:var(--text-muted)">ВЫБОР СКОРОСТИ ПОХУДЕНИЯ:</label>
+                    <div style="display:flex; gap:6px; flex-wrap:wrap">
+                        <button class="btn btn-secondary style-compact-pill ${activePace==='comfort'?'btn-primary':''}" style="flex:1; padding:0.5rem; font-size:0.8rem" onclick="updateIndependentProfilePacing(${num}, 'comfort')">Комфорт -10%</button>
+                        <button class="btn btn-secondary style-compact-pill ${activePace==='moderate'?'btn-primary':''}" style="flex:1; padding:0.5rem; font-size:0.8rem" onclick="updateIndependentProfilePacing(${num}, 'moderate')">Умеренно -15%</button>
+                        <button class="btn btn-secondary style-compact-pill ${activePace==='intensive'?'btn-primary':''}" style="flex:1; padding:0.5rem; font-size:0.8rem" onclick="updateIndependentProfilePacing(${num}, 'intensive')">Интенсив -25%</button>
+                    </div>
+                `;
+                container.appendChild(col);
+            });
+            // Auto scroll smoothly to results summary
+            area.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // ==========================================
+        // FEATURE 2: UNIFIED COOKBOOK MODAL & TRACKER
+        // ==========================================
+        function openRecipeCreationView() {
+            currentEditingRecipeId = null;
+            document.getElementById('recipe-editor-headline').innerText = "Создать новый рецепт";
+            document.getElementById('edit-rec-name').value = '';
+            document.getElementById('editor-ingredients-rows').innerHTML = '';
+            addIngredientRowToRecipeEditor();
+            document.getElementById('recipe-editor-modal').classList.add('active');
+        }
+
+        function closeRecipeEditorWindow() {
+            document.getElementById('recipe-editor-modal').classList.remove('active');
+        }
+
+        function addIngredientRowToRecipeEditor(selectedFoodId=null, amountGrams=100) {
+            const wrapper = document.getElementById('editor-ingredients-rows');
+            const div = document.createElement('div');
+            div.className = 'recipe-ingredient-row-item';
+            div.style.display = 'flex';
+            div.style.gap = '8px';
+            div.style.marginBottom = '6px';
+
+            let optionsHtml = `<option value="">-- Выберите из базы --</option>`;
+            state.foodBase.forEach(item => {
+                optionsHtml += `<option value="${item.id}" ${selectedFoodId == item.id ? 'selected' : ''}>${escapeHtml(item.name)} (100г)</option>`;
             });
 
-            const cookedWeight = tempRecObj.cookedWeight || totalRawWeight || 100;
-            const densityKcal = Math.round((totalKcal / cookedWeight) * 100);
-            const densityP = Math.round(((totalP / cookedWeight) * 100) * 10) / 10;
-            const densityF = Math.round(((totalF / cookedWeight) * 100) * 10) / 10;
-            const densityC = Math.round(((totalC / cookedWeight) * 100) * 10) / 10;
-
-            const box = document.getElementById('recipe-true-density-readout-box');
-            if(box) {
-                box.innerHTML = `
-                    <span style="font-size:0.8rem; font-weight:600; text-transform:uppercase; color:var(--text-muted);">Истинная плотность КБЖУ готового блюда (на 100г):</span>
-                    <strong style="font-size:1.15rem; color:#4f46e5; margin-top:4px;">🔥 ${densityKcal} ккал | Б: ${densityP}г | Ж: ${densityF}г | У: ${densityC}г</strong>
-                `;
-            }
+            div.innerHTML = `
+                <select class="input-field ing-select-broker" style="flex:2">${optionsHtml}</select>
+                <input type="number" class="input-field ing-weight-broker" placeholder="Вес, г" value="${amountGrams}" style="flex:1">
+                <button class="btn btn-danger" style="padding:0.5rem 0.75rem" onclick="this.parentElement.remove()">&times;</button>
+            `;
+            wrapper.appendChild(div);
         }
 
         function commitRecipeToStateDatabase() {
-            if(!currentRecipeEditingObject) return;
-            const r = currentRecipeEditingObject;
-            if(!r.title.trim()) {
-                showToast("Укажите корректное название создаваемого блюда", "danger");
-                return;
-            }
-            if(!r.cookedWeight || r.cookedWeight <= 0) {
-                showToast("Укажите финальный вес готового блюда", "danger");
-                return;
-            }
+            const title = document.getElementById('edit-rec-name').value.trim();
+            if (!title) return showToastNotificationMessage("Введите название рецепта", "danger");
 
-            const existingIdx = state.recipes.findIndex(x => x.id === r.id);
-            if(existingIdx > -1) {
-                state.recipes[existingIdx] = r;
+            const rows = document.querySelectorAll('.recipe-ingredient-row-item');
+            let components = [];
+
+            rows.forEach(r => {
+                const fId = parseInt(r.querySelector('.ing-select-broker').value);
+                const weight = parseFloat(r.querySelector('.ing-weight-broker').value);
+                if (fId && weight > 0) {
+                    components.push({ foodId: fId, weight: weight });
+                }
+            });
+
+            if(components.length === 0) return showToastNotificationMessage("Добавьте хотя бы один валидный ингредиент", "danger");
+
+            if (currentEditingRecipeId === null) {
+                const newRecipe = {
+                    id: Date.now(),
+                    name: title,
+                    ingredients: components
+                };
+                state.recipes.push(newRecipe);
             } else {
-                state.recipes.push(r);
+                const targetIdx = state.recipes.findIndex(x => x.id === currentEditingRecipeId);
+                if(targetIdx !== -1) {
+                    state.recipes[targetIdx].name = title;
+                    state.recipes[targetIdx].ingredients = components;
+                }
             }
 
-            saveStateToBrowserStorage();
-            closeRecipeModal();
-            renderRecipes();
-            showToast(`Рецепт "${r.title}" успешно сохранен!`, "success");
+            saveSystemStateToBrowserStorage();
+            closeRecipeEditorWindow();
+            renderRecipesDeck();
+            showToastNotificationMessage("Рецепт успешно зафиксирован в кулинарной книге");
         }
 
-        // PROPORTIONAL SPLIT SLIDER SYSTEM CONTEXT
-        function openRecipeViewerModalLayout(recipeId) {
-            const recipe = state.recipes.find(x => x.id === recipeId);
-            if(!recipe) return;
-            currentRecipeViewerObject = recipe;
+        function renderRecipesDeck() {
+            const container = document.getElementById('recipe-cards-deck');
+            container.innerHTML = '';
 
-            document.getElementById('viewer-recipe-title').innerText = recipe.title;
-            const dens = calculateSingleRecipeAbsoluteDensity(recipe);
-            document.getElementById('viewer-recipe-meta-sub').innerText = `Истинная базовая плотность КБЖУ на 100г готового веса: ${dens.kcal} ккал | Б: ${dens.p}г | Ж: ${dens.f}г | У: ${dens.c}г`;
-
-            document.getElementById('portion-title-p1').innerText = state.settings.p1.name || 'Пользователь 1';
-            document.getElementById('portion-title-p2').innerText = state.settings.p2.name || 'Пользователь 2';
-
-            // Establish calculation base ratios
-            const kcalP1 = state.settings.p1.kcal || 2000;
-            const kcalP2 = state.settings.p2.kcal || 2000;
-            const idealP1RatioPercent = Math.round((kcalP1 / (kcalP1 + kcalP2)) * 100);
-
-            const rangeSlider = document.getElementById('recipe-proportion-range-slider');
-            rangeSlider.value = idealP1RatioPercent;
-            
-            handleSliderProportionShift(idealP1RatioPercent);
-            document.getElementById('recipe-viewer-modal').style.display = 'flex';
-        }
-
-        function closeRecipeViewerModal() {
-            document.getElementById('recipe-viewer-modal').style.display = 'none';
-            currentRecipeViewerObject = null;
-        }
-
-        function handleSliderProportionShift(p1Val) {
-            if(!currentRecipeViewerObject) return;
-            const r = currentRecipeViewerObject;
-            const p1Percent = parseInt(p1Val);
-            const p2Percent = 100 - p1Percent;
-
-            const n1 = state.settings.p1.name || 'Пользователь 1';
-            const n2 = state.settings.p2.name || 'Пользователь 2';
-
-            document.getElementById('slider-label-p1').innerText = `${n1}: ${p1Percent}%`;
-            document.getElementById('slider-label-p2').innerText = `${n2}: ${p2Percent}%`;
-
-            // Abs totals calculation
-            let totalKcal = 0, totalP = 0, totalF = 0, totalC = 0;
-            r.ingredients.forEach(i => {
-                const m = (i.weight || 0) / 100;
-                totalKcal += (i.kcal || 0) * m;
-                totalP += (i.p || 0) * m;
-                totalF += (i.f || 0) * m;
-                totalC += (i.c || 0) * m;
-            });
-
-            const w1 = Math.round(r.cookedWeight * (p1Percent / 100));
-            const w2 = Math.round(r.cookedWeight * (p2Percent / 100));
-
-            document.getElementById('portion-weight-p1').innerText = `${w1} грамм`;
-            document.getElementById('portion-weight-p2').innerText = `${w2} грамм`;
-
-            document.getElementById('portion-kcal-p1').innerText = Math.round(totalKcal * (p1Percent / 100));
-            document.getElementById('portion-p-p1').innerText = Math.round(totalP * (p1Percent / 100)) + 'г';
-            document.getElementById('portion-f-p1').innerText = Math.round(totalF * (p1Percent / 100)) + 'г';
-            document.getElementById('portion-c-p1').innerText = Math.round(totalC * (p1Percent / 100)) + 'г';
-
-            document.getElementById('portion-kcal-p2').innerText = Math.round(totalKcal * (p2Percent / 100));
-            document.getElementById('portion-p-p2').innerText = Math.round(totalP * (p2Percent / 100)) + 'г';
-            document.getElementById('portion-f-p2').innerText = Math.round(totalF * (p2Percent / 100)) + 'г';
-            document.getElementById('portion-c-p2').innerText = Math.round(totalC * (p2Percent / 100)) + 'г';
-        }
-
-        function logPortionToUserDiary(pKey) {
-            if(!currentRecipeViewerObject) return;
-            const r = currentRecipeViewerObject;
-            const dateStr = document.getElementById('diary-current-date').value;
-            const mealType = document.getElementById(`diary-meal-select-${pKey}`).value;
-
-            const sliderVal = parseInt(document.getElementById('recipe-proportion-range-slider').value);
-            const ratioPercent = (pKey === 'p1') ? sliderVal : (100 - sliderVal);
-
-            let totalKcal = 0, totalP = 0, totalF = 0, totalC = 0;
-            r.ingredients.forEach(i => {
-                const m = (i.weight || 0) / 100;
-                totalKcal += (i.kcal || 0) * m;
-                totalP += (i.p || 0) * m;
-                totalF += (i.f || 0) * m;
-                totalC += (i.c || 0) * m;
-            });
-
-            const logItem = {
-                id: 'log_' + Date.now() + '_' + Math.random().toString(36).substr(2, 4),
-                date: dateStr,
-                profile: pKey,
-                mealType: mealType,
-                name: r.title,
-                kcal: Math.round(totalKcal * (ratioPercent / 100)),
-                p: Math.round(totalP * (ratioPercent / 100)),
-                f: Math.round(totalF * (ratioPercent / 100)),
-                c: Math.round(totalC * (ratioPercent / 100))
-            };
-
-            state.diary.push(logItem);
-            saveStateToBrowserStorage();
-            showToast(`Блюдо записано в дневник для ${state.settings[pKey].name}!`, "success");
-        }
-
-        function generateShoppingListContainerPopup() {
-            if(!currentRecipeViewerObject) return;
-            const r = currentRecipeViewerObject;
-            const out = document.getElementById('shopping-list-ingredients-output-box');
-            if(!out) return;
-
-            out.innerHTML = '';
-            r.ingredients.forEach(i => {
-                const itemLine = document.createElement('div');
-                itemLine.style.cssText = "display:flex; justify-content:space-between; border-bottom:1px solid rgba(0,0,0,0.04); padding:4px 0;";
-                itemLine.innerHTML = `<span>📌 ${escapeHtml(i.name)}</span> <strong>${Math.round(i.weight)} г</strong>`;
-                out.appendChild(itemLine);
-            });
-
-            document.getElementById('shopping-list-modal').style.display = 'flex';
-        }
-
-        function closeShoppingListModal() {
-            document.getElementById('shopping-list-modal').style.display = 'none';
-        }
-
-        // 3. COMPACT HIGH-CAPACITY FOOD BASE LAYOUT UTILITY
-        function renderDatabase() {
-            const wrapper = document.getElementById('food-base-items-wrapper');
-            if(!wrapper) return;
-            wrapper.innerHTML = '';
-
-            const q = document.getElementById('db-search-input').value.toLowerCase();
-            const unifiedBase = [...defaultFoodBase, ...state.foodBase];
-            const filtered = unifiedBase.filter(x => x.name.toLowerCase().includes(q));
-
-            if(filtered.length === 0) {
-                wrapper.innerHTML = `<p style="color:var(--text-muted); grid-column:1/-1; text-align:center; padding:20px;">В каталоге продуктов ничего не найдено...</p>`;
+            if (state.recipes.length === 0) {
+                container.innerHTML = `<div class="glass-card" style="grid-column:1/-1; text-align:center; color:var(--text-muted)">Книга рецептов пуста. Создайте первый составной рецепт.</div>`;
                 return;
             }
 
-            filtered.forEach(item => {
-                const el = document.createElement('div');
-                el.className = 'food-base-item-card';
-                el.innerHTML = `
-                    <div>
-                        <strong style="display:block; margin-bottom:4px; font-size:0.95rem;">${item.name}</strong>
-                        <span style="font-size:0.8rem; color:var(--text-muted);">
-                            ${item.kcal} ккал | Б:${item.p}г | Ж:${item.f}г | У:${item.c}г
-                        </span>
-                    </div>
-                `;
-                wrapper.appendChild(el);
-            });
-        }
-
-        function submitCustomProductToBase() {
-            const name = document.getElementById('new-prod-name').value.trim();
-            const kcal = parseFloat(document.getElementById('new-prod-kcal').value);
-            const p = parseFloat(document.getElementById('new-prod-p').value) || 0;
-            const f = parseFloat(document.getElementById('new-prod-f').value) || 0;
-            const c = parseFloat(document.getElementById('new-prod-c').value) || 0;
-
-            if(!name || isNaN(kcal)) {
-                showToast("Заполните корректно название и калорийность продукта", "danger");
-                return;
-            }
-
-            state.foodBase.push({ name, kcal, p, f, c });
-            saveStateToBrowserStorage();
-            
-            document.getElementById('new-prod-name').value = '';
-            document.getElementById('new-prod-kcal').value = '';
-            document.getElementById('new-prod-p').value = '';
-            document.getElementById('new-prod-f').value = '';
-            document.getElementById('new-prod-c').value = '';
-
-            renderDatabase();
-            showToast(`Продукт "${name}" успешно добавлен в базу!`, "success");
-        }
-
-        // 4. DIARY TIERS & LIFESTYLE TRACKS WITH CRITICAL REMAINING TRACK COUNTERS
-        function renderDiary() {
-            const activeDate = document.getElementById('diary-current-date').value;
-            renderDisciplineStreakBadge();
-
-            ['p1', 'p2'].forEach(pKey => {
-                const pNorms = state.settings[pKey];
-                const dayLogs = state.diary.filter(x => x.date === activeDate && x.profile === pKey);
-
-                let consumedKcal = 0, consumedP = 0, consumedF = 0, consumedC = 0;
-                dayLogs.forEach(l => {
-                    consumedKcal += l.kcal || 0;
-                    consumedP += l.p || 0;
-                    consumedF += l.f || 0;
-                    consumedC += l.c || 0;
+            state.recipes.forEach(rec => {
+                let totalKcal = 0;
+                rec.ingredients.forEach(i => {
+                    const food = state.foodBase.find(f => f.id === i.foodId);
+                    if(food) totalKcal += (food.kcal * i.weight) / 100;
                 });
 
-                // Calculate critical parameters remaining counters
-                const remKcal = pNorms.kcal - consumedKcal;
-                const remP = pNorms.p - consumedP;
-                const remF = pNorms.f - consumedF;
-                const remC = pNorms.c - consumedC;
+                const card = document.createElement('div');
+                card.className = 'glass-card';
+                card.style.cursor = 'pointer';
+                card.style.transition = 'transform 0.2s';
+                card.setAttribute('onclick', `openUnifiedRecipeModalWithParameters(${rec.id})`);
+                card.innerHTML = `
+                    <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:0.5rem">
+                        <h3 style="font-size:1.15rem; font-weight:700;">${escapeHtml(rec.name)}</h3>
+                        <div style="display:flex; gap:6px;">
+                            <button class="btn btn-secondary" style="padding:4px 8px; font-size:0.8rem;" onclick="event.stopPropagation(); initRecipeEditPipeline(${rec.id})"><i class="fas fa-edit"></i></button>
+                            <button class="btn btn-danger" style="padding:4px 8px; font-size:0.8rem;" onclick="event.stopPropagation(); deleteRecipeFromState(${rec.id})"><i class="fas fa-trash"></i></button>
+                        </div>
+                    </div>
+                    <p style="color:var(--text-muted); font-size:0.85rem;"><i class="fas fa-mortar-pestle"></i> Ингредиентов: ${rec.ingredients.length}</p>
+                    <div style="margin-top:1rem; font-size:0.95rem; font-weight:600; color:var(--accent-primary)">Сырой состав: ~${Math.round(totalKcal)} ккал</div>
+                `;
+                container.appendChild(card);
+            });
+        }
 
-                const readoutBox = document.getElementById(`${pKey}-remaining-metrics`);
-                readoutBox.className = "remaining-row";
-                if(remKcal < 0 || remP < 0 || remF < 0 || remC < 0) {
-                    readoutBox.classList.add('remaining-warning');
+        function initRecipeEditPipeline(id) {
+            const rec = state.recipes.find(x => x.id === id);
+            if(!rec) return;
+            currentEditingRecipeId = id;
+            document.getElementById('recipe-editor-headline').innerText = "Редактировать рецепт";
+            document.getElementById('edit-rec-name').value = rec.name;
+            document.getElementById('editor-ingredients-rows').innerHTML = '';
+            rec.ingredients.forEach(i => {
+                addIngredientRowToRecipeEditor(i.foodId, i.weight);
+            });
+            document.getElementById('recipe-editor-modal').classList.add('active');
+        }
+
+        function deleteRecipeFromState(id) {
+            if(confirm("Вы уверены, что хотите удалить этот рецепт?")) {
+                state.recipes = state.recipes.filter(x => x.id !== id);
+                saveSystemStateToBrowserStorage();
+                renderRecipesDeck();
+                showToastNotificationMessage("Рецепт удален");
+            }
+        }
+
+        function openUnifiedRecipeModalWithParameters(id) {
+            const rec = state.recipes.find(x => x.id === id);
+            if(!rec) return;
+            activeSelectedRecipeForUnifiedViewer = rec;
+
+            document.getElementById('unified-recipe-title').innerText = rec.name;
+            document.getElementById('calc-u1-name-lbl').innerText = state.user1.name;
+            document.getElementById('calc-u2-name-lbl').innerText = state.user2.name;
+            document.getElementById('slider-u1-label').innerText = `${state.user1.name}: 50%`;
+            document.getElementById('slider-u2-label').innerText = `${state.user2.name}: 50%`;
+            document.getElementById('unified-proportion-range').value = 50;
+
+            // Generate row views
+            const listWrapper = document.getElementById('unified-ingredients-list');
+            listWrapper.innerHTML = '';
+            
+            let totalRawWeight = 0;
+            rec.ingredients.forEach(ing => {
+                const food = state.foodBase.find(f => f.id === ing.foodId);
+                if(food) {
+                    totalRawWeight += ing.weight;
+                    const row = document.createElement('div');
+                    row.style.display = 'flex';
+                    row.style.justify = 'space-between';
+                    row.style.fontSize = '0.9rem';
+                    row.style.borderBottom = '1px dashed var(--glass-border)';
+                    row.style.paddingBottom = '4px';
+                    row.innerHTML = `
+                        <span>${escapeHtml(food.name)}</span>
+                        <span style="color:var(--text-muted)">${ing.weight}г (${Math.round(food.kcal * ing.weight / 100)} ккал)</span>
+                    `;
+                    listWrapper.appendChild(row);
                 }
-                readoutBox.innerHTML = `Осталось: <strong>${remKcal}</strong> ккал | Б: <strong>${Math.round(remP)}г</strong> | Ж: <strong>${Math.round(remF)}г</strong> | У: <strong>${Math.round(remC)}г</strong>`;
+            });
 
-                // Set horizontal tracks widths seamlessly
-                setMacroTrackDataProgress(pKey, 'kcal', consumedKcal, pNorms.kcal, 'ккал');
-                setMacroTrackDataProgress(pKey, 'p', consumedP, pNorms.p, 'г');
-                setMacroTrackDataProgress(pKey, 'f', consumedF, pNorms.f, 'г');
-                setMacroTrackDataProgress(pKey, 'c', consumedC, pNorms.c, 'г');
+            // Pre-fill cooked text box weight with total raw weight as defaults fallback
+            document.getElementById('unified-cooked-weight-input').value = Math.round(totalRawWeight);
+            
+            recalculateUnifiedRecipeSplitMetrics();
+            document.getElementById('unified-recipe-modal').classList.add('active');
+        }
 
-                // Segment items elegantly by timelines inside sub-card rows elements framework
-                const timelinesContainer = document.getElementById(`${pKey}-meals-timeline-container`);
-                timelinesContainer.innerHTML = '';
+        function closeUnifiedRecipeModal() {
+            document.getElementById('unified-recipe-modal').classList.remove('active');
+            activeSelectedRecipeForUnifiedViewer = null;
+        }
 
-                const categories = [
-                    { id: 'breakfast', title: 'Завтрак' },
-                    { id: 'lunch', title: 'Обед' },
-                    { id: 'dinner', title: 'Ужин' },
-                    { id: 'snack', title: 'Перекусы' }
-                ];
+        function recalculateUnifiedRecipeSplitMetrics() {
+            if(!activeSelectedRecipeForUnifiedViewer) return;
+            const rec = activeSelectedRecipeForUnifiedViewer;
 
-                categories.forEach(cat => {
-                    const catLogs = dayLogs.filter(x => x.dropMealType === cat.id || x.mealType === cat.id);
-                    const panel = document.createElement('div');
-                    panel.className = 'meal-timeline-panel';
+            let totalKcal = 0, totalP = 0, totalF = 0, totalC = 0, rawWeight = 0;
+            rec.ingredients.forEach(i => {
+                const food = state.foodBase.find(f => f.id === i.foodId);
+                if(food) {
+                    rawWeight += i.weight;
+                    totalKcal += (food.kcal * i.weight) / 100;
+                    totalP += (food.p * i.weight) / 100;
+                    totalF += (food.f * i.weight) / 100;
+                    totalC += (food.c * i.weight) / 100;
+                }
+            });
+
+            const cookedWeightInput = parseFloat(document.getElementById('unified-cooked-weight-input').value) || rawWeight;
+            
+            // Calculate shrinkage density per 100g cooked
+            let densityKcal = (totalKcal / cookedWeightInput) * 100;
+            let densityP = (totalP / cookedWeightInput) * 100;
+            let densityF = (totalF / cookedWeightInput) * 100;
+            let densityC = (totalC / cookedWeightInput) * 100;
+
+            document.getElementById('unified-density-output').innerHTML = `
+                Плотность готового блюда (на 100г):<br>
+                <span style="color:var(--accent-primary)">${Math.round(densityKcal)} ккал</span> | Б: ${densityP.toFixed(1)}г | Жиры: ${densityF.toFixed(1)}г | Угл: ${densityC.toFixed(1)}г
+            `;
+
+            // Proportional calculation outputs
+            const ratio1 = parseInt(document.getElementById('unified-proportion-range').value);
+            const ratio2 = 100 - ratio1;
+
+            document.getElementById('slider-u1-label').innerText = `${state.user1.name}: ${ratio1}%`;
+            document.getElementById('slider-u2-label').innerText = `${state.user2.name}: ${ratio2}%`;
+
+            let u1CookedGrams = (cookedWeightInput * ratio1) / 100;
+            let u2CookedGrams = (cookedWeightInput * ratio2) / 100;
+
+            document.getElementById('u1-serving-weight').innerText = `${Math.round(u1CookedGrams)} грамм`;
+            document.getElementById('u2-serving-weight').innerText = `${Math.round(u2CookedGrams)} грамм`;
+
+            document.getElementById('u1-serving-kbju').innerText = `
+                ${Math.round(totalKcal * ratio1 / 100)} ккал | Б: ${(totalP * ratio1 / 100).toFixed(1)} | Ж: ${(totalF * ratio1 / 100).toFixed(1)} | У: ${(totalC * ratio1 / 100).toFixed(1)}
+            `;
+            document.getElementById('u2-serving-kbju').innerText = `
+                ${Math.round(totalKcal * ratio2 / 100)} ккал | Б: ${(totalP * ratio2 / 100).toFixed(1)} | Ж: ${(totalF * ratio2 / 100).toFixed(1)} | У: ${(totalC * ratio2 / 100).toFixed(1)}
+            `;
+        }
+
+        function dispatchUnifiedSplitToDiary() {
+            if(!activeSelectedRecipeForUnifiedViewer) return;
+            const rec = activeSelectedRecipeForUnifiedViewer;
+
+            const targetDate = document.getElementById('diary-date-picker').value;
+            const mealCategory = document.getElementById('unified-meal-select').value;
+
+            let totalKcal = 0, totalP = 0, totalF = 0, totalC = 0, rawWeight = 0;
+            rec.ingredients.forEach(i => {
+                const food = state.foodBase.find(f => f.id === i.foodId);
+                if(food) {
+                    rawWeight += i.weight;
+                    totalKcal += (food.kcal * i.weight) / 100;
+                    totalP += (food.p * i.weight) / 100;
+                    totalF += (food.f * i.weight) / 100;
+                    totalC += (food.c * i.weight) / 100;
+                }
+            });
+
+            const cookedWeightInput = parseFloat(document.getElementById('unified-cooked-weight-input').value) || rawWeight;
+            const ratio1 = parseInt(document.getElementById('unified-proportion-range').value);
+            const ratio2 = 100 - ratio1;
+
+            if(!state.diary[targetDate]) state.diary[targetDate] = { breakfast: [], lunch: [], dinner: [], snacks: [] };
+
+            // Inject separate records to corresponding components logs
+            if(ratio1 > 0) {
+                state.diary[targetDate][mealCategory].push({
+                    profileNum: 1,
+                    name: `${rec.name} (Порция)`,
+                    weight: Math.round((cookedWeightInput * ratio1) / 100),
+                    kcal: Math.round(totalKcal * ratio1 / 100),
+                    p: parseFloat((totalP * ratio1 / 100).toFixed(1)),
+                    f: parseFloat((totalF * ratio1 / 100).toFixed(1)),
+                    c: parseFloat((totalC * ratio1 / 100).toFixed(1))
+                });
+            }
+
+            if(ratio2 > 0) {
+                state.diary[targetDate][mealCategory].push({
+                    profileNum: 2,
+                    name: `${rec.name} (Порция)`,
+                    weight: Math.round((cookedWeightInput * ratio2) / 100),
+                    kcal: Math.round(totalKcal * ratio2 / 100),
+                    p: parseFloat((totalP * ratio2 / 100).toFixed(1)),
+                    f: parseFloat((totalF * ratio2 / 100).toFixed(1)),
+                    c: parseFloat((totalC * ratio2 / 100).toFixed(1))
+                });
+            }
+
+            saveSystemStateToBrowserStorage();
+            closeUnifiedRecipeModal();
+            renderDiaryWorkspace();
+            showToastNotificationMessage("Компоненты блюда успешно разнесены в дневник питания!");
+        }
+
+        // ==========================================
+        // FEATURE 3: FOOD DIRECTORY CATEGORY PILLS
+        // ==========================================
+        function setFoodCategoryFilter(categoryName) {
+            activeFoodCategoryFilter = categoryName;
+            
+            // UI Toggle Pills active styles classes
+            const pills = document.querySelectorAll('#pills-container-row .pill-tab');
+            pills.forEach(p => {
+                if(p.innerText === categoryName) p.classList.add('active');
+                else p.classList.remove('active');
+            });
+
+            triggerFoodDirectoryFiltering();
+        }
+
+        function triggerFoodDirectoryFiltering() {
+            const searchStr = document.getElementById('food-search-box').value.toLowerCase().trim();
+            const tbody = document.getElementById('food-db-rows-body');
+            tbody.innerHTML = '';
+
+            const filteredData = state.foodBase.filter(item => {
+                const matchesCategory = (activeFoodCategoryFilter === 'Все' || item.category === activeFoodCategoryFilter);
+                const matchesSearch = item.name.toLowerCase().includes(searchStr);
+                return matchesCategory && matchesSearch;
+            });
+
+            if(filteredData.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; color:var(--text-muted)">Нет подходящих продуктов в этой категории</td></tr>`;
+                return;
+            }
+
+            filteredData.forEach(item => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td data-label="Название"><strong>${escapeHtml(item.name)}</strong></td>
+                    <td data-label="Категория"><span class="pill-tab" style="padding:2px 8px; font-size:0.75rem; pointer-events:none;">${item.category || 'Разное'}</span></td>
+                    <td data-label="Калории">${item.kcal} ккал</td>
+                    <td data-label="Белки">${item.p}г</td>
+                    <td data-label="Жиры">${item.f}г</td>
+                    <td data-label="Углеводы">${item.c}г</td>
+                    <td data-label="Действия" style="text-align:right">
+                        <button class="btn btn-danger" style="padding:4px 8px; font-size:0.8rem;" onclick="deleteFoodDbItemFromState(${item.id})"><i class="fas fa-trash"></i></button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function renderFoodDirectoryRows() {
+            triggerFoodDirectoryFiltering();
+        }
+
+        function openFoodDbInsertWindow() {
+            document.getElementById('food-item-name').value = '';
+            document.getElementById('food-item-kcal').value = '';
+            document.getElementById('food-item-p').value = '';
+            document.getElementById('food-item-f').value = '';
+            document.getElementById('food-item-c').value = '';
+            document.getElementById('food-db-modal').classList.add('active');
+        }
+
+        function closeFoodDbInsertWindow() {
+            document.getElementById('food-db-modal').classList.remove('active');
+        }
+
+        function commitFoodDbItemToState() {
+            const name = document.getElementById('food-item-name').value.trim();
+            const cat = document.getElementById('food-item-category').value;
+            const kcal = Math.round(parseFloat(document.getElementById('food-item-kcal').value)) || 0;
+            const p = parseFloat(document.getElementById('food-item-p').value) || 0;
+            const f = parseFloat(document.getElementById('food-item-f').value) || 0;
+            const c = parseFloat(document.getElementById('food-item-c').value) || 0;
+
+            if(!name) return showToastNotificationMessage("Укажите наименование продукта!", "danger");
+
+            const newItem = { id: Date.now(), name, category: cat, kcal, p, f, c };
+            state.foodBase.push(newItem);
+            saveSystemStateToBrowserStorage();
+            closeFoodDbInsertWindow();
+            renderFoodDirectoryRows();
+            showToastNotificationMessage("Продукт сохранен в директорию базы.");
+        }
+
+        function deleteFoodDbItemFromState(id) {
+            if(confirm("Удалить данный продукт из локального справочника КБЖУ?")) {
+                state.foodBase = state.foodBase.filter(x => x.id !== id);
+                saveSystemStateToBrowserStorage();
+                renderFoodDirectoryRows();
+                showToastNotificationMessage("Продукт успешно стерт.");
+            }
+        }
+
+        // ==========================================
+        // FEATURE 4: DIARY HISTORY RANGE AVERAGES
+        // ==========================================
+        function setDiaryRangeMode(mode) {
+            activeDiaryRangeMode = mode;
+            const tabs = document.querySelectorAll('#diary-range-pills .pill-tab');
+            tabs.forEach(t => {
+                if(t.getAttribute('onclick').includes(mode)) t.classList.add('active');
+                else t.classList.remove('active');
+            });
+            renderDiaryWorkspace();
+        }
+
+        function syncDiaryViewToSelectedRange() {
+            renderDiaryWorkspace();
+        }
+
+        function getDatesListInActiveSelectedRange(centerDateStr, mode) {
+            let dates = [];
+            let center = new Date(centerDateStr);
+            if (isNaN(center.getTime())) center = new Date();
+
+            if (mode === 'today') {
+                dates.push(getSystemLocalDateString(center));
+            } else if (mode === 'week') {
+                // Determine calendar week boundaries starting from Monday
+                let currentDay = center.getDay();
+                let distanceToMonday = currentDay === 0 ? 6 : currentDay - 1;
+                let monday = new Date(center);
+                monday.setDate(center.getDate() - distanceToMonday);
+                
+                for(let i=0; i<7; i++) {
+                    let d = new Date(monday);
+                    d.setDate(monday.getDate() + i);
+                    dates.push(getSystemLocalDateString(d));
+                }
+            } else if (mode === 'month') {
+                // Target full current month configuration calendar array
+                let year = center.getFullYear();
+                let month = center.getMonth();
+                let daysInMonth = new Date(year, month + 1, 0).getDate();
+                for (let i = 1; i <= daysInMonth; i++) {
+                    let d = new Date(year, month, i);
+                    dates.push(getSystemLocalDateString(d));
+                }
+            }
+            return dates;
+        }
+
+        function renderDiaryWorkspace() {
+            const pickedDate = document.getElementById('diary-date-picker').value;
+            const targetDates = getDatesListInActiveSelectedRange(pickedDate, activeDiaryRangeMode);
+            
+            // Calculate intake across specified ranges array
+            let totals = {
+                u1: { kcal: 0, p: 0, f: 0, c: 0 },
+                u2: { kcal: 0, p: 0, f: 0, c: 0 }
+            };
+
+            targetDates.forEach(d => {
+                if (state.diary[d]) {
+                    ['breakfast', 'lunch', 'dinner', 'snacks'].forEach(cat => {
+                        state.diary[d][cat].forEach(entry => {
+                            let userRef = entry.profileNum === 1 ? 'u1' : 'u2';
+                            totals[userRef].kcal += entry.kcal || 0;
+                            totals[userRef].p += entry.p || 0;
+                            totals[userRef].f += entry.f || 0;
+                            totals[userRef].c += entry.c || 0;
+                        });
+                    });
+                }
+            });
+
+            // True Daily Averages calculation denominator allocation
+            let divisor = (activeDiaryRangeMode === 'today') ? 1 : targetDates.length;
+            
+            let avgU1 = {
+                kcal: Math.round(totals.u1.kcal / divisor),
+                p: Math.round(totals.u1.p / divisor),
+                f: Math.round(totals.u1.f / divisor),
+                c: Math.round(totals.u1.c / divisor)
+            };
+
+            let avgU2 = {
+                kcal: Math.round(totals.u2.kcal / divisor),
+                p: Math.round(totals.u2.p / divisor),
+                f: Math.round(totals.u2.f / divisor),
+                c: Math.round(totals.u2.c / divisor)
+            };
+
+            // Render tracking header counters
+            const grid = document.getElementById('diary-profiles-grid');
+            grid.innerHTML = '';
+
+            const profilesMeta = [
+                { num: 1, key: 'u1', stateKey: 'user1', data: avgU1, color: 'var(--accent-primary)' },
+                { num: 2, key: 'u2', stateKey: 'user2', data: avgU2, color: 'var(--accent-secondary)' }
+            ];
+
+            profilesMeta.forEach(p => {
+                const userConf = state[p.stateKey];
+                let remKcal = userConf.targetKcal - p.data.kcal;
+                let pct = Math.min(100, (p.data.kcal / userConf.targetKcal) * 100);
+
+                let headerTitleLabel = activeDiaryRangeMode === 'today' ? 'Сегодня' : 'Среднее за день';
+
+                const card = document.createElement('div');
+                card.className = 'glass-card';
+                card.style.margin = '0';
+                card.innerHTML = `
+                    <h3 style="font-size:1.15rem; margin-bottom:0.75rem;">${escapeHtml(userConf.name)} <span style="font-size:0.8rem; color:var(--text-muted)">(${headerTitleLabel})</span></h3>
+                    <div style="font-size:1.4rem; font-weight:800; margin-bottom:0.25rem;">${p.data.kcal} / ${userConf.targetKcal} ккал</div>
+                    <div style="font-size:0.85rem; font-weight:600; color:${remKcal >= 0 ? 'var(--success)' : 'var(--danger)'}; margin-bottom:1rem;">
+                        ${remKcal >= 0 ? `Осталось: ${remKcal} ккал` : `Перебор: ${Math.abs(remKcal)} ккал`}
+                    </div>
                     
-                    let panelHtml = `<div class="meal-timeline-title">${cat.title}</div>`;
-                    if(catLogs.length === 0) {
-                        panelHtml += `<div style="font-size:0.8rem; color:var(--text-muted); font-style:italic;">Нет записей</div>`;
-                    } else {
-                        catLogs.forEach(entry => {
-                            panelHtml += `
-                                <div class="log-entry">
-                                    <div>
-                                        <strong>${escapeHtml(entry.name)}</strong><br>
-                                        <small style="color:var(--text-muted); font-size:0.75rem;">${entry.kcal} ккал [Б:${entry.p} Ж:${entry.f} У:${entry.c}]</small>
-                                    </div>
-                                    <i class="fa-solid fa-circle-minus" style="color:#ef4444; cursor:pointer;" onclick="deleteDiaryLogItem('${entry.id}')"></i>
-                                </div>
+                    ${renderComponentProgressBarMarkup("Калории", pct, p.color)}
+                    ${renderComponentProgressBarMarkup(`Белки (${p.data.p}г / ${userConf.targetP}г)`, (p.data.p / userConf.targetP)*100, '#34d399')}
+                    ${renderComponentProgressBarMarkup(`Жиры (${p.data.f}г / ${userConf.targetF}г)`, (p.data.f / userConf.targetF)*100, '#fbbf24')}
+                    ${renderComponentProgressBarMarkup(`Углеводы (${p.data.c}г / ${userConf.targetC}г)`, (p.data.c / userConf.targetC)*100, '#60a5fa')}
+                `;
+                grid.appendChild(card);
+            });
+
+            // Display Meal logs tables grid configuration context
+            const logsWrapper = document.getElementById('meal-logs-wrapper');
+            logsWrapper.innerHTML = '';
+
+            const mealsConfig = [
+                { id: 'breakfast', title: "🥞 Завтрак" },
+                { id: 'lunch', title: "🍲 Обед" },
+                { id: 'dinner', title: "🥩 Ужин" },
+                { id: 'snacks', title: "🍎 Перекусы" }
+            ];
+
+            mealsConfig.forEach(m => {
+                const card = document.createElement('div');
+                card.className = 'glass-card';
+                
+                let rowsHtml = '';
+                
+                // Aggregate active target entries list logs
+                targetDates.forEach(d => {
+                    if (state.diary[d] && state.diary[d][m.id]) {
+                        state.diary[d][m.id].forEach((entry, index) => {
+                            const profileName = entry.profileNum === 1 ? state.user1.name : state.user2.name;
+                            let uniqueStamp = `${d}_${m.id}_${index}`;
+                            
+                            // Prefix with date if viewing period totals
+                            let datePrefixLabel = activeDiaryRangeMode !== 'today' ? `<small style="display:block; color:var(--text-muted)">${d}</small>` : '';
+
+                            rowsHtml += `
+                                <tr>
+                                    <td data-label="Профиль"><span class="pill-tab" style="padding:2px 8px; font-size:0.75rem; pointer-events:none;">${escapeHtml(profileName)}</span></td>
+                                    <td data-label="Блюдо">${datePrefixLabel}<strong>${escapeHtml(entry.name)}</strong></td>
+                                    <td data-label="Вес">${entry.weight}г</td>
+                                    <td data-label="КБЖУ">${entry.kcal} ккал | Б:${entry.p} | Ж:${entry.f} | У:${entry.c}</td>
+                                    <td data-label="Удалить" style="text-align:right">
+                                        <button class="btn btn-danger" style="padding:4px 8px; font-size:0.7rem" onclick="deleteDiaryEntryItem('${uniqueStamp}')">&times;</button>
+                                    </td>
+                                </tr>
                             `;
                         });
                     }
-                    panel.innerHTML = panelHtml;
-                    timelinesContainer.appendChild(panel);
                 });
+
+                if(!rowsHtml) {
+                    rowsHtml = `<tr><td colspan="5" style="text-align:center; color:var(--text-muted); padding:1rem;">Нет записей приемов пищи за выбранный период</td></tr>`;
+                }
+
+                card.innerHTML = `
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; flex-wrap:wrap; gap:10px;">
+                        <h3 style="font-size:1.2rem; font-weight:700;">${m.title}</h3>
+                        ${activeDiaryRangeMode === 'today' ? `<button class="btn btn-secondary style-compact-pill" style="font-size:0.8rem; padding:4px 10px" onclick="openDirectQuickFoodLogWizard('${m.id}')"><i class="fas fa-plus"></i> Добавить</button>` : ''}
+                    </div>
+                    <table class="custom-table">
+                        <thead>
+                            <tr>
+                                <th style="width:15%">Профиль</th>
+                                <th style="width:35%">Продукт / Блюдо</th>
+                                <th style="width:10%">Вес</th>
+                                <th style="width:30%">КБЖУ</th>
+                                <th style="width:10%; text-align:right">Удалить</th>
+                            </tr>
+                        </thead>
+                        <tbody>${rowsHtml}</tbody>
+                    </table>
+                `;
+                logsWrapper.appendChild(card);
             });
         }
 
-        function setMacroTrackDataProgress(pKey, macro, current, target, unit) {
-            document.getElementById(`${pKey}-bar-txt-${macro}`).innerText = `${Math.round(current)} / ${target} ${unit}`;
-            let percentage = target > 0 ? (current / target) * 100 : 0;
-            if(percentage > 100) percentage = 100;
-            document.getElementById(`${pKey}-bar-fill-${macro}`).style.width = percentage + '%';
+        function renderComponentProgressBarMarkup(title, percent, color) {
+            let clamped = Math.min(100, Math.max(0, percent)) || 0;
+            return `
+                <div class="progress-wrapper">
+                    <div class="progress-labels">
+                        <span>${title}</span>
+                        <span>${Math.round(percent || 0)}%</span>
+                    </div>
+                    <div class="progress-container">
+                        <div class="progress-bar-fill" style="width: ${clamped}%; background-color: ${color}"></div>
+                    </div>
+                </div>
+            `;
         }
 
-        function deleteDiaryLogItem(id) {
-            state.diary = state.diary.filter(x => x.id !== id);
-            saveStateToBrowserStorage();
-            renderDiary();
-            showToast("Запись успешно удалена из дневника питания", "success");
+        function deleteDiaryEntryItem(stamp) {
+            if(!confirm("Удалить выбранную позицию питания из логов дневника?")) return;
+            let pieces = stamp.split('_');
+            let targetDate = pieces[0];
+            let category = pieces[1];
+            let index = parseInt(pieces[2]);
+
+            if(state.diary[targetDate] && state.diary[targetDate][category]) {
+                state.diary[targetDate][category].splice(index, 1);
+                saveSystemStateToBrowserStorage();
+                renderDiaryWorkspace();
+                showToastNotificationMessage("Запись успешно стерта.");
+            }
         }
 
-        function renderDisciplineStreakBadge() {
-            const container = document.getElementById('discipline-streak-container');
-            if(!container) return;
+        function openDirectQuickFoodLogWizard(mealId) {
+            // Instantly reuse custom modal overlay architecture mapping
+            let optionsHtml = '';
+            state.foodBase.forEach(f => {
+                optionsHtml += `<option value="${f.id}">${escapeHtml(f.name)}</option>`;
+            });
 
-            // Compute unique chronologically aligned timestamps logged chain variables array
-            const uniqueDates = [...new Set(state.diary.map(x => x.date))].sort().reverse();
-            let streak = 0;
-            let expectedDateStr = todayIsoString;
+            const targetDate = document.getElementById('diary-date-picker').value;
 
-            // Check if user has anything logged today or yesterday to preserve continuity validation bounds
-            if (uniqueDates.includes(todayIsoString) || uniqueDates.includes(new Date(Date.now() - 86400000).toISOString().split('T')[0])) {
-                let checkIdx = uniqueDates.includes(todayIsoString) ? 0 : 0;
-                let currentCheckDate = new Date(uniqueDates[0]);
-                streak = 1;
+            // Prompt fallback implementation template for raw injections speed
+            let container = document.createElement('div');
+            container.className = 'modal-overlay active';
+            container.innerHTML = `
+                <div class="glass-card" style="width:90%; max-width:400px">
+                    <h3 style="margin-bottom:1rem">Добавить в ${mealId}</h3>
+                    <div class="form-group">
+                        <label>Для кого рассчитать?</label>
+                        <select id="quick-user-ref" class="input-field">
+                            <option value="1">${state.user1.name}</option>
+                            <option value="2">${state.user2.name}</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Выберите продукт</label>
+                        <select id="quick-food-ref" class="input-field">${optionsHtml}</select>
+                    </div>
+                    <div class="form-group">
+                        <label>Вес порции (грамм)</label>
+                        <input type="number" id="quick-weight-num" class="input-field" value="100">
+                    </div>
+                    <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:1.5rem">
+                        <button class="btn btn-secondary" onclick="this.parentElement.parentElement.parentElement.remove()">Отмена</button>
+                        <button class="btn btn-primary" id="btn-quick-log-commit">Добавить</button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(container);
 
-                for(let i = 1; i < uniqueDates.length; i++) {
-                    let prevDate = new Date(uniqueDates[i]);
-                    let diffTime = Math.abs(currentCheckDate - prevDate);
-                    let diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            container.querySelector('#btn-quick-log-commit').onclick = () => {
+                const uNum = parseInt(container.querySelector('#quick-user-ref').value);
+                const fId = parseInt(container.querySelector('#quick-food-ref').value);
+                const weight = parseFloat(container.querySelector('#quick-weight-num').value) || 0;
+
+                const product = state.foodBase.find(x => x.id === fId);
+                if(product && weight > 0) {
+                    if(!state.diary[targetDate]) state.diary[targetDate] = { breakfast: [], lunch: [], dinner: [], snacks: [] };
                     
-                    if(diffDays === 1) {
-                        streak++;
-                        currentCheckDate = prevDate;
-                    } else if(diffDays > 1) {
-                        break;
-                    }
+                    state.diary[targetDate][mealId].push({
+                        profileNum: uNum,
+                        name: product.name,
+                        weight: weight,
+                        kcal: Math.round(product.kcal * weight / 100),
+                        p: parseFloat((product.p * weight / 100).toFixed(1)),
+                        f: parseFloat((product.f * weight / 100).toFixed(1)),
+                        c: parseFloat((product.c * weight / 100).toFixed(1))
+                    });
+
+                    saveSystemStateToBrowserStorage();
+                    renderDiaryWorkspace();
+                    container.remove();
+                    showToastNotificationMessage("Продукт добавлен в дневник!");
                 }
+            };
+        }
+
+        // ==========================================
+        // FEATURE 5: SEPARATE WEIGHT TRACKING GRAPHS
+        // ==========================================
+        function initializeSeparateChartFrames() {
+            // Instantiates Chart.js layouts configurations configurations
+            const buildOptionsObject = (labelName, colorHex) => ({
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: { grid: { display: false }, ticks: { color: 'var(--text-muted)' } },
+                    y: { ticks: { color: 'var(--text-muted)' } }
+                },
+                plugins: { legend: { display: false } }
+            });
+
+            let ctx1 = document.getElementById('chart-frame-user1').getContext('2d');
+            u1ChartInstance = new Chart(ctx1, {
+                type: 'line',
+                data: { labels: [], datasets: [{ data: [], borderColor: '#6366f1', tension: 0.3, fill: false }] },
+                options: buildOptionsObject(state.user1.name, '#6366f1')
+            });
+
+            let ctx2 = document.getElementById('chart-frame-user2').getContext('2d');
+            u2ChartInstance = new Chart(ctx2, {
+                type: 'line',
+                data: { labels: [], datasets: [{ data: [], borderColor: '#ec4899', tension: 0.3, fill: false }] },
+                options: buildOptionsObject(state.user2.name, '#ec4899')
+            });
+
+            rebuildSeparateCharts();
+        }
+
+        function setGraphPeriod(userTag, days) {
+            if(userTag === 'u1') {
+                activeGraphPeriodU1 = days;
+                ['7','30','90','all'].forEach(k => document.getElementById(`btn-graph-u1-${k}`).classList.remove('active'));
+                document.getElementById(`btn-graph-u1-${days === 0 ? 'all' : days}`).classList.add('active');
             } else {
-                streak = 0;
+                activeGraphPeriodU2 = days;
+                ['7','30','90','all'].forEach(k => document.getElementById(`btn-graph-u2-${k}`).classList.remove('active'));
+                document.getElementById(`btn-graph-u2-${days === 0 ? 'all' : days}`).classList.add('active');
+            }
+            rebuildSeparateCharts();
+        }
+
+        function rebuildSeparateCharts() {
+            if(!u1ChartInstance || !u2ChartInstance) return;
+
+            // Chronological sort filter
+            let history = [...state.weightHistory].sort((a,b) => new Date(a.date) - new Date(b.date));
+            let now = new Date();
+
+            const extractDatasetForUser = (userNum, rangeDays) => {
+                let filtered = history.filter(item => {
+                    if (rangeDays === 0) return true;
+                    let diffTime = now - new Date(item.date);
+                    let diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                    return diffDays <= rangeDays;
+                });
+
+                let labels = filtered.map(x => x.date);
+                let data = filtered.map(x => userNum === 1 ? x.w1 : x.w2).disabled;
+                
+                // Keep only existing items rows pairs points arrays
+                let cleanLabels = [], cleanData = [];
+                filtered.forEach(x => {
+                    let val = userNum === 1 ? x.w1 : x.w2;
+                    if(val > 0) {
+                        cleanLabels.push(x.date);
+                        cleanData.push(val);
+                    }
+                });
+
+                return { labels: cleanLabels, data: cleanData };
+            };
+
+            let u1Data = extractDatasetForUser(1, activeGraphPeriodU1);
+            u1ChartInstance.data.labels = u1Data.labels;
+            u1ChartInstance.data.datasets[0].data = u1Data.data;
+            u1ChartInstance.update();
+
+            let u2Data = extractDatasetForUser(2, activeGraphPeriodU2);
+            u2ChartInstance.data.labels = u2Data.labels;
+            u2ChartInstance.data.datasets[0].data = u2Data.data;
+            u2ChartInstance.update();
+
+            renderWeightTableHistoryLogRows();
+        }
+
+        function commitWeightLogEntries() {
+            const dateStr = document.getElementById('weight-log-date').value;
+            const w1 = parseFloat(document.getElementById('weight-log-u1').value) || 0;
+            const w2 = parseFloat(document.getElementById('weight-log-u2').value) || 0;
+
+            if(!dateStr) return showToastNotificationMessage("Укажите дату замера!", "danger");
+            if(w1 === 0 && w2 === 0) return showToastNotificationMessage("Введите вес хотя бы одного пользователя", "danger");
+
+            let existingIdx = state.weightHistory.findIndex(x => x.date === dateStr);
+            if(existingIdx !== -1) {
+                if(w1 > 0) state.weightHistory[existingIdx].w1 = w1;
+                if(w2 > 0) state.weightHistory[existingIdx].w2 = w2;
+            } else {
+                state.weightHistory.push({ date: dateStr, w1, w2 });
             }
 
-            if(state.diary.length === 0) streak = 0;
-
-            container.innerHTML = `<div class="discipline-badge"><i class="fa-solid fa-fire-flame-curved"></i> Страйк дисциплины: ${streak} дн.</div>`;
+            saveSystemStateToBrowserStorage();
+            rebuildSeparateCharts();
+            showToastNotificationMessage("Метрики веса успешно зафиксированы в истории");
         }
 
-        // WEIGHTS HISTORICAL CHRONOLOGY LOGGING UTILITY SYSTEM
-        function logProfileWeightEntry(pKey) {
-            const val = parseFloat(document.getElementById(`weight-val-${pKey}`).value);
-            const date = document.getElementById(`weight-date-${pKey}`).value;
+        function renderWeightTableHistoryLogRows() {
+            const tbody = document.getElementById('weight-history-rows-box');
+            tbody.innerHTML = '';
+            
+            let sorted = [...state.weightHistory].sort((a,b) => new Date(b.date) - new Date(a.date));
 
-            if(isNaN(val) || !date) {
-                showToast("Укажите корректные дату и значение веса тела", "danger");
+            if(sorted.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; color:var(--text-muted)">История пуста</td></tr>`;
                 return;
             }
 
-            // Purge duplicate day items arrays logs to preserve unique tracking constraints
-            state.weights[pKey] = state.weights[pKey].filter(w => w.date !== date);
-            state.weights[pKey].push({ date, val });
-            state.weights[pKey].sort((a, b) => new Date(a.date) - new Date(b.date));
-
-            saveStateToBrowserStorage();
-            document.getElementById(`weight-val-${pKey}`).value = '';
-            renderProgressChartLayout();
-            showToast("Показатель массы тела сохранен!", "success");
+            sorted.forEach(row => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td data-label="Дата"><strong>${row.date}</strong></td>
+                    <td data-label="Вес У1">${row.w1 > 0 ? `${row.w1} кг` : '—'}</td>
+                    <td data-label="Вес У2">${row.w2 > 0 ? `${row.w2} кг` : '—'}</td>
+                    <td data-label="Удалить" style="text-align:right">
+                        <button class="btn btn-danger" style="padding:4px 8px; font-size:0.8rem;" onclick="deleteWeightRecordEntry('${row.date}')">&times;</button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
         }
 
-        function renderProgressChartLayout() {
-            const ctx = document.getElementById('weightAnalyticsChartCanvas');
-            if(!ctx) return;
-
-            // Gather timeline dates
-            const allDates = [...new Set([...state.weights.p1.map(x=>x.date), ...state.weights.p2.map(x=>x.date)])].sort();
-
-            const dataP1 = allDates.map(d => {
-                const match = state.weights.p1.find(w => w.date === d);
-                return match ? match.val : null;
-            });
-            const dataP2 = allDates.map(d => {
-                const match = state.weights.p2.find(w => w.date === d);
-                return match ? match.val : null;
-            });
-
-            if(weightChartInstance) {
-                weightChartInstance.destroy();
+        function deleteWeightRecordEntry(dateStr) {
+            if(confirm(`Удалить запись замера за ${dateStr}?`)) {
+                state.weightHistory = state.weightHistory.filter(x => x.date !== dateStr);
+                saveSystemStateToBrowserStorage();
+                rebuildSeparateCharts();
+                showToastNotificationMessage("Запись удалена.");
             }
-
-            weightChartInstance = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: allDates,
-                    datasets: [
-                        {
-                            label: state.settings.p1.name || 'Пользователь 1',
-                            data: dataP1,
-                            borderColor: '#4f46e5',
-                            backgroundColor: 'rgba(99, 102, 241, 0.05)',
-                            tension: 0.2,
-                            spanGaps: true,
-                            borderWidth: 3,
-                            pointRadius: 4
-                        },
-                        {
-                            label: state.settings.p2.name || 'Пользователь 2',
-                            data: dataP2,
-                            borderColor: '#06b6d4',
-                            backgroundColor: 'rgba(6, 182, 212, 0.05)',
-                            tension: 0.2,
-                            spanGaps: true,
-                            borderWidth: 3,
-                            pointRadius: 4
-                        }
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { position: 'top', labels: { font: { weight: '600' } } }
-                    },
-                    scales: {
-                        y: { grid: { color: 'rgba(0,0,0,0.03)' }, ticks: { font: { weight: '500' } } },
-                        x: { grid: { display: false }, ticks: { font: { weight: '500' } } }
-                    }
-                }
-            });
         }
 
-        // 5. STORAGE UTILITY BACKUP AND CONFIRMATION OPERATIONS
-        function exportDataBackup() {
-            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(state, null, 2));
-            const anchor = document.createElement('a');
-            anchor.setAttribute("href", dataStr);
-            anchor.setAttribute("download", `NutriSplit_Backup_${new Date().toISOString().split('T')[0]}.json`);
-            anchor.click();
-            showToast("Резервная копия базы данных сохранена!", "success");
+        // ==========================================
+        // FEATURE 6 & 7: EXPORT, IMPORT & SYSTEM LOOPS
+        // ==========================================
+        function exportApplicationStateData() {
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(state));
+            const dlAnchorElem = document.createElement('a');
+            dlAnchorElem.setAttribute("href", dataStr);
+            dlAnchorElem.setAttribute("download", `nutrisplit_backup_${getSystemLocalDateString(new Date())}.json`);
+            dlAnchorElem.click();
         }
 
-        function importDataBackup(event) {
+        function importApplicationStateData(event) {
             const file = event.target.files[0];
-            if(!file) return;
-
+            if (!file) return;
             const reader = new FileReader();
             reader.onload = function(e) {
                 try {
                     const parsed = JSON.parse(e.target.result);
-                    if(parsed.settings && parsed.recipes && parsed.diary) {
+                    if(parsed.user1 && parsed.foodBase) {
                         state = parsed;
-                        saveStateToBrowserStorage();
-                        populateFormsFromInternalState();
-                        liveUpdateProfileNames();
-                        renderCalculatedNormsBlockView();
-                        showToast("Резервная копия NutriSplit успешно импортирована!", "success");
-                        switchTab('kbju_calc');
+                        saveSystemStateToBrowserStorage();
+                        showToastNotificationMessage("Резервная копия успешно импортирована!", "success");
+                        setTimeout(() => window.location.reload(), 1000);
                     } else {
-                        throw new Error("Invalid format matrix template fields missing");
+                        throw new Error("Неверная структура JSON файла.");
                     }
                 } catch(err) {
-                    showToast("Ошибка чтения файла копии. Проверьте валидность структуры JSON.", "danger");
+                    showToastNotificationMessage("Ошибка чтения файла. Проверьте валидность структуры.", "danger");
                 }
             };
             reader.readAsText(file);
         }
 
         function triggerTotalSystemResetLoop() {
-            if(confirm("ВНИМАНИЕ! Данное действие безвозвратно удалит все сохраненные профили, рецепты и дневники. Выполнить полный сброс приложения?")) {
-                if(confirm("ПОДТВЕРДИТЕ СБРОС: Вы уверены, что резервная копия сохранена на внешнее устройство?")) {
+            if(confirm("ВНИМАНИЕ! Данное действие безвозвратно удалит все сохраненные профили, рецепты, замеры веса и дневники. Выполнить полный сброс?")) {
+                if(confirm("ПОДТВЕРДИТЕ СБРОС: Вы уверены, что копия сохранена?")) {
                     localStorage.removeItem('nutrisplit_state_v4');
                     localStorage.removeItem('nutrisplit_active_tab_v4');
-                    showToast("Все данные успешно стерты. Перезагрузка...", "danger");
+                    showToastNotificationMessage("Все данные успешно стерты. Перезагрузка...", "danger");
                     setTimeout(() => window.location.reload(), 1000);
                 }
             }
         }
 
-        // COMPACT SECURE STRING ESCAPE PREVENT INJECTIONS CONTEXT
         function escapeHtml(str) {
             if(!str) return '';
-            return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+            return str.toString().replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
         }
     </script>
 </body>

@@ -797,18 +797,18 @@
                 <div class="grid-2">
                     <div class="profile-setup-box" style="--p-color: var(--p1-main);">
                         <h4 style="margin-bottom:12px;" class="p1-name-title">Пользователь 1</h4>
-                        <div style="display:flex; gap:10px;">
-                            <input type="number" id="weight-val-p1" placeholder="Вес (кг)" step="0.1" style="flex:1;">
-                            <input type="date" id="weight-date-p1" style="min-width: 165px; flex-shrink: 0;">
-                            <button class="primary" onclick="logProfileWeightEntry('p1')">Записать</button>
+                        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                            <input type="number" id="weight-val-p1" placeholder="Вес (кг)" step="0.1" style="flex:1; min-width:100px;">
+                            <input type="date" id="weight-date-p1" style="flex:1; min-width:160px;">
+                            <button class="primary" style="white-space:nowrap;" onclick="logProfileWeightEntry('p1')">Записать</button>
                         </div>
                     </div>
                     <div class="profile-setup-box" style="--p-color: var(--p2-main);">
                         <h4 style="margin-bottom:12px;" class="p2-name-title">Пользователь 2</h4>
-                        <div style="display:flex; gap:10px;">
-                            <input type="number" id="weight-val-p2" placeholder="Вес (кг)" step="0.1" style="flex:1;">
-                            <input type="date" id="weight-date-p2" style="min-width: 165px; flex-shrink: 0;">
-                            <button class="primary" onclick="logProfileWeightEntry('p2')">Записать</button>
+                        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                            <input type="number" id="weight-val-p2" placeholder="Вес (кг)" step="0.1" style="flex:1; min-width:100px;">
+                            <input type="date" id="weight-date-p2" style="flex:1; min-width:160px;">
+                            <button class="primary" style="white-space:nowrap;" onclick="logProfileWeightEntry('p2')">Записать</button>
                         </div>
                     </div>
                 </div>

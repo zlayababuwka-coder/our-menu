@@ -365,6 +365,46 @@
             border-radius: 4px;
         }
 
+        /* ===== ТЁМНАЯ ТЕМА ===== */
+        [data-theme="dark"] {
+            --bg-mesh: radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.12) 0, transparent 45%),
+                       radial-gradient(at 50% 0%, rgba(6, 182, 212, 0.12) 0, transparent 50%),
+                       radial-gradient(at 100% 0%, rgba(236, 72, 153, 0.12) 0, transparent 45%),
+                       #0f172a;
+            --text-main: #e2e8f0;
+            --text-muted: #94a3b8;
+            --glass-bg: rgba(15, 23, 42, 0.8);
+            --glass-border: rgba(255, 255, 255, 0.07);
+            --glass-input: rgba(30, 41, 59, 0.9);
+            --shadow-soft: 0 10px 40px -10px rgba(0, 0, 0, 0.4);
+            --shadow-hover: 0 20px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+        [data-theme="dark"] body { background: #0f172a; color: var(--text-main); }
+        [data-theme="dark"] h1, [data-theme="dark"] h2, [data-theme="dark"] h3, [data-theme="dark"] h4 { color: var(--text-main); }
+        [data-theme="dark"] p { color: var(--text-muted); }
+        [data-theme="dark"] input, [data-theme="dark"] select, [data-theme="dark"] textarea {
+            color: var(--text-main); background: var(--glass-input); border-color: rgba(255,255,255,0.1);
+        }
+        [data-theme="dark"] input:focus, [data-theme="dark"] select:focus { background: rgba(30, 41, 59, 0.98); }
+        [data-theme="dark"] button.secondary { background: rgba(30,41,59,0.9); color: var(--text-main); border-color: rgba(255,255,255,0.1); }
+        [data-theme="dark"] button.secondary:hover { background: rgba(51,65,85,0.9); border-color: rgba(255,255,255,0.2); }
+        [data-theme="dark"] .profile-setup-box { background: rgba(15, 23, 42, 0.6); }
+        [data-theme="dark"] .modal-content { background: #1e293b; }
+        [data-theme="dark"] .chart-container { background: #1e293b !important; }
+        [data-theme="dark"] .autocomplete-dropdown { background: #1e293b; border-color: rgba(255,255,255,0.1); }
+        [data-theme="dark"] .autocomplete-item { border-color: rgba(255,255,255,0.05); color: var(--text-main); }
+        [data-theme="dark"] .autocomplete-item:hover { background: rgba(255,255,255,0.05); }
+        [data-theme="dark"] table { background: rgba(15,23,42,0.5); }
+        [data-theme="dark"] th { background: rgba(255,255,255,0.04); }
+        [data-theme="dark"] td { border-color: rgba(255,255,255,0.05); }
+        [data-theme="dark"] .nav-btn.active { background: rgba(255,255,255,0.1); color: var(--text-main); }
+        [data-theme="dark"] .ingredient-row { background: rgba(30, 41, 59, 0.6); }
+        [data-theme="dark"] .meal-timeline-panel { background: rgba(15, 23, 42, 0.4); }
+        [data-theme="dark"] .remaining-row { background: rgba(30, 41, 59, 0.6); }
+        [data-theme="dark"] .split-slider-container { background: rgba(30, 41, 59, 0.6); }
+        [data-theme="dark"] .food-base-item-card { background: rgba(30, 41, 59, 0.6); border-color: rgba(255,255,255,0.07); }
+        [data-theme="dark"] .shopping-list-inline-panel { background: rgba(15,23,42,0.6) !important; }
+
         /* Центрирование контейнера на десктопе */
         @media (min-width: 1024px) {
             body { display: block; padding-left: 280px; }
@@ -439,6 +479,9 @@
         </button>
         <button class="nav-btn" id="btn-tab-progress" onclick="switchTab('progress')">
             <i class="fa-solid fa-chart-line"></i> Прогресс
+        </button>
+        <button class="nav-btn" id="dark-mode-btn" onclick="toggleDarkTheme()" style="margin-top: auto;">
+            <i class="fa-solid fa-moon" id="dark-mode-icon"></i> <span id="dark-mode-label">Тёмная тема</span>
         </button>
     </nav>
 
@@ -616,6 +659,13 @@
                     <button class="secondary" onclick="toggleShoppingListPanel()">
                         <i class="fa-solid fa-basket-shopping"></i> Список покупок
                     </button>
+                    <select id="recipe-sort-select" onchange="renderRecipes()" style="width: auto;">
+                        <option value="default">Сортировка: по умолчанию</option>
+                        <option value="name">По названию А–Я</option>
+                        <option value="kcal-asc">Ккал ↑ (меньше калорий)</option>
+                        <option value="kcal-desc">Ккал ↓ (больше калорий)</option>
+                        <option value="protein-desc">Белки ↓ (больше белка)</option>
+                    </select>
                     <button class="primary" onclick="openRecipeCreateModal()">
                         <i class="fa-solid fa-plus"></i> Создать рецепт
                     </button>
@@ -722,10 +772,21 @@
                     <h2>Дневник питания и баланса нутриентов</h2>
                 </div>
                 
-                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:25px; flex-wrap:wrap; gap:15px;">
+                <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:25px; flex-wrap:wrap; gap:15px;">
                     <div>
                         <label>Выбранная дата дневника</label>
-                        <input type="date" id="diary-current-date" onchange="renderDiary()" style="width:220px;">
+                        <div style="display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-top:8px;">
+                            <input type="date" id="diary-current-date" onchange="renderDiary()" style="width:200px;">
+                            <button class="secondary" style="padding:8px 14px; font-size:0.85rem;" onclick="setDiaryToToday()">
+                                <i class="fa-solid fa-calendar-day"></i> Сегодня
+                            </button>
+                            <button class="secondary" style="padding:8px 14px; font-size:0.85rem;" onclick="copyYesterdayDiary()">
+                                <i class="fa-solid fa-copy"></i> Скопировать вчера
+                            </button>
+                            <button class="secondary" style="padding:8px 14px; font-size:0.85rem;" onclick="exportDiaryToCSV()">
+                                <i class="fa-solid fa-file-csv"></i> Экспорт CSV
+                            </button>
+                        </div>
                     </div>
                     <div id="discipline-streak-container"></div>
                 </div>
@@ -802,6 +863,9 @@
                             <input type="date" id="weight-date-p1" style="flex:1; min-width:160px;">
                             <button class="primary" style="white-space:nowrap;" onclick="logProfileWeightEntry('p1')">Записать</button>
                         </div>
+                        <div style="display:flex; gap:10px; align-items:center; margin-top:10px;">
+                            <input type="number" id="target-weight-p1" placeholder="🎯 Целевой вес (кг)" step="0.1" style="flex:1;" oninput="saveTargetWeight('p1', this.value)">
+                        </div>
                     </div>
                     <div class="profile-setup-box" style="--p-color: var(--p2-main);">
                         <h4 style="margin-bottom:12px;" class="p2-name-title">Пользователь 2</h4>
@@ -809,6 +873,9 @@
                             <input type="number" id="weight-val-p2" placeholder="Вес (кг)" step="0.1" style="flex:1; min-width:100px;">
                             <input type="date" id="weight-date-p2" style="flex:1; min-width:160px;">
                             <button class="primary" style="white-space:nowrap;" onclick="logProfileWeightEntry('p2')">Записать</button>
+                        </div>
+                        <div style="display:flex; gap:10px; align-items:center; margin-top:10px;">
+                            <input type="number" id="target-weight-p2" placeholder="🎯 Целевой вес (кг)" step="0.1" style="flex:1;" oninput="saveTargetWeight('p2', this.value)">
                         </div>
                     </div>
                 </div>
@@ -1025,8 +1092,8 @@
 
         let state = {
             settings: {
-                p1: { name: '', gender: 'male', age: '', height: '', weight: '', activity: 'sedentary', goal: 'maintenance', pacing: 'moderate', kcal: 0, p: 0, f: 0, c: 0 },
-                p2: { name: '', gender: 'female', age: '', height: '', weight: '', activity: 'sedentary', goal: 'maintenance', pacing: 'moderate', kcal: 0, p: 0, f: 0, c: 0 }
+                p1: { name: '', gender: 'male', age: '', height: '', weight: '', activity: 'sedentary', goal: 'maintenance', pacing: 'moderate', kcal: 0, p: 0, f: 0, c: 0, targetWeight: null },
+                p2: { name: '', gender: 'female', age: '', height: '', weight: '', activity: 'sedentary', goal: 'maintenance', pacing: 'moderate', kcal: 0, p: 0, f: 0, c: 0, targetWeight: null }
             },
             recipes: [],
             foodBase: [],
@@ -1084,6 +1151,18 @@
             document.getElementById('diary-current-date').value = todayIsoString;
             document.getElementById('weight-date-p1').value = todayIsoString;
             document.getElementById('weight-date-p2').value = todayIsoString;
+
+            // Загружаем целевые веса в поля
+            if (state.settings.p1.targetWeight) document.getElementById('target-weight-p1').value = state.settings.p1.targetWeight;
+            if (state.settings.p2.targetWeight) document.getElementById('target-weight-p2').value = state.settings.p2.targetWeight;
+
+            // Восстанавливаем тему
+            const savedTheme = localStorage.getItem('nutrisplit_theme');
+            if (savedTheme === 'dark') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                document.getElementById('dark-mode-icon').className = 'fa-solid fa-sun';
+                document.getElementById('dark-mode-label').innerText = 'Светлая тема';
+            }
 
             populateFormsFromInternalState();
             liveUpdateProfileNames();
@@ -1390,12 +1469,30 @@
 
             const searchQ = document.getElementById('recipe-search-bar').value.toLowerCase();
             const catQ = document.getElementById('recipe-filter-category').value;
+            const sortQ = document.getElementById('recipe-sort-select') ? document.getElementById('recipe-sort-select').value : 'default';
             
-            const filteredCollection = state.recipes.filter(r => {
+            let filteredCollection = state.recipes.filter(r => {
                 const matchName = r.title.toLowerCase().includes(searchQ);
                 const matchCat = (catQ === 'all' || (r.category || 'main') === catQ);
                 return matchName && matchCat;
             });
+
+            // Сортировка
+            if (sortQ === 'name') {
+                filteredCollection.sort((a, b) => a.title.localeCompare(b.title, 'ru'));
+            } else if (sortQ === 'kcal-asc' || sortQ === 'kcal-desc') {
+                filteredCollection.sort((a, b) => {
+                    const dA = calculateSingleRecipeAbsoluteDensity(a).kcal;
+                    const dB = calculateSingleRecipeAbsoluteDensity(b).kcal;
+                    return sortQ === 'kcal-asc' ? dA - dB : dB - dA;
+                });
+            } else if (sortQ === 'protein-desc') {
+                filteredCollection.sort((a, b) => {
+                    const dA = calculateSingleRecipeAbsoluteDensity(a).p;
+                    const dB = calculateSingleRecipeAbsoluteDensity(b).p;
+                    return dB - dA;
+                });
+            }
 
             if(filteredCollection.length === 0) {
                 grid.innerHTML = `<p style="color:var(--text-muted); grid-column:1/-1; text-align:center; padding:30px;">Рецепты не найдены. Создайте свой первый рецепт!</p>`;
@@ -1421,7 +1518,10 @@
                     </div>
                     <div class="recipe-footer">
                         <span>Ингредиентов: ${recipe.ingredients.length}</span>
-                        <span style="color:#4f46e5; font-weight:600;"><i class="fa-solid fa-arrow-pointer"></i> Открыть</span>
+                        <div style="display:flex; gap:10px; align-items:center;">
+                            <button onclick="event.stopPropagation(); deleteRecipe('${recipe.id}')" style="background:none; border:none; color:#ef4444; cursor:pointer; font-size:0.9rem; padding:4px 8px; border-radius:6px; transition:var(--transition);" onmouseover="this.style.background='#fef2f2'" onmouseout="this.style.background='none'" title="Удалить рецепт"><i class="fa-solid fa-trash"></i></button>
+                            <span style="color:#4f46e5; font-weight:600;"><i class="fa-solid fa-arrow-pointer"></i> Открыть</span>
+                        </div>
                     </div>
                 `;
                 grid.appendChild(el);
@@ -2147,6 +2247,21 @@
                 if(reversedWeights.length === 0) {
                     html += '<p style="font-size: 0.85rem; color: var(--text-muted);">Нет данных</p>';
                 } else {
+                    // Блок с изменением от первого взвешивания
+                    if (reversedWeights.length >= 2) {
+                        const first = reversedWeights[reversedWeights.length - 1].val;
+                        const last = reversedWeights[0].val;
+                        const delta = last - first;
+                        const sign = delta > 0 ? '+' : '';
+                        const deltaColor = delta < 0 ? '#10b981' : (delta > 0 ? '#ef4444' : '#64748b');
+                        html += `<div style="margin-bottom:12px; padding:10px 14px; background:rgba(255,255,255,0.5); border-radius:var(--radius-md); font-size:0.88rem; font-weight:600;">
+                            📊 Изменение за период: <span style="color:${deltaColor};">${sign}${delta.toFixed(1)} кг</span>
+                            <span style="color:var(--text-muted); font-weight:400; font-size:0.78rem; display:block; margin-top:3px;">
+                                ${reversedWeights[reversedWeights.length-1].date}: ${first} кг → ${reversedWeights[0].date}: ${last} кг
+                            </span>
+                        </div>`;
+                    }
+
                     reversedWeights.forEach(entry => {
                         html += `
                             <div style="display:flex; justify-content:space-between; align-items:center; padding: 8px 12px; border-bottom: 1px solid rgba(0,0,0,0.05); font-size: 0.9rem;">
@@ -2199,25 +2314,39 @@
             if(pIndex === 1 && chartInstanceP1) chartInstanceP1.destroy();
             if(pIndex === 2 && chartInstanceP2) chartInstanceP2.destroy();
 
+            const targetWeight = pIndex === 1 ? state.settings.p1.targetWeight : state.settings.p2.targetWeight;
+            const datasets = [{
+                label: labelText,
+                data: dataVals,
+                borderColor: colorLine,
+                backgroundColor: colorBg,
+                tension: 0.2,
+                spanGaps: true,
+                borderWidth: 3,
+                pointRadius: 4
+            }];
+
+            if (targetWeight && allDates.length > 0) {
+                datasets.push({
+                    label: 'Целевой вес',
+                    data: allDates.map(() => parseFloat(targetWeight)),
+                    borderColor: colorLine,
+                    backgroundColor: 'transparent',
+                    borderWidth: 2,
+                    borderDash: [6, 4],
+                    pointRadius: 0,
+                    tension: 0,
+                    spanGaps: true
+                });
+            }
+
             const newChart = new Chart(ctx, {
                 type: 'line',
-                data: {
-                    labels: allDates,
-                    datasets: [{
-                        label: labelText,
-                        data: dataVals,
-                        borderColor: colorLine,
-                        backgroundColor: colorBg,
-                        tension: 0.2,
-                        spanGaps: true,
-                        borderWidth: 3,
-                        pointRadius: 4
-                    }]
-                },
+                data: { labels: allDates, datasets },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    plugins: { legend: { display: false } },
+                    plugins: { legend: { display: !!targetWeight } },
                     scales: {
                         y: { grid: { color: 'rgba(0,0,0,0.03)' }, ticks: { font: { weight: '500' } } },
                         x: { grid: { display: false }, ticks: { font: { weight: '500' } } }
@@ -2278,6 +2407,122 @@
         function escapeHtml(str) {
             if(!str) return '';
             return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+        }
+
+        // ===== ТЁМНАЯ ТЕМА =====
+        function toggleDarkTheme() {
+            const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+            if (isDark) {
+                document.documentElement.removeAttribute('data-theme');
+                localStorage.setItem('nutrisplit_theme', 'light');
+                document.getElementById('dark-mode-icon').className = 'fa-solid fa-moon';
+                document.getElementById('dark-mode-label').innerText = 'Тёмная тема';
+            } else {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                localStorage.setItem('nutrisplit_theme', 'dark');
+                document.getElementById('dark-mode-icon').className = 'fa-solid fa-sun';
+                document.getElementById('dark-mode-label').innerText = 'Светлая тема';
+            }
+        }
+
+        // ===== ДНЕВНИК: СЕГОДНЯ =====
+        function setDiaryToToday() {
+            document.getElementById('diary-current-date').value = todayIsoString;
+            renderDiary();
+        }
+
+        // ===== ДНЕВНИК: КОПИРОВАТЬ ВЧЕРА =====
+        function copyYesterdayDiary() {
+            const currentDate = document.getElementById('diary-current-date').value;
+            if (!currentDate) { showToast("Сначала выберите дату дневника", "danger"); return; }
+
+            const yesterday = new Date(currentDate);
+            yesterday.setDate(yesterday.getDate() - 1);
+            const yesterdayStr = yesterday.toISOString().split('T')[0];
+
+            const yesterdayEntries = state.diary.filter(x => x.date === yesterdayStr);
+            if (yesterdayEntries.length === 0) {
+                showToast(`За ${yesterdayStr} записей нет — нечего копировать`, "danger");
+                return;
+            }
+
+            const alreadyExists = state.diary.some(x => x.date === currentDate);
+            if (alreadyExists) {
+                if (!confirm(`В дневнике за ${currentDate} уже есть записи. Добавить поверх?`)) return;
+            }
+
+            yesterdayEntries.forEach(entry => {
+                state.diary.push({
+                    ...entry,
+                    id: 'log_' + Date.now() + '_' + Math.random().toString(36).substr(2, 4),
+                    date: currentDate
+                });
+            });
+
+            saveStateToBrowserStorage();
+            renderDiary();
+            showToast(`Скопировано ${yesterdayEntries.length} записей с ${yesterdayStr}!`, "success");
+        }
+
+        // ===== ДНЕВНИК: ЭКСПОРТ CSV =====
+        function exportDiaryToCSV() {
+            if (state.diary.length === 0) {
+                showToast("Дневник пуст — нечего экспортировать", "danger");
+                return;
+            }
+
+            const p1Name = state.settings.p1.name || 'Пользователь 1';
+            const p2Name = state.settings.p2.name || 'Пользователь 2';
+
+            const headers = ['Дата', 'Пользователь', 'Приём пищи', 'Блюдо/продукт', 'Ккал', 'Белки (г)', 'Жиры (г)', 'Углеводы (г)'];
+            const mealNames = { breakfast: 'Завтрак', lunch: 'Обед', dinner: 'Ужин', snack: 'Перекус' };
+
+            const rows = state.diary
+                .sort((a, b) => a.date.localeCompare(b.date))
+                .map(entry => [
+                    entry.date,
+                    entry.profile === 'p1' ? p1Name : p2Name,
+                    mealNames[entry.mealType] || entry.mealType,
+                    entry.name,
+                    entry.kcal,
+                    entry.p,
+                    entry.f,
+                    entry.c
+                ]);
+
+            const csvContent = [headers, ...rows]
+                .map(row => row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(','))
+                .join('\n');
+
+            const bom = '\uFEFF'; // UTF-8 BOM для корректного открытия в Excel
+            const blob = new Blob([bom + csvContent], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `NutriSplit_Дневник_${new Date().toISOString().split('T')[0]}.csv`;
+            a.click();
+            URL.revokeObjectURL(url);
+            showToast("Дневник экспортирован в CSV!", "success");
+        }
+
+        // ===== РЕЦЕПТЫ: УДАЛЕНИЕ С ПОДТВЕРЖДЕНИЕМ =====
+        function deleteRecipe(id) {
+            const recipe = state.recipes.find(r => r.id === id);
+            if (!recipe) return;
+            if (confirm(`Удалить рецепт "${recipe.title}"? Это действие нельзя отменить.`)) {
+                state.recipes = state.recipes.filter(r => r.id !== id);
+                saveStateToBrowserStorage();
+                renderRecipes();
+                showToast(`Рецепт "${recipe.title}" удалён`, "success");
+            }
+        }
+
+        // ===== ПРОГРЕСС: СОХРАНЕНИЕ ЦЕЛЕВОГО ВЕСА =====
+        function saveTargetWeight(pKey, val) {
+            const num = parseFloat(val);
+            state.settings[pKey].targetWeight = isNaN(num) ? null : num;
+            saveStateToBrowserStorage();
+            renderProgressChartLayout();
         }
     </script>
 </body>

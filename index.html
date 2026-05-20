@@ -799,7 +799,7 @@
                         <h4 style="margin-bottom:12px;" class="p1-name-title">Пользователь 1</h4>
                         <div style="display:flex; gap:10px;">
                             <input type="number" id="weight-val-p1" placeholder="Вес (кг)" step="0.1" style="flex:1;">
-                            <input type="date" id="weight-date-p1" style="width: auto; min-width: 140px; flex: 1;">
+                            <input type="date" id="weight-date-p1" style="min-width: 165px; flex-shrink: 0;">
                             <button class="primary" onclick="logProfileWeightEntry('p1')">Записать</button>
                         </div>
                     </div>
@@ -807,7 +807,7 @@
                         <h4 style="margin-bottom:12px;" class="p2-name-title">Пользователь 2</h4>
                         <div style="display:flex; gap:10px;">
                             <input type="number" id="weight-val-p2" placeholder="Вес (кг)" step="0.1" style="flex:1;">
-                            <input type="date" id="weight-date-p2" style="width: auto; min-width: 140px; flex: 1;">
+                            <input type="date" id="weight-date-p2" style="min-width: 165px; flex-shrink: 0;">
                             <button class="primary" onclick="logProfileWeightEntry('p2')">Записать</button>
                         </div>
                     </div>
@@ -994,7 +994,6 @@
     </div>
 
     <script>
-        // База продуктов теперь с правильными категориями
         const defaultFoodBase = [
             { id: "fb_1", name: "Куриное филе", category: "meat", kcal: 113, p: 23.6, f: 1.9, c: 0.4 },
             { id: "fb_2", name: "Рис сухой", category: "carb", kcal: 345, p: 6.7, f: 0.7, c: 78.9 },
@@ -1299,9 +1298,9 @@
                         <input type="number" class="editable-macro" value="${Math.round(p1.kcal || 0)}" onchange="manualOverrideMacro('p1', 'kcal', this.value)" style="width: 70px; font-size:1.4rem; font-weight:800; padding:0;"> ккал <span style="font-size:0.85rem; font-weight:500; color:var(--text-muted);">/ сутки</span>
                     </div>
                     <div style="font-size:0.9rem; line-height:1.7; color:var(--text-main); display:flex; gap: 12px; flex-wrap: wrap;">
-                        <span style="display:flex; align-items:baseline; gap:4px;"><i class="fa-solid fa-drumstick-bite" style="color:var(--text-muted)"></i> Белки: <input type="number" class="editable-macro" value="${Math.round(p1.p || 0)}" onchange="manualOverrideMacro('p1', 'p', this.value)" style="width: 45px; font-weight:bold;"> г</span> 
-                        <span style="display:flex; align-items:baseline; gap:4px;"><i class="fa-solid fa-droplet" style="color:var(--text-muted)"></i> Жиры: <input type="number" class="editable-macro" value="${Math.round(p1.f || 0)}" onchange="manualOverrideMacro('p1', 'f', this.value)" style="width: 45px; font-weight:bold;"> г</span> 
-                        <span style="display:flex; align-items:baseline; gap:4px;"><i class="fa-solid fa-wheat-awn" style="color:var(--text-muted)"></i> Углеводы: <input type="number" class="editable-macro" value="${Math.round(p1.c || 0)}" onchange="manualOverrideMacro('p1', 'c', this.value)" style="width: 45px; font-weight:bold;"> г</span>
+                        <span style="display:flex; align-items:baseline; gap:4px;"><i class="fa-solid fa-drumstick-bite" style="color:var(--text-muted)"></i> Белки: <input type="number" class="editable-macro" value="${Math.round(p1.p || 0)}" onchange="manualOverrideMacro('p1', 'p', this.value)" style="width: 60px; font-weight:bold;"> г</span> 
+                        <span style="display:flex; align-items:baseline; gap:4px;"><i class="fa-solid fa-droplet" style="color:var(--text-muted)"></i> Жиры: <input type="number" class="editable-macro" value="${Math.round(p1.f || 0)}" onchange="manualOverrideMacro('p1', 'f', this.value)" style="width: 60px; font-weight:bold;"> г</span> 
+                        <span style="display:flex; align-items:baseline; gap:4px;"><i class="fa-solid fa-wheat-awn" style="color:var(--text-muted)"></i> Углеводы: <input type="number" class="editable-macro" value="${Math.round(p1.c || 0)}" onchange="manualOverrideMacro('p1', 'c', this.value)" style="width: 60px; font-weight:bold;"> г</span>
                     </div>
                     ${getPacingHtml('p1', p1.pacing || 'moderate')}
                 </div>
@@ -1312,9 +1311,9 @@
                         <input type="number" class="editable-macro" value="${Math.round(p2.kcal || 0)}" onchange="manualOverrideMacro('p2', 'kcal', this.value)" style="width: 70px; font-size:1.4rem; font-weight:800; padding:0;"> ккал <span style="font-size:0.85rem; font-weight:500; color:var(--text-muted);">/ сутки</span>
                     </div>
                     <div style="font-size:0.9rem; line-height:1.7; color:var(--text-main); display:flex; gap: 12px; flex-wrap: wrap;">
-                        <span style="display:flex; align-items:baseline; gap:4px;"><i class="fa-solid fa-drumstick-bite" style="color:var(--text-muted)"></i> Белки: <input type="number" class="editable-macro" value="${Math.round(p2.p || 0)}" onchange="manualOverrideMacro('p2', 'p', this.value)" style="width: 45px; font-weight:bold;"> г</span> 
-                        <span style="display:flex; align-items:baseline; gap:4px;"><i class="fa-solid fa-droplet" style="color:var(--text-muted)"></i> Жиры: <input type="number" class="editable-macro" value="${Math.round(p2.f || 0)}" onchange="manualOverrideMacro('p2', 'f', this.value)" style="width: 45px; font-weight:bold;"> г</span> 
-                        <span style="display:flex; align-items:baseline; gap:4px;"><i class="fa-solid fa-wheat-awn" style="color:var(--text-muted)"></i> Углеводы: <input type="number" class="editable-macro" value="${Math.round(p2.c || 0)}" onchange="manualOverrideMacro('p2', 'c', this.value)" style="width: 45px; font-weight:bold;"> г</span>
+                        <span style="display:flex; align-items:baseline; gap:4px;"><i class="fa-solid fa-drumstick-bite" style="color:var(--text-muted)"></i> Белки: <input type="number" class="editable-macro" value="${Math.round(p2.p || 0)}" onchange="manualOverrideMacro('p2', 'p', this.value)" style="width: 60px; font-weight:bold;"> г</span> 
+                        <span style="display:flex; align-items:baseline; gap:4px;"><i class="fa-solid fa-droplet" style="color:var(--text-muted)"></i> Жиры: <input type="number" class="editable-macro" value="${Math.round(p2.f || 0)}" onchange="manualOverrideMacro('p2', 'f', this.value)" style="width: 60px; font-weight:bold;"> г</span> 
+                        <span style="display:flex; align-items:baseline; gap:4px;"><i class="fa-solid fa-wheat-awn" style="color:var(--text-muted)"></i> Углеводы: <input type="number" class="editable-macro" value="${Math.round(p2.c || 0)}" onchange="manualOverrideMacro('p2', 'c', this.value)" style="width: 60px; font-weight:bold;"> г</span>
                     </div>
                     ${getPacingHtml('p2', p2.pacing || 'comfortable')}
                 </div>
